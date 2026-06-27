@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Receptores do SNA</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a18; min-height: 100vh; }
+.container { padding: 1.5rem 1rem; max-width: 700px; margin: 0 auto; }
+h1 { font-size: 18px; font-weight: 500; margin-bottom: 4px; color: #1a1a18; }
+.subtitle { font-size: 13px; color: #888; margin-bottom: 1.5rem; }
+.tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.tab { flex: 1; min-width: 90px; padding: 9px 6px; border: 1px solid #ccc; border-radius: 8px; background: #fff; cursor: pointer; font-size: 13px; font-weight: 500; color: #666; text-align: center; transition: all 0.15s; }
+.tab.active { background: #e8f0fe; color: #1a56db; border-color: #a0b8f5; }
+.select-label { font-size: 13px; color: #666; margin-bottom: 6px; }
+select { width: 100%; margin-bottom: 1.25rem; font-size: 14px; border-radius: 8px; padding: 10px; border: 1px solid #ccc; background: #fff; color: #1a1a18; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+.results { display: flex; flex-direction: column; gap: 10px; }
+.card { background: #fff; border: 1px solid #e0e0d8; border-radius: 12px; padding: 1rem 1.25rem; }
+.card-title { font-size: 15px; font-weight: 500; color: #1a1a18; margin-bottom: 8px; }
+.card-sub { font-size: 12px; color: #888; margin-bottom: 10px; }
+.badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 20px; white-space: nowrap; margin-bottom: 6px; margin-right: 4px; }
+.badge-sim { background: #fde8e8; color: #b91c1c; }
+.badge-para { background: #e8f0fe; color: #1a56db; }
+.badge-ago { background: #e8f5e9; color: #1b6e2e; }
+.badge-ant { background: #fff3e0; color: #b45309; }
+.badge-misto { background: #f3e8ff; color: #7c3aed; }
+.badge-class { background: #f5f5f0; color: #555; border: 1px solid #ddd; }
+.effect { font-size: 14px; color: #1a1a18; line-height: 1.5; margin-bottom: 6px; }
+.rec-tag { display: inline-block; font-size: 11px; padding: 2px 7px; border-radius: 20px; background: #f5f5f0; border: 1px solid #ccc; color: #555; margin-right: 4px; margin-top: 4px; }
+.divider { border: none; border-top: 1px solid #eee; margin: 10px 0; }
+.empty { text-align: center; padding: 2rem; color: #aaa; font-size: 14px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 6px; }
+.info-label { font-size: 12px; color: #888; min-width: 80px; }
+.info-val { font-size: 13px; color: #1a1a18; }
+.indicacoes { font-size: 13px; color: #444; line-height: 1.6; margin-top: 6px; }
+.efeitos-title { font-size: 12px; font-weight: 500; color: #888; margin: 8px 0 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+.orgao-efeito { font-size: 13px; color: #333; padding: 4px 0; border-bottom: 1px solid #f0f0ec; }
+.orgao-efeito:last-child { border-bottom: none; }
+.orgao-nome { font-weight: 500; color: #1a1a18; }
+optgroup { font-weight: 600; color: #555; }
+
+@media (prefers-color-scheme: dark) {
+  body { background: #1a1a18; color: #eee; }
+  h1 { color: #eee; }
+  .tab { background: #2a2a28; border-color: #444; color: #aaa; }
+  .tab.active { background: #1e3a6e; color: #90b4f8; border-color: #3a5a9e; }
+  select { background-color: #2a2a28; border-color: #444; color: #eee; }
+  .card { background: #242422; border-color: #3a3a38; }
+  .card-title { color: #eee; }
+  .card-sub { color: #888; }
+  .effect { color: #ddd; }
+  .info-val { color: #ddd; }
+  .indicacoes { color: #bbb; }
+  .rec-tag { background: #2a2a28; border-color: #444; color: #aaa; }
+  .badge-sim { background: #4a1a1a; color: #f8a0a0; }
+  .badge-para { background: #1a2a4a; color: #90b4f8; }
+  .badge-ago { background: #1a3a22; color: #6fcf97; }
+  .badge-ant { background: #3a2a10; color: #f6ad55; }
+  .badge-misto { background: #2d1a4a; color: #c4b5fd; }
+  .badge-class { background: #2a2a28; color: #aaa; border-color: #444; }
+  .divider { border-color: #333; }
+  .orgao-efeito { color: #ccc; border-color: #333; }
+  .orgao-nome { color: #eee; }
+  .efeitos-title { color: #888; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Receptores do SNA</h1>
+  <p class="subtitle">Sistema Nervoso Autônomo — Distribuição, Efeitos e Fármacos</p>
+
+  <div class="tabs">
+    <div class="tab active" onclick="setTab('receptor')" id="tab-receptor">Por receptor</div>
+    <div class="tab" onclick="setTab('orgao')" id="tab-orgao">Por órgão</div>
+    <div class="tab" onclick="setTab('farmaco')" id="tab-farmaco">Por fármaco</div>
+  </div>
+
+  <!-- PAINEL RECEPTOR -->
+  <div id="panel-receptor">
+    <p class="select-label">Selecione o receptor:</p>
+    <select id="sel-receptor" onchange="renderReceptor()">
+      <option value="">— escolha um receptor —</option>
+      <option value="a1">α₁ (alfa-1)</option>
+      <option value="a2">α₂ (alfa-2)</option>
+      <option value="b1">β₁ (beta-1)</option>
+      <option value="b2">β₂ (beta-2)</option>
+      <option value="b3">β₃ (beta-3)</option>
+      <option value="M2">M₂ (muscarínico 2)</option>
+      <option value="M3">M₃ (muscarínico 3)</option>
+      <option value="M4">M₄ (muscarínico 4)</option>
+      <option value="N">N (nicotínico)</option>
+    </select>
+    <div class="results" id="res-receptor"></div>
+  </div>
+
+  <!-- PAINEL ORGÃO -->
+  <div id="panel-orgao" style="display:none">
+    <p class="select-label">Selecione o órgão / estrutura:</p>
+    <select id="sel-orgao" onchange="renderOrgao()">
+      <option value="">— escolha um órgão —</option>
+    </select>
+    <div class="results" id="res-orgao"></div>
+  </div>
+
+  <!-- PAINEL FÁRMACO -->
+  <div id="panel-farmaco" style="display:none">
+    <p class="select-label">Selecione o fármaco:</p>
+    <select id="sel-farmaco" onchange="renderFarmaco()">
+      <option value="">— escolha um fármaco —</option>
+    </select>
+    <div class="results" id="res-farmaco"></div>
+  </div>
+</div>
+
+<script>
+// ===================== DADOS: ÓRGÃOS =====================
+const orgData = [
+  { orgao: "Olho — músculo radial (midríase)", sim: "Contração → midríase ++", rec_sim: ["a1"], para: null, rec_para: [] },
+  { orgao: "Olho — esfíncter pupilar (miose)", sim: null, rec_sim: [], para: "Contração → miose +++", rec_para: ["M3","M2"] },
+  { orgao: "Olho — músculo ciliar", sim: "Relaxamento (visão distante) +", rec_sim: ["b2"], para: "Contração (visão próxima) +++", rec_para: ["M3","M2"] },
+  { orgao: "Glândulas lacrimais", sim: "Secreção +", rec_sim: ["a1"], para: "Secreção +++", rec_para: ["M3","M2"] },
+  { orgao: "Coração — nó SA", sim: "↑ frequência cardíaca ++", rec_sim: ["b1","b2"], para: "↓ frequência cardíaca +++", rec_para: ["M2","M3"] },
+  { orgao: "Coração — átrios", sim: "↑ contratilidade e velocidade de condução ++", rec_sim: ["b1","b2"], para: "↓ contratilidade; ↓ duração do PA ++", rec_para: ["M2","M3"] },
+  { orgao: "Coração — nó AV", sim: "↑ automaticidade e velocidade de condução ++", rec_sim: ["b1","b2"], para: "↓ velocidade de condução; bloqueio AV +++", rec_para: ["M2","M3"] },
+  { orgao: "Coração — His-Purkinje", sim: "↑ automaticidade e condução", rec_sim: ["b1","b2"], para: "Pouco efeito", rec_para: ["M2","M3"] },
+  { orgao: "Coração — ventrículo", sim: "↑ contratilidade, condução, automaticidade +++", rec_sim: ["b1","b2"], para: "Leve ↓ contratilidade", rec_para: ["M2","M3"] },
+  { orgao: "Vasos — coronárias", sim: "Constrição +; dilatação ++", rec_sim: ["a1","a2","b2"], para: null, rec_para: [] },
+  { orgao: "Vasos — pele e mucosas", sim: "Constrição +++", rec_sim: ["a1","a2"], para: null, rec_para: [] },
+  { orgao: "Vasos — músculo esquelético", sim: "Constrição; dilatação ++", rec_sim: ["a1","b2"], para: null, rec_para: [] },
+  { orgao: "Vasos — cerebrais", sim: "Constrição (leve)", rec_sim: ["a1"], para: null, rec_para: [] },
+  { orgao: "Vasos — pulmonares", sim: "Constrição +; dilatação", rec_sim: ["a1","b2"], para: null, rec_para: [] },
+  { orgao: "Vasos — vísceras abdominais", sim: "Constrição +++; dilatação +", rec_sim: ["a1","b2"], para: null, rec_para: [] },
+  { orgao: "Vasos — renais", sim: "Constrição ++; dilatação ++", rec_sim: ["a1","a2","b1","b2"], para: null, rec_para: [] },
+  { orgao: "Endotélio", sim: null, rec_sim: [], para: "↑ NO-sintase (vasodilatação)", rec_para: ["M3"] },
+  { orgao: "Pulmões — músculo liso brônquico", sim: "Relaxamento (broncodilatação)", rec_sim: ["b2"], para: "Contração (broncoconstrição)", rec_para: ["M2","M3"] },
+  { orgao: "Pulmões — glândulas brônquicas", sim: "↓ secreção; ↑ secreção", rec_sim: ["a1","b2"], para: "Estimulação da secreção", rec_para: ["M2","M3"] },
+  { orgao: "Estômago — motilidade e tônus", sim: "↓ motilidade (geralmente) +", rec_sim: ["a1","a2","b1","b2"], para: "↑ motilidade e tônus +++", rec_para: ["M2","M3"] },
+  { orgao: "Estômago — esfíncteres", sim: "Contração +", rec_sim: ["a1"], para: "Relaxamento +", rec_para: ["M3","M2"] },
+  { orgao: "Estômago — secreção", sim: "Inibição", rec_sim: ["a2"], para: "Estimulação ++", rec_para: ["M3","M2"] },
+  { orgao: "Intestino — motilidade e tônus", sim: "↓ motilidade +", rec_sim: ["a1","a2","b1","b2"], para: "↑ motilidade +++", rec_para: ["M3","M2"] },
+  { orgao: "Intestino — esfíncteres", sim: "Contração +", rec_sim: ["a1"], para: "Relaxamento +", rec_para: ["M3","M2"] },
+  { orgao: "Intestino — secreção", sim: "↓ secreção", rec_sim: ["a2"], para: "↑ secreção ++", rec_para: ["M3","M2"] },
+  { orgao: "Vesícula biliar e ductos", sim: "Relaxamento +", rec_sim: ["b2"], para: "Contração +", rec_para: ["M"] },
+  { orgao: "Pâncreas — ácinos", sim: "↓ secreção +", rec_sim: ["a1"], para: "Secreção ++", rec_para: ["M3","M2"] },
+  { orgao: "Pâncreas — ilhotas β (↓ insulina)", sim: "↓ secreção +++", rec_sim: ["a2"], para: null, rec_para: [] },
+  { orgao: "Pâncreas — ilhotas β (↑ insulina)", sim: "↑ secreção +", rec_sim: ["b2"], para: null, rec_para: [] },
+  { orgao: "Bexiga — detrusor", sim: "Relaxamento +", rec_sim: ["b2"], para: "Contração +++", rec_para: ["M3","M2"] },
+  { orgao: "Bexiga — trígono e esfíncter", sim: "Contração ++", rec_sim: ["a1"], para: "Relaxamento ++", rec_para: ["M3","M2"] },
+  { orgao: "Ureter — motilidade e tônus", sim: "↑ motilidade", rec_sim: ["a1"], para: "↑ motilidade (?)", rec_para: ["M"] },
+  { orgao: "Útero (grávido)", sim: "Contração", rec_sim: ["a1"], para: "Variável", rec_para: ["M"] },
+  { orgao: "Útero (não grávido)", sim: "Relaxamento", rec_sim: ["b2"], para: null, rec_para: [] },
+  { orgao: "Órgãos sexuais masculinos", sim: "Ejaculação +++", rec_sim: ["a1"], para: "Ereção +++", rec_para: ["M3"] },
+  { orgao: "Músculos pilomotores", sim: "Contração (piloereção) ++", rec_sim: ["a1"], para: null, rec_para: [] },
+  { orgao: "Glândulas sudoríparas", sim: "Secreção localizada ++", rec_sim: ["a1"], para: "Secreção generalizada +++", rec_para: ["M3","M2"] },
+  { orgao: "Cápsula esplênica", sim: "Contração +++; relaxamento +", rec_sim: ["a1","b2"], para: null, rec_para: [] },
+  { orgao: "Medula suprarrenal", sim: null, rec_sim: [], para: "Secreção de EPI e NE", rec_para: ["N","M"] },
+  { orgao: "Músculo esquelético", sim: "↑ contratilidade; glicogenólise; captação de K⁺", rec_sim: ["b2"], para: null, rec_para: [] },
+  { orgao: "Fígado", sim: "Glicogenólise e gliconeogênese +++", rec_sim: ["a1","b2"], para: null, rec_para: [] },
+  { orgao: "Adipócitos — lipólise", sim: "Lipólise +++; termogênese", rec_sim: ["a1","b1","b2","b3"], para: null, rec_para: [] },
+  { orgao: "Adipócitos — inibição lipólise", sim: "Inibição da lipólise", rec_sim: ["a2"], para: null, rec_para: [] },
+  { orgao: "Glândulas salivares", sim: "Secreção de K⁺ e água +", rec_sim: ["a1"], para: "Secreção de K⁺ e água +++", rec_para: ["M3","M2"] },
+  { orgao: "Glândulas nasofaríngeas", sim: null, rec_sim: [], para: "Secreção ++", rec_para: ["M3","M2"] },
+  { orgao: "Glândula pineal", sim: "Síntese de melatonina", rec_sim: ["b1"], para: null, rec_para: [] },
+  { orgao: "Neuro-hipófise", sim: "Secreção de ADH", rec_sim: ["b1"], para: null, rec_para: [] },
+  { orgao: "Terminação simpática — autorreceptor", sim: "Inibe liberação de NE", rec_sim: ["a2"], para: null, rec_para: [] },
+  { orgao: "Terminação parassimpática — heterorreceptor", sim: "Inibe liberação de ACh", rec_sim: ["a2"], para: null, rec_para: [] },
+  { orgao: "Terminação parassimpática — autorreceptor", sim: null, rec_sim: [], para: "Inibe liberação de ACh", rec_para: ["M2","M4"] },
+];
+
+// ===================== DADOS: FÁRMACOS =====================
+const farmacos = [
+  // ---- AGONISTAS ADRENÉRGICOS ----
+  {
+    nome: "Adrenalina (Epinefrina)", grupo: "Agonistas adrenérgicos",
+    tipo: "agonista", sistema: "adrenérgico",
+    receptores: ["a1","a2","b1","b2","b3"],
+    seletividade: "Não seletivo (α e β)",
+    mecanismo: "Agonista direto de todos os receptores adrenérgicos. Em doses baixas predomina efeito β; em doses altas predomina α.",
+    indicacoes: "Parada cardíaca, anafilaxia, broncoespasmo grave, vasoconstritor em anestesias locais.",
+    efeitos: [
+      { orgao: "Coração", efeito: "↑ FC, ↑ contratilidade, ↑ débito cardíaco (β₁)" },
+      { orgao: "Vasos (doses altas)", efeito: "Vasoconstrição → ↑ PA (α₁)" },
+      { orgao: "Vasos (doses baixas)", efeito: "Vasodilatação em músculo esquelético (β₂)" },
+      { orgao: "Brônquios", efeito: "Broncodilatação (β₂)" },
+      { orgao: "Pupila", efeito: "Midríase (α₁)" },
+      { orgao: "Fígado", efeito: "Glicogenólise → hiperglicemia (α₁, β₂)" },
+    ]
+  },
+  {
+    nome: "Noradrenalina (Norepinefrina)", grupo: "Agonistas adrenérgicos",
+    tipo: "agonista", sistema: "adrenérgico",
+    receptores: ["a1","a2","b1"],
+    seletividade: "α₁, α₂ e β₁ (fraco em β₂)",
+    mecanismo: "Agonista direto com forte ação α e β₁. Quase sem ação β₂.",
+    indicacoes: "Choque vasodilatatório (séptico), hipotensão grave.",
+    efeitos: [
+      { orgao: "Vasos", efeito: "Vasoconstrição intensa → ↑↑ PA (α₁)" },
+      { orgao: "Coração", efeito: "↑ contratilidade (β₁); bradicardia reflexa por ↑ PA" },
+      { orgao: "Brônquios", efeito: "Pouco efeito (sem ação β₂ significativa)" },
+    ]
+  },
+  {
+    nome: "Dopamina", grupo: "Agonistas adrenérgicos",
+    tipo: "agonista", sistema: "adrenérgico",
+    receptores: ["a1","b1","b2"],
+    seletividade: "Dose-dependente: D₁ (baixa) → β (média) → α (alta)",
+    mecanismo: "Precursor da NE. Em doses baixas ativa receptores dopaminérgicos D₁ renais; em doses médias ativa β₁; em doses altas ativa α₁.",
+    indicacoes: "Choque cardiogênico, insuficiência cardíaca descompensada, oligúria no contexto de choque.",
+    efeitos: [
+      { orgao: "Rins (dose baixa 1–3 mcg/kg/min)", efeito: "Vasodilatação renal → ↑ diurese (D₁)" },
+      { orgao: "Coração (dose média 3–10 mcg/kg/min)", efeito: "↑ contratilidade e FC (β₁)" },
+      { orgao: "Vasos (dose alta >10 mcg/kg/min)", efeito: "Vasoconstrição → ↑ PA (α₁)" },
+    ]
+  },
+  {
+    nome: "Dobutamina", grupo: "Agonistas adrenérgicos",
+    tipo: "agonista", sistema: "adrenérgico",
+    receptores: ["b1","b2"],
+    seletividade: "β₁ seletivo (alguma ação β₂ e α₁)",
+    mecanismo: "Agonista β₁ direto com efeito inotrópico positivo predominante e menor efeito cronotrópico que isoproterenol.",
+    indicacoes: "Insuficiência cardíaca descompensada, choque cardiogênico, teste de estresse farmacológico.",
+    efeitos: [
+      { orgao: "Coração", efeito: "↑↑ contratilidade (β₁); ↑ FC moderado" },
+      { orgao: "Vasos", efeito: "Leve vasodilatação (β₂) → ↓ pós-carga" },
+    ]
+  },
+  {
+    nome: "Isoproterenol", grupo: "Agonistas adrenérgicos",
+    tipo: "agonista", sistema: "adrenérgico",
+    receptores: ["b1","b2"],
+    seletividade: "β₁ e β₂ não seletivo",
+    mecanismo: "Agonista β puro (sem ação α). Potente cronotrópico e inotrópico.",
+    indicacoes: "Bradicardia refratária, bloqueio AV (uso histórico), broncoespasmo (substituído por β₂ seletivos).",
+    efeitos: [
+      { orgao: "Coração", efeito: "↑↑ FC e contratilidade (β₁)" },
+      { orgao: "Vasos", efeito: "Vasodilatação → ↓ PA diastólica (β₂)" },
+      { orgao: "Brônquios", efeito: "Broncodilatação (β₂)" },
+    ]
+  },
+  {
+    nome: "Fenilefrina", grupo: "Agonistas adrenérgicos",
+    tipo: "agonista", sistema: "adrenérgico",
+    receptores: ["a1"],
+    seletividade: "α₁ seletivo",
+    mecanismo: "Agonista α₁ direto. Potente vasoconstritor sem ação β significativa.",
+    indicacoes: "Hipotensão intraoperatória, descongestionante nasal, midríase diagnóstica.",
+    efeitos: [
+      { orgao: "Vasos", efeito: "Vasoconstrição → ↑↑ PA (α₁)" },
+      { orgao: "Coração", efeito: "Bradicardia reflexa (por ↑ PA)" },
+      { orgao: "Pupila", efeito: "Midríase sem cicloplegia (α₁)" },
+      { orgao: "Mucosa nasal", efeito: "Vasoconstrição → descongestionamento" },
+    ]
+  },
+  {
+    nome: "Clonidina", grupo: "Agonistas adrenérgicos",
+    tipo: "agonista", sistema: "adrenérgico",
+    receptores: ["a2"],
+    seletividade: "α₂ central e periférico",
+    mecanismo: "Agonista α₂ pré-sináptico. No SNC reduz o tônus simpático central → ↓ PA e FC. Perifericamente inibe liberação de NE.",
+    indicacoes: "Hipertensão, TDAH (off-label), abstinência de opioides, dor crônica.",
+    efeitos: [
+      { orgao: "SNC", efeito: "↓ tônus simpático central → ↓ PA, ↓ FC, sedação" },
+      { orgao: "Terminações simpáticas", efeito: "Inibe liberação de NE (autorreceptor α₂)" },
+      { orgao: "Pâncreas", efeito: "↓ secreção de insulina (α₂)" },
+    ]
+  },
+  {
+    nome: "Salbutamol (Albuterol)", grupo: "Agonistas adrenérgicos",
+    tipo: "agonista", sistema: "adrenérgico",
+    receptores: ["b2"],
+    seletividade: "β₂ seletivo",
+    mecanismo: "Agonista β₂ de curta duração. Relaxa músculo liso brônquico via ↑ AMPc → broncodilatação.",
+    indicacoes: "Asma (crise aguda), DPOC, hiperpotassemia (captação celular de K⁺).",
+    efeitos: [
+      { orgao: "Brônquios", efeito: "Broncodilatação rápida (β₂)" },
+      { orgao: "Útero", efeito: "Relaxamento (β₂) — uso em tocólise" },
+      { orgao: "Músculo esquelético", efeito: "↑ captação de K⁺ → ↓ potassemia" },
+      { orgao: "Coração", efeito: "Taquicardia leve (β₁ residual em doses altas)" },
+    ]
+  },
+  {
+    nome: "Formoterol / Salmeterol", grupo: "Agonistas adrenérgicos",
+    tipo: "agonista", sistema: "adrenérgico",
+    receptores: ["b2"],
+    seletividade: "β₂ seletivo de longa duração (LABA)",
+    mecanismo: "Agonistas β₂ de longa duração (12–24h). Mesmos mecanismos do salbutamol, porém com efeito prolongado.",
+    indicacoes: "Asma (manutenção, em combinação com CI), DPOC.",
+    efeitos: [
+      { orgao: "Brônquios", efeito: "Broncodilatação prolongada (β₂)" },
+      { orgao: "Útero", efeito: "Relaxamento (β₂)" },
+    ]
+  },
+  // ---- ANTAGONISTAS ADRENÉRGICOS ----
+  {
+    nome: "Propranolol", grupo: "Antagonistas adrenérgicos (β-bloqueadores)",
+    tipo: "antagonista", sistema: "adrenérgico",
+    receptores: ["b1","b2"],
+    seletividade: "β não seletivo (β₁ e β₂)",
+    mecanismo: "Antagonista competitivo β₁ e β₂. Reduz FC, contratilidade e débito cardíaco. Bloqueia broncodilatação β₂.",
+    indicacoes: "HAS, angina, arritmias, ICC (estável), enxaqueca (profilaxia), hipertireoidismo, tremor essencial, ansiedade situacional.",
+    efeitos: [
+      { orgao: "Coração", efeito: "↓ FC, ↓ contratilidade, ↓ PA (β₁ bloqueado)" },
+      { orgao: "Brônquios", efeito: "Broncoconstrição (β₂ bloqueado) — contraindicado na asma" },
+      { orgao: "Pâncreas", efeito: "Pode mascarar hipoglicemia (bloqueia taquicardia reflexa)" },
+      { orgao: "Vasos periféricos", efeito: "Vasoconstrição (β₂ bloqueado, α₁ desimpedido)" },
+    ]
+  },
+  {
+    nome: "Metoprolol / Atenolol", grupo: "Antagonistas adrenérgicos (β-bloqueadores)",
+    tipo: "antagonista", sistema: "adrenérgico",
+    receptores: ["b1"],
+    seletividade: "β₁ seletivo (cardioseletivo)",
+    mecanismo: "Antagonistas β₁ seletivos. Menor risco de broncoconstrição comparado ao propranolol, porém a seletividade é relativa em doses altas.",
+    indicacoes: "HAS, angina, ICC, infarto agudo do miocárdio, arritmias.",
+    efeitos: [
+      { orgao: "Coração", efeito: "↓ FC, ↓ contratilidade, ↓ PA (β₁ bloqueado)" },
+      { orgao: "Brônquios", efeito: "Menor efeito que propranolol (β₂ relativamente preservado)" },
+    ]
+  },
+  {
+    nome: "Carvedilol", grupo: "Antagonistas adrenérgicos (β-bloqueadores)",
+    tipo: "antagonista", sistema: "adrenérgico",
+    receptores: ["a1","b1","b2"],
+    seletividade: "α₁, β₁ e β₂ (não seletivo com ação α₁)",
+    mecanismo: "Antagonista α₁ e β não seletivo. O bloqueio α₁ causa vasodilatação, reduzindo a pós-carga.",
+    indicacoes: "ICC (padrão ouro), HAS, disfunção ventricular pós-IAM.",
+    efeitos: [
+      { orgao: "Coração", efeito: "↓ FC e ↓ contratilidade (β₁ bloqueado)" },
+      { orgao: "Vasos", efeito: "Vasodilatação → ↓ pós-carga (α₁ bloqueado)" },
+    ]
+  },
+  {
+    nome: "Prazosina / Doxazosina", grupo: "Antagonistas adrenérgicos (α-bloqueadores)",
+    tipo: "antagonista", sistema: "adrenérgico",
+    receptores: ["a1"],
+    seletividade: "α₁ seletivo",
+    mecanismo: "Antagonistas α₁ pós-sinápticos. Bloqueiam vasoconstrição mediada por α₁ → vasodilatação arteriolar e venosa.",
+    indicacoes: "HAS, HPB (relaxamento do esfíncter uretral e próstata), síndrome de Raynaud.",
+    efeitos: [
+      { orgao: "Vasos", efeito: "Vasodilatação → ↓ PA (α₁ bloqueado)" },
+      { orgao: "Bexiga / próstata", efeito: "Relaxamento do esfíncter → ↓ sintomas urinários (HPB)" },
+    ]
+  },
+  {
+    nome: "Fentolamina", grupo: "Antagonistas adrenérgicos (α-bloqueadores)",
+    tipo: "antagonista", sistema: "adrenérgico",
+    receptores: ["a1","a2"],
+    seletividade: "α₁ e α₂ não seletivo",
+    mecanismo: "Antagonista α₁ e α₂ competitivo. O bloqueio α₂ pré-sináptico aumenta a liberação de NE, o que pode causar taquicardia reflexa.",
+    indicacoes: "Feocromocitoma (crise hipertensiva), reversão de vasoconstrição local.",
+    efeitos: [
+      { orgao: "Vasos", efeito: "Vasodilatação intensa → ↓↓ PA (α₁ bloqueado)" },
+      { orgao: "Coração", efeito: "Taquicardia reflexa (↑ liberação NE por bloqueio α₂)" },
+    ]
+  },
+  // ---- AGONISTAS COLINÉRGICOS ----
+  {
+    nome: "Acetilcolina (ACh)", grupo: "Agonistas colinérgicos",
+    tipo: "agonista", sistema: "colinérgico",
+    receptores: ["M2","M3","N"],
+    seletividade: "Não seletivo (muscarínico + nicotínico)",
+    mecanismo: "Neurotransmissor fisiológico. Ativa todos os receptores muscarínicos e nicotínicos. Rapidamente hidrolisada pela acetilcolinesterase.",
+    indicacoes: "Uso diagnóstico/experimental. Aplicação intraocular em cirurgia (miose).",
+    efeitos: [
+      { orgao: "Coração", efeito: "↓ FC, ↓ condução AV (M₂)" },
+      { orgao: "Vasos", efeito: "Vasodilatação via NO endotelial (M₃)" },
+      { orgao: "Brônquios", efeito: "Broncoconstrição + hipersecreção (M₂, M₃)" },
+      { orgao: "TGI", efeito: "↑ motilidade, ↑ secreção gástrica (M₂, M₃)" },
+      { orgao: "Bexiga", efeito: "Contração do detrusor (M₃)" },
+      { orgao: "Pupila", efeito: "Miose + acomodação para perto (M₃)" },
+    ]
+  },
+  {
+    nome: "Pilocarpina", grupo: "Agonistas colinérgicos",
+    tipo: "agonista", sistema: "colinérgico",
+    receptores: ["M3","M2"],
+    seletividade: "Muscarínico (M₃ predominante)",
+    mecanismo: "Alcaloide muscarínico resistente à colinesterase. Ação prolongada.",
+    indicacoes: "Glaucoma (colírio — ↑ drenagem humor aquoso), síndrome de Sjögren (estimula salivação), teste de suor na fibrose cística.",
+    efeitos: [
+      { orgao: "Olho", efeito: "Miose + contração músculo ciliar (M₃) → ↓ pressão intraocular" },
+      { orgao: "Glândulas salivares", efeito: "↑↑ salivação (M₃)" },
+      { orgao: "Glândulas sudoríparas", efeito: "↑ sudorese (M₃)" },
+    ]
+  },
+  {
+    nome: "Betanecol", grupo: "Agonistas colinérgicos",
+    tipo: "agonista", sistema: "colinérgico",
+    receptores: ["M3","M2"],
+    seletividade: "Muscarínico (resistente à colinesterase, sem ação nicotínica)",
+    mecanismo: "Éster de colina estável à hidrólise. Ação predominante no TGI e trato urinário.",
+    indicacoes: "Retenção urinária não obstrutiva, atonia gástrica e intestinal pós-cirúrgica.",
+    efeitos: [
+      { orgao: "Bexiga", efeito: "↑ tônus do detrusor → esvaziamento vesical (M₃)" },
+      { orgao: "TGI", efeito: "↑ motilidade gástrica e intestinal (M₂, M₃)" },
+    ]
+  },
+  // ---- ANTICOLINESTERÁSICOS ----
+  {
+    nome: "Neostigmina / Piridostigmina", grupo: "Anticolinesterásicos",
+    tipo: "agonista", sistema: "colinérgico",
+    receptores: ["M2","M3","N"],
+    seletividade: "Indireto — inibe acetilcolinesterase (↑ ACh endógena)",
+    mecanismo: "Inibidores reversíveis da AChE. Aumentam a concentração de ACh na fenda sináptica, potencializando ação em todos os receptores colinérgicos.",
+    indicacoes: "Miastenia gravis, reversão do bloqueio neuromuscular (neostigmina), íleo paralítico (neostigmina).",
+    efeitos: [
+      { orgao: "Junção neuromuscular", efeito: "↑ transmissão nicotínica → ↑ força muscular" },
+      { orgao: "TGI", efeito: "↑ motilidade (M₂, M₃)" },
+      { orgao: "Coração", efeito: "Bradicardia (M₂)" },
+      { orgao: "Brônquios", efeito: "Broncoconstrição + secreção (M₂, M₃)" },
+    ]
+  },
+  {
+    nome: "Fisostigmina", grupo: "Anticolinesterásicos",
+    tipo: "agonista", sistema: "colinérgico",
+    receptores: ["M2","M3","N"],
+    seletividade: "Indireto — cruza a BHE (ação central + periférica)",
+    mecanismo: "Inibidor reversível da AChE com penetração no SNC. Reverte efeitos anticolinérgicos centrais.",
+    indicacoes: "Intoxicação por anticolinérgicos (atropina, antidepressivos tricíclicos), glaucoma (colírio).",
+    efeitos: [
+      { orgao: "SNC", efeito: "Reverte confusão, alucinações e coma anticolinérgico" },
+      { orgao: "Periférico", efeito: "Mesmos efeitos muscarínicos da ACh" },
+    ]
+  },
+  {
+    nome: "Organofosforados (inseticidas/agentes nervosos)", grupo: "Anticolinesterásicos",
+    tipo: "agonista", sistema: "colinérgico",
+    receptores: ["M2","M3","N"],
+    seletividade: "Indireto — inibe AChE irreversivelmente",
+    mecanismo: "Inibição irreversível da AChE → acúmulo maciço de ACh em todas as sinapses colinérgicas. Síndrome colinérgica (DUMBELS/SLUDGE).",
+    indicacoes: "Intoxicação (acidental ou bélica). Tratamento: atropina + pralidoxima (se precoce).",
+    efeitos: [
+      { orgao: "TGI", efeito: "Diarreia, cólicas, vômitos, salivação +++  (M₃)" },
+      { orgao: "Brônquios", efeito: "Broncoespasmo + hipersecreção (M₂, M₃)" },
+      { orgao: "Coração", efeito: "Bradicardia intensa, bloqueio AV (M₂)" },
+      { orgao: "Olho", efeito: "Miose (M₃)" },
+      { orgao: "Músculo esquelético", efeito: "Fasciculações → paralisia (N)" },
+      { orgao: "SNC", efeito: "Convulsões, coma" },
+    ]
+  },
+  // ---- ANTAGONISTAS COLINÉRGICOS (ANTIMUSCARÍNICOS) ----
+  {
+    nome: "Atropina", grupo: "Antagonistas colinérgicos (antimuscarínicos)",
+    tipo: "antagonista", sistema: "colinérgico",
+    receptores: ["M2","M3"],
+    seletividade: "Muscarínico não seletivo (M₁, M₂, M₃)",
+    mecanismo: "Antagonista competitivo muscarínico. Bloqueia os efeitos parassimpáticos em todos os órgãos-alvo.",
+    indicacoes: "Bradicardia sintomática, bloqueio AV, pré-medicação anestésica (↓ secreções), intoxicação por organofosforados, espasmos GI.",
+    efeitos: [
+      { orgao: "Coração", efeito: "↑ FC (bloqueia M₂ do nó SA)" },
+      { orgao: "Brônquios", efeito: "Broncodilatação + ↓ secreção (M₂, M₃ bloqueados)" },
+      { orgao: "TGI", efeito: "↓ motilidade, ↓ secreções (M₂, M₃ bloqueados)" },
+      { orgao: "Bexiga", efeito: "Relaxamento detrusor → retenção urinária (M₃ bloqueado)" },
+      { orgao: "Olho", efeito: "Midríase + cicloplegia (M₃ bloqueado)" },
+      { orgao: "Glândulas", efeito: "↓ salivação, sudorese, lacrimejamento (M₃ bloqueado)" },
+    ]
+  },
+  {
+    nome: "Escopolamina", grupo: "Antagonistas colinérgicos (antimuscarínicos)",
+    tipo: "antagonista", sistema: "colinérgico",
+    receptores: ["M2","M3"],
+    seletividade: "Muscarínico não seletivo com maior ação central (cruza BHE melhor que atropina)",
+    mecanismo: "Antimuscarínico com forte ação no SNC (sedação, antiemético vestibular).",
+    indicacoes: "Cinetose (enjoo de movimento), náusea pós-operatória, pré-medicação anestésica.",
+    efeitos: [
+      { orgao: "SNC / vestibular", efeito: "Antiemético, sedação (M central)" },
+      { orgao: "Olho", efeito: "Midríase + cicloplegia" },
+      { orgao: "Glândulas", efeito: "↓ secreções" },
+    ]
+  },
+  {
+    nome: "Ipratrópio", grupo: "Antagonistas colinérgicos (antimuscarínicos)",
+    tipo: "antagonista", sistema: "colinérgico",
+    receptores: ["M2","M3"],
+    seletividade: "Muscarínico não seletivo — inalatório, ação local (pouca absorção sistêmica)",
+    mecanismo: "Antagonista muscarínico por via inalatória. Bloqueia broncoconstrição e hipersecreção colinérgica nas vias aéreas.",
+    indicacoes: "DPOC (1ª linha), asma (adjuvante), rinorreia vasomotora.",
+    efeitos: [
+      { orgao: "Brônquios", efeito: "Broncodilatação + ↓ secreção brônquica (M₂, M₃ bloqueados)" },
+    ]
+  },
+  {
+    nome: "Tiotrópio", grupo: "Antagonistas colinérgicos (antimuscarínicos)",
+    tipo: "antagonista", sistema: "colinérgico",
+    receptores: ["M3"],
+    seletividade: "M₃ seletivo de longa duração (LAMA)",
+    mecanismo: "Antagonista M₃ de longa duração (24h). Dissociação lenta do M₃ vs. M₂.",
+    indicacoes: "DPOC (manutenção 1ª linha), asma (add-on).",
+    efeitos: [
+      { orgao: "Brônquios", efeito: "Broncodilatação prolongada 24h (M₃ bloqueado)" },
+    ]
+  },
+  {
+    nome: "Oxibutinina / Solifenacina", grupo: "Antagonistas colinérgicos (antimuscarínicos)",
+    tipo: "antagonista", sistema: "colinérgico",
+    receptores: ["M3","M2"],
+    seletividade: "M₃ > M₂ (bexiga)",
+    mecanismo: "Antimuscarínicos com preferência pelo trato urinário. Reduzem contrações involuntárias do detrusor.",
+    indicacoes: "Bexiga hiperativa, incontinência urinária de urgência.",
+    efeitos: [
+      { orgao: "Bexiga (detrusor)", efeito: "↓ contrações involuntárias → ↑ capacidade vesical (M₃ bloqueado)" },
+      { orgao: "Efeitos adversos", efeito: "Boca seca, constipação, visão turva (M₃ em outras regiões)" },
+    ]
+  },
+  {
+    nome: "Trospio", grupo: "Antagonistas colinérgicos (antimuscarínicos)",
+    tipo: "antagonista", sistema: "colinérgico",
+    receptores: ["M3","M2"],
+    seletividade: "M₃ > M₂; amônio quaternário — não cruza BHE",
+    mecanismo: "Antimuscarínico com estrutura de amônio quaternário. Não penetra no SNC → menor risco de efeitos cognitivos vs. oxibutinina.",
+    indicacoes: "Bexiga hiperativa, incontinência urinária de urgência (preferido em idosos).",
+    efeitos: [
+      { orgao: "Bexiga (detrusor)", efeito: "↓ contrações involuntárias (M₃ bloqueado)" },
+      { orgao: "SNC", efeito: "Sem efeitos cognitivos (não cruza BHE)" },
+    ]
+  },
+];
+
+// ===================== LABELS =====================
+const recLabels = { a1:"α₁", a2:"α₂", b1:"β₁", b2:"β₂", b3:"β₃", M2:"M₂", M3:"M₃", M4:"M₄", N:"N (nicotínico)", M:"M (muscarínico)" };
+
+// ===================== TABS =====================
+function setTab(t) {
+  ['receptor','orgao','farmaco'].forEach(id => {
+    document.getElementById('panel-'+id).style.display = t===id ? '' : 'none';
+    document.getElementById('tab-'+id).className = 'tab' + (t===id?' active':'');
+  });
+}
+
+// ===================== RECEPTOR =====================
+function renderReceptor() {
+  const rec = document.getElementById('sel-receptor').value;
+  const div = document.getElementById('res-receptor');
+  if (!rec) { div.innerHTML = ''; return; }
+  const matches = orgData.filter(d => d.rec_sim.includes(rec) || d.rec_para.includes(rec));
+  if (!matches.length) { div.innerHTML = '<div class="empty">Nenhum dado encontrado.</div>'; return; }
+  div.innerHTML = matches.map(d => {
+    let html = `<div class="card"><div class="card-title">${d.orgao}</div>`;
+    if (d.rec_sim.includes(rec) && d.sim) {
+      html += `<span class="badge badge-sim">Simpático</span><div class="effect">${d.sim}</div>`;
+      if (d.rec_sim.length > 1) html += `<div>` + d.rec_sim.map(r=>`<span class="rec-tag">${recLabels[r]||r}</span>`).join('') + `</div>`;
+    }
+    if (d.rec_sim.includes(rec) && d.rec_para.includes(rec)) html += `<hr class="divider">`;
+    if (d.rec_para.includes(rec) && d.para) {
+      html += `<span class="badge badge-para">Parassimpático</span><div class="effect">${d.para}</div>`;
+      if (d.rec_para.length > 1) html += `<div>` + d.rec_para.map(r=>`<span class="rec-tag">${recLabels[r]||r}</span>`).join('') + `</div>`;
+    }
+    html += `</div>`;
+    return html;
+  }).join('');
+}
+
+// ===================== ÓRGÃO =====================
+const orgaos = [...new Set(orgData.map(d => d.orgao))];
+const selOrgao = document.getElementById('sel-orgao');
+orgaos.forEach(o => {
+  const opt = document.createElement('option');
+  opt.value = o; opt.textContent = o;
+  selOrgao.appendChild(opt);
+});
+
+function renderOrgao() {
+  const orgao = document.getElementById('sel-orgao').value;
+  const div = document.getElementById('res-orgao');
+  if (!orgao) { div.innerHTML = ''; return; }
+  const matches = orgData.filter(d => d.orgao === orgao);
+  div.innerHTML = matches.map(d => {
+    let html = `<div class="card">`;
+    if (d.sim) {
+      html += `<span class="badge badge-sim">Simpático</span><div class="effect">${d.sim}</div>`;
+      if (d.rec_sim.length) html += `<div style="margin-bottom:4px">` + d.rec_sim.map(r=>`<span class="rec-tag">${recLabels[r]||r}</span>`).join('') + `</div>`;
+    }
+    if (d.sim && d.para) html += `<hr class="divider">`;
+    if (d.para) {
+      html += `<span class="badge badge-para">Parassimpático</span><div class="effect">${d.para}</div>`;
+      if (d.rec_para.length) html += `<div>` + d.rec_para.map(r=>`<span class="rec-tag">${recLabels[r]||r}</span>`).join('') + `</div>`;
+    }
+    html += `</div>`;
+    return html;
+  }).join('');
+}
+
+// ===================== FÁRMACO =====================
+const grupos = [...new Set(farmacos.map(f => f.grupo))];
+const selFar = document.getElementById('sel-farmaco');
+grupos.forEach(g => {
+  const og = document.createElement('optgroup');
+  og.label = g;
+  farmacos.filter(f => f.grupo === g).forEach(f => {
+    const opt = document.createElement('option');
+    opt.value = f.nome; opt.textContent = f.nome;
+    og.appendChild(opt);
+  });
+  selFar.appendChild(og);
+});
+
+function renderFarmaco() {
+  const nome = document.getElementById('sel-farmaco').value;
+  const div = document.getElementById('res-farmaco');
+  if (!nome) { div.innerHTML = ''; return; }
+  const f = farmacos.find(x => x.nome === nome);
+  if (!f) { div.innerHTML = '<div class="empty">Nenhum dado encontrado.</div>'; return; }
+
+  const tipoBadge = f.tipo === 'agonista'
+    ? `<span class="badge badge-ago">Agonista</span>`
+    : `<span class="badge badge-ant">Antagonista</span>`;
+  const sistBadge = f.sistema === 'adrenérgico'
+    ? `<span class="badge badge-sim">Adrenérgico</span>`
+    : `<span class="badge badge-para">Colinérgico</span>`;
+
+  const recTags = f.receptores.map(r => `<span class="rec-tag">${recLabels[r]||r}</span>`).join('');
+
+  const efeitos = f.efeitos.map(e =>
+    `<div class="orgao-efeito"><span class="orgao-nome">${e.orgao}:</span> ${e.efeito}</div>`
+  ).join('');
+
+  div.innerHTML = `
+    <div class="card">
+      <div class="card-title">${f.nome}</div>
+      <div style="margin-bottom:10px">${tipoBadge} ${sistBadge} <span class="badge badge-class">${f.grupo}</span></div>
+      <div class="row"><span class="info-label">Seletividade</span><span class="info-val">${f.seletividade}</span></div>
+      <div style="margin-bottom:8px">${recTags}</div>
+      <hr class="divider">
+      <div class="efeitos-title">Mecanismo</div>
+      <div class="indicacoes">${f.mecanismo}</div>
+      <hr class="divider">
+      <div class="efeitos-title">Indicações clínicas</div>
+      <div class="indicacoes">${f.indicacoes}</div>
+      <hr class="divider">
+      <div class="efeitos-title">Efeitos por órgão / sistema</div>
+      ${efeitos}
+    </div>`;
+}
+</script>
+</body>
+</html>
