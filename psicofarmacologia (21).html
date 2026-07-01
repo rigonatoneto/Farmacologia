@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Psicofarmacologia — SNC</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a18;min-height:100vh}
+.container{padding:1.5rem 1rem;max-width:720px;margin:0 auto}
+h1{font-size:18px;font-weight:500;margin-bottom:2px}
+.subtitle{font-size:12px;color:#888;margin-bottom:1.2rem}
+.tabs{display:flex;gap:5px;margin-bottom:1.2rem;flex-wrap:wrap}
+.tab{flex:1;min-width:70px;padding:8px 4px;border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:500;color:#666;text-align:center;transition:all .15s;line-height:1.3;word-break:break-word}
+.tab.active{background:#e8f0fe;color:#1a56db;border-color:#a0b8f5}
+.select-label{font-size:12px;color:#666;margin-bottom:5px}
+select{width:100%;margin-bottom:1rem;font-size:13px;border-radius:8px;padding:9px;border:1px solid #ccc;background:#fff;color:#1a1a18;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+.results{display:flex;flex-direction:column;gap:10px}
+.card{background:#fff;border:1px solid #e0e0d8;border-radius:12px;padding:.9rem 1.1rem}
+.card-title{font-size:15px;font-weight:500;margin-bottom:4px}
+.card-sub{font-size:11px;color:#888;margin-bottom:10px}
+.badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px;margin-right:3px;margin-bottom:4px}
+.b-isrs{background:#e0f2fe;color:#0369a1}
+.b-irsn{background:#ede9fe;color:#6d28d9}
+.b-tca{background:#fce7f3;color:#9d174d}
+.b-imao{background:#fee2e2;color:#991b1b}
+.b-atip{background:#d1fae5;color:#065f46}
+.b-ap1{background:#fef3c7;color:#92400e}
+.b-ap2{background:#ffedd5;color:#9a3412}
+.b-estab{background:#e0e7ff;color:#3730a3}
+.b-bzd{background:#f0fdf4;color:#166534}
+.b-compz{background:#ecfdf5;color:#065f46}
+.b-barb{background:#fdf2f8;color:#86198f}
+.b-outros{background:#f8fafc;color:#334155}
+.section-title{font-size:11px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.05em;margin:10px 0 4px}
+.effect-row{display:flex;align-items:center;gap:8px;padding:3px 0;border-bottom:1px solid #f0f0ec;font-size:13px}
+.effect-row:last-child{border-bottom:none}
+.effect-label{min-width:130px;color:#555;font-size:12px}
+.stars{display:flex;gap:2px}
+.star{width:10px;height:10px;border-radius:50%;background:#e0e0d8}
+.star.on{background:#f59e0b}
+.star.red.on{background:#ef4444}
+.tag{display:inline-block;font-size:10px;padding:2px 6px;border-radius:12px;background:#f5f5f0;border:1px solid #ddd;color:#555;margin:2px 2px 2px 0}
+.cyp-tag{background:#ede9fe;border-color:#c4b5fd;color:#5b21b6}
+.ind-tag{background:#d1fae5;border-color:#6ee7b7;color:#065f46}
+.alert{background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:7px 10px;font-size:12px;color:#78350f;margin-top:8px;line-height:1.5}
+.alert.red{background:#fee2e2;border-color:#fca5a5;color:#7f1d1d}
+.info-text{font-size:13px;color:#333;line-height:1.6}
+.divider{border:none;border-top:1px solid #eee;margin:8px 0}
+.empty{text-align:center;padding:2rem;color:#aaa;font-size:13px}
+.nt-card{background:#fff;border:1px solid #e0e0d8;border-radius:12px;padding:.9rem 1.1rem;margin-bottom:10px}
+.nt-title{font-size:14px;font-weight:500;margin-bottom:6px}
+.rec-list{display:flex;flex-direction:column;gap:6px}
+.rec-item{background:#f8f8f5;border-radius:8px;padding:8px 10px}
+.rec-name{font-size:13px;font-weight:500;margin-bottom:2px}
+.rec-desc{font-size:12px;color:#555;line-height:1.5}
+.search-box{width:100%;padding:9px 12px;border:1px solid #ccc;border-radius:8px;font-size:13px;margin-bottom:1rem;background:#fff;color:#1a1a18}
+@media(prefers-color-scheme:dark){
+  body{background:#1a1a18;color:#eee}
+  h1{color:#eee}
+  .tab{background:#2a2a28;border-color:#444;color:#aaa}
+  .tab.active{background:#1e3a6e;color:#90b4f8;border-color:#3a5a9e}
+  select,.search-box{background:#2a2a28;border-color:#444;color:#eee}
+  .card,.nt-card{background:#242422;border-color:#3a3a38}
+  .card-sub,.card-title{color:#eee}
+  .effect-label{color:#aaa}
+  .effect-row{border-color:#333}
+  .star{background:#3a3a38}
+  .tag{background:#2a2a28;border-color:#444;color:#aaa}
+  .cyp-tag{background:#2d1a5a;border-color:#7c3aed;color:#c4b5fd}
+  .ind-tag{background:#064e3b;border-color:#059669;color:#6ee7b7}
+  .alert{background:#3a2a00;border-color:#d97706;color:#fde68a}
+  .alert.red{background:#3a0000;border-color:#dc2626;color:#fca5a5}
+  .info-text{color:#ccc}
+  .divider{border-color:#333}
+  .rec-item{background:#2a2a28}
+  .rec-desc{color:#aaa}
+  .section-title{color:#888}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Psicofarmacologia — SNC</h1>
+  <p class="subtitle">Antidepressivos · Antipsicóticos · Estabilizadores do humor · Neurotransmissores</p>
+
+  <input class="search-box" type="text" placeholder="🔍 Busca global — fármaco, classe, Apsen, indicação..." id="busca-global-input" oninput="buscaGlobal(this.value)" style="border-color:#a0b8f5">
+  <div class="btn-list" id="res-busca-global" style="margin-bottom:1rem"></div>
+
+  <div id="painel-favoritos" style="background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:10px 14px;margin-bottom:14px">
+    <div style="font-size:12px;font-weight:500;color:#92400e;margin-bottom:6px">&#9733; Favoritos</div>
+    <div id="lista-favoritos"></div>
+  </div>
+
+  <div style="margin-bottom:14px">
+    <p class="select-label" style="margin-bottom:4px">Área terapêutica (filtra Fármaco / Classe / CYP — Interação e Comparar sempre cruzam todas as áreas):</p>
+    <select id="sel-area" onchange="onAreaChange()" style="width:100%;font-size:13px;padding:8px 10px;border-radius:8px;border:1px solid #d8d8d0">
+      <option value="">Todas as áreas</option>
+    </select>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="setTab('farmaco')" id="tab-farmaco">Por fármaco</div>
+    <div class="tab" onclick="setTab('classe')" id="tab-classe">Por classe</div>
+    <div class="tab" onclick="setTab('indicacao')" id="tab-indicacao">Por indicação</div>
+    <div class="tab" onclick="setTab('nt')" id="tab-nt">Neurotrans.</div>
+    <div class="tab" onclick="setTab('cyp')" id="tab-cyp">CYPs</div>
+    <div class="tab" onclick="setTab('interacao')" id="tab-interacao">Checar interação</div>
+    <div class="tab" onclick="setTab('comparar')" id="tab-comparar">Comparar</div>
+    <div class="tab" onclick="setTab('quiz')" id="tab-quiz">Quiz</div>
+  </div>
+
+  <div id="panel-farmaco">
+    <input class="search-box" type="text" placeholder="Buscar fármaco..." oninput="filterFarmacos(this.value)" id="search-farmaco">
+    <p class="select-label">Selecione o fármaco:</p>
+    <select id="sel-farmaco" onchange="renderFarmaco()"><option value="">— escolha —</option></select>
+    <div class="results" id="res-farmaco"></div>
+  </div>
+
+  <div id="panel-classe" style="display:none">
+    <p class="select-label">Selecione a classe:</p>
+    <select id="sel-classe" onchange="renderClasse()"><option value="">— escolha —</option></select>
+    <div class="results" id="res-classe"></div>
+  </div>
+
+  <div id="panel-indicacao" style="display:none">
+    <p class="select-label">Selecione a indicação:</p>
+    <select id="sel-indicacao" onchange="renderIndicacao()">
+      <option value="">— escolha —</option>
+      <option value="depressao">Depressão maior</option>
+      <option value="ansiedade">Ansiedade / TAG</option>
+      <option value="toc">TOC</option>
+      <option value="tept">TEPT</option>
+      <option value="bipolar">Transtorno bipolar</option>
+      <option value="esquizofrenia">Esquizofrenia</option>
+      <option value="mania">Mania aguda</option>
+      <option value="tdah">TDAH</option>
+      <option value="dor">Dor neuropática / fibromialgia</option>
+      <option value="tabagismo">Abandono do tabagismo</option>
+      <option value="insonia">Insônia</option>
+      <option value="convulsao">Convulsões / epilepsia</option>
+      <option value="abstinencia">Abstinência de álcool</option>
+      <option value="anestesia">Anestesia / sedação para procedimentos</option>
+      <option value="overdose">Reversão de overdose</option>
+      <option value="parto">Depressão pós-parto</option>
+    </select>
+    <div class="results" id="res-indicacao"></div>
+  </div>
+
+  <div id="panel-nt" style="display:none">
+    <div id="res-nt"></div>
+  </div>
+
+  <div id="panel-cyp" style="display:none">
+    <div style="background:#e8f0fe;border:1px solid #a0b8f5;border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px">
+      <div style="font-size:20px;line-height:1">&#x1F9EC;</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;color:#1a56db;margin-bottom:3px">Referência em Farmacogenética</div>
+        <div style="font-size:12px;color:#333;margin-bottom:6px">O <strong>ClinPGx</strong> é um banco de dados clínico de farmacogenética com informações sobre variantes genéticas, fenótipos metabolizadores (PM/IM/NM/UM), diretrizes CPIC e interações gene-fármaco.</div>
+        <a href="https://www.clinpgx.org/" target="_blank" style="display:inline-block;font-size:12px;font-weight:500;color:#fff;background:#1a56db;padding:4px 12px;border-radius:6px;text-decoration:none">Acessar ClinPGx.org</a>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e0e0d8;border-radius:10px;padding:12px 14px;margin-bottom:14px">
+      <div style="font-size:12px;font-weight:500;color:#555;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">Fenótipos metabolizadores</div>
+      <div style="font-size:12px;color:#333;line-height:1.6">
+        <div style="margin-bottom:6px"><strong style="color:#b91c1c">PM (Metabolizador Lento):</strong> sem atividade enzimática para aquela CYP. O fármaco se acumula — risco de toxicidade. Exige doses bem menores.</div>
+        <div style="margin-bottom:6px"><strong style="color:#b45309">IM (Metabolizador Intermediário):</strong> atividade reduzida. Níveis mais altos que o esperado — frequentemente exige ajuste de dose.</div>
+        <div style="margin-bottom:6px"><strong style="color:#166534">NM (Metabolizador Normal):</strong> atividade enzimática normal. As doses padrão de bula são calculadas para este grupo.</div>
+        <div><strong style="color:#1d4ed8">UM (Metabolizador Ultrarrápido):</strong> atividade muito superior ao normal (geralmente cópias extras do gene). Elimina o fármaco rápido demais — pode não fazer efeito, ou gerar excesso de metabólito ativo (ex: codeína → morfina).</div>
+      </div>
+    </div>
+    <input class="search-box" type="text" placeholder="Buscar fármaco..." oninput="filterCypFarmacos(this.value)" id="search-cyp">
+    <p class="select-label">Selecione o fármaco para ver perfil CYP e interações:</p>
+    <select id="sel-cyp" onchange="renderCYP()"><option value="">— escolha —</option></select>
+    <div class="results" id="res-cyp"></div>
+  </div>
+
+  <div id="panel-interacao" style="display:none">
+    <p class="select-label">Selecione o 1º fármaco:</p>
+    <select id="interacao-1" onchange="checarInteracao()"><option value="">— escolha —</option></select>
+    <p class="select-label">Selecione o 2º fármaco:</p>
+    <select id="interacao-2" onchange="checarInteracao()"><option value="">— escolha —</option></select>
+    <div class="results" id="res-interacao"></div>
+  </div>
+
+  <div id="panel-comparar" style="display:none">
+    <p class="select-label">Selecione o 1º fármaco:</p>
+    <select id="comparar-1" onchange="compararFarmacos()"><option value="">— escolha —</option></select>
+    <p class="select-label">Selecione o 2º fármaco:</p>
+    <select id="comparar-2" onchange="compararFarmacos()"><option value="">— escolha —</option></select>
+    <p class="select-label">Selecione o 3º fármaco (opcional):</p>
+    <select id="comparar-3" onchange="compararFarmacos()"><option value="">— escolha —</option></select>
+    <div class="results" id="res-comparar"></div>
+  </div>
+
+  <div id="panel-quiz" style="display:none">
+    <p class="select-label" style="margin-bottom:10px">Teste seu conhecimento: mecanismo de ação e metabolismo CYP de um fármaco sorteado.</p>
+    <button onclick="novoQuiz()" style="font-size:13px;padding:9px 18px;border-radius:8px;border:1px solid #a0b8f5;background:#e8f0fe;color:#1a56db;cursor:pointer;font-weight:500;margin-bottom:14px">&#127922; Sortear fármaco</button>
+    <div id="quiz-area"></div>
+  </div>
+</div>
+
+<script src="farmacos.js"></script>
+<script>
+// farmacos, classes, classBadge, areas agora vêm de farmacos.js (carregado acima)
+
+
+var cypDB = {
+  '1A2': {
+    descricao: "Responsável por ~5% do metabolismo hepático. Expressão induzida por hidrocarbonetos aromáticos (fumaça de cigarro, carne assada na brasa). Polimorfismo menor que 2D6 e 2C19.",
+    fenotipos: "Variação moderada entre indivíduos. Fumantes têm atividade ~40% maior — ao parar de fumar, nível de substratos (clozapina, olanzapina) pode ↑ significativamente.",
+    substratos_externos: ["Paracetamol (parcial)", "Cafeína", "Teofilina", "Propranolol"],
+    inibidores_externos: [
+      {nome:"Fluvoxamina", potencia:"Forte", nota:"Principal inibidor CYP1A2. ↑↑↑ clozapina e olanzapina"},
+      {nome:"Ciprofloxacino", potencia:"Moderado", nota:"Antibiótico quinolônico — revisar psicofármacos"},
+      {nome:"Amiodarona", potencia:"Moderado", nota:"Antiarrítmico de longa meia-vida"},
+      {nome:"Cimetidina", potencia:"Leve", nota:"Antiulceroso H₂"},
+      {nome:"Mexiletina", potencia:"Moderado", nota:"Antiarrítmico"},
+    ],
+    indutores_externos: [
+      {nome:"Fumaça de cigarro", potencia:"Forte", nota:"Hidrocarbonetos policíclicos aromáticos — NÃO nicotina. Cessação → ↑ 40% nível clozapina/olanzapina"},
+      {nome:"Carne assada na brasa", potencia:"Leve", nota:"Hidrocarbonetos policíclicos aromáticos — indução dietética"},
+      {nome:"Omeprazol (doses altas)", potencia:"Leve", nota:"IBP — efeito menor"},
+      {nome:"Carbamazepina", potencia:"Moderado", nota:"Também induz 3A4 e 2C9"},
+      {nome:"Rifampicina", potencia:"Forte", nota:"Indutor global"},
+      {nome:"Fenobarbital", potencia:"Moderado", nota:"Induz múltiplas CYPs"},
+      {nome:"Brócolis / crucíferas", potencia:"Leve", nota:"Indução dietética"},
+    ]
+  },
+  '2B6': {
+    descricao: "Representa ~3–5% do CYP hepático. Metaboliza metadona, efavirenz, bupropiona. Polimorfismo clinicamente relevante.",
+    fenotipos: "PM: risco de toxicidade com metadona. UM: falha terapêutica com bupropiona.",
+    inibidores_externos: [
+      {nome:"Ticlopidina", potencia:"Forte", nota:"Antiagregante plaquetário"},
+      {nome:"Clopidogrel", potencia:"Moderado", nota:"Antiagregante"},
+      {nome:"Voriconazol", potencia:"Moderado", nota:"Antifúngico azólico"},
+      {nome:"Ritonavir", potencia:"Moderado", nota:"Inibidor de protease HIV"},
+    ],
+    indutores_externos: [
+      {nome:"Rifampicina", potencia:"Forte", nota:"↓ 60–80% exposição de substratos"},
+      {nome:"Carbamazepina", potencia:"Moderado", nota:""},
+      {nome:"Fenitoína", potencia:"Moderado", nota:""},
+      {nome:"Erva-de-são-joão", potencia:"Moderado", nota:"Fitoterápico — indução global"},
+    ]
+  },
+  '2C9': {
+    descricao: "Responsável por ~20% do metabolismo hepático. Metaboliza varfarina (S-varfarina — mais potente), fenitoína, AINEs, sulfonilureias. Interações clinicamente críticas.",
+    fenotipos: "PM (5–10% caucasianos): risco de sangramento com varfarina em doses padrão. Testar genótipo antes de iniciar varfarina é recomendado em muitos países.",
+    inibidores_externos: [
+      {nome:"Fluconazol", potencia:"Forte", nota:"↑↑ varfarina → risco hemorrágico grave"},
+      {nome:"Amiodarona", potencia:"Forte", nota:"Meia-vida muito longa (40–55 dias) — inibição prolongada"},
+      {nome:"Voriconazol", potencia:"Forte", nota:"Antifúngico azólico"},
+      {nome:"Sulfametoxazol", potencia:"Moderado", nota:"Componente do SMZ-TMP"},
+      {nome:"Metronidazol", potencia:"Moderado", nota:"↑ varfarina"},
+      {nome:"Miconazol (tópico/oral)", potencia:"Forte", nota:"Mesmo uso tópico pode inibir sistemicamente"},
+    ],
+    indutores_externos: [
+      {nome:"Rifampicina", potencia:"Forte", nota:"↓ varfarina → risco trombótico"},
+      {nome:"Fenobarbital", potencia:"Moderado", nota:""},
+      {nome:"Carbamazepina", potencia:"Moderado", nota:""},
+      {nome:"Dexametasona", potencia:"Leve", nota:"Corticosteroide"},
+      {nome:"Erva-de-são-joão", potencia:"Moderado", nota:"↓ eficácia anticoagulante"},
+    ],
+    substratos_externos: ["Varfarina", "Diclofenaco", "Ibuprofeno", "Celecoxibe", "Glipizida (antidiabético)"]
+  },
+  '2C19': {
+    descricao: "Metaboliza IBPs, clopidogrel (pró-fármaco — precisa ser ativado), antiepilépticos, alguns benzodiazepínicos.",
+    fenotipos: "PM: 2–3% europeus, 12–23% asiáticos. Clopidogrel em PM = falha de ativação → risco cardiovascular. PM com IBPs = maior supressão ácida (pode ser vantagem). UM: menor eficácia dos IBPs.",
+    substratos_externos: ["Clopidogrel (pró-fármaco)", "Omeprazol", "Lansoprazol", "Propranolol"],
+    inibidores_externos: [
+      {nome:"Fluvoxamina", potencia:"Forte", nota:"Dupla inibição 1A2 + 2C19"},
+      {nome:"Fluoxetina", potencia:"Moderado", nota:"Também inibe 2D6"},
+      {nome:"Omeprazol", potencia:"Moderado", nota:"Auto-inibição — aumenta sua própria exposição"},
+      {nome:"Esomeprazol", potencia:"Moderado", nota:""},
+      {nome:"Voriconazol", potencia:"Forte", nota:""},
+      {nome:"Cetoconazol", potencia:"Moderado", nota:""},
+    ],
+    indutores_externos: [
+      {nome:"Rifampicina", potencia:"Forte", nota:""},
+      {nome:"Carbamazepina", potencia:"Moderado", nota:""},
+      {nome:"Erva-de-são-joão", potencia:"Moderado", nota:""},
+    ]
+  },
+  '2D6': {
+    descricao: "Metaboliza ~20–25% de todos os fármacos. Não é induzível (raro entre as CYPs). Polimorfismo mais clinicamente relevante em psiquiatria e cardiologia.",
+    fenotipos: "PM (7% caucasianos, 2% asiáticos): acúmulo de TCAs, antipsicóticos, opioides → toxicidade. UM (1–10% populações, até 29% África Oriental): falha de codeína/tramadol; UM + codeína → morfina excessiva → risco fatal em neonatos amamentados.",
+    substratos_externos: ["Codeína (ativação → morfina)", "Tramadol", "Metoprolol", "Propranolol", "Flecainida", "Propafenona"],
+    inibidores_externos: [
+      {nome:"Quinidina", potencia:"Forte", nota:"Antiarrítmico — inibidor mais potente do CYP2D6"},
+      {nome:"Fluoxetina", potencia:"Forte", nota:"↑ TCAs, risperidona, tramadol, metoprolol"},
+      {nome:"Paroxetina", potencia:"Forte", nota:"↑ TCAs, antipsicóticos — revisar toda medicação"},
+      {nome:"Bupropiona", potencia:"Forte", nota:"↑ risperidona, venlafaxina, metoprolol"},
+      {nome:"Duloxetina", potencia:"Moderado", nota:"↑ TCAs e outros substratos 2D6"},
+      {nome:"Amiodarona", potencia:"Moderado", nota:""},
+      {nome:"Haloperidol", potencia:"Leve-Moderado", nota:"Substrato E inibidor leve"},
+      {nome:"Terbinafina", potencia:"Forte", nota:"Antifúngico oral — inibição prolongada após suspensão"},
+      {nome:"Metadona", potencia:"Moderado", nota:""},
+    ],
+    indutores_externos: [
+      {nome:"(Nenhum indutor clinicamente significativo conhecido)", potencia:"—", nota:"CYP2D6 é a principal CYP não induzível — diferencial importante"},
+    ]
+  },
+  '3A4': {
+    descricao: "A mais abundante: ~30–40% do CYP hepático + ~70% do CYP intestinal. Metaboliza >50% dos fármacos comercializados. Amplamente induzível e inibível.",
+    fenotipos: "Variação 10–100x entre indivíduos mesmo sem polimorfismos clássicos. CYP3A5 tem papel complementar (especialmente em afrodescendentes).",
+    substratos_externos: ["Estatinas (sinvastatina, atorvastatina, lovastatina)", "Amlodipina, nifedipina, diltiazem, verapamil", "Ciclosporina, tacrolimo, sirolimo", "Fentanila, metadona, buprenorfina", "Midazolam, triazolam", "Sildenafila", "Contraceptivos orais"],
+    inibidores_externos: [
+      {nome:"Cetoconazol / Itraconazol", potencia:"Forte", nota:"Antifúngicos azólicos — inibição potente e rápida, bloqueio direto reversível"},
+      {nome:"Voriconazol / Posaconazol", potencia:"Forte", nota:""},
+      {nome:"Claritromicina / Eritromicina", potencia:"Forte / Moderado", nota:"Antibióticos macrolídeos — ↑ BZDs, quetiapina, estatinas (risco de rabdomiólise)"},
+      {nome:"Ritonavir / Cobicistat", potencia:"Forte", nota:"Inibidores de protease HIV — usados intencionalmente como boosters"},
+      {nome:"Suco de toranja (grapefruit)", potencia:"Moderado", nota:"Inibe CYP3A4 intestinal de forma irreversível (requer síntese de nova enzima) — efeito dura ~3 dias"},
+      {nome:"Nefazodona", potencia:"Forte", nota:"Antidepressivo — inibição intensa"},
+      {nome:"Diltiazem / Verapamil", potencia:"Moderado", nota:"Bloqueadores de canal de cálcio — também substratos"},
+      {nome:"Fluconazol", potencia:"Moderado", nota:"Inibe 3A4 e 2C9"},
+      {nome:"Aprepitanto", potencia:"Moderado", nota:"Antiemético — importante em quimioterapia"},
+    ],
+    indutores_externos: [
+      {nome:"Rifampicina", potencia:"Forte", nota:"Ativa receptor nuclear PXR — ↓ 70–90% da exposição de substratos; início em 3–7 dias"},
+      {nome:"Fenobarbital", potencia:"Forte", nota:"Ativa PXR e CAR; início em 7–14 dias"},
+      {nome:"Carbamazepina", potencia:"Forte", nota:"Ativa PXR e CAR; início em 3–7 dias — revisar toda medicação concomitante"},
+      {nome:"Fenitoína", potencia:"Forte", nota:"Ativa PXR; início em 7–14 dias"},
+      {nome:"Erva-de-são-joão (Hypericum)", potencia:"Moderado", nota:"Ativa PXR; início em 2–3 semanas — ↓ anticoncepcionais, antirretrovirais, BZDs, quetiapina"},
+      {nome:"Rifabutina", potencia:"Moderado", nota:"Ativa PXR"},
+      {nome:"Dexametasona", potencia:"Moderado", nota:"Corticosteroide"},
+      {nome:"Oxcarbazepina", potencia:"Moderado", nota:"Anticonvulsivante"},
+      {nome:"Modafinil", potencia:"Leve-Moderado", nota:"Estimulante — induz CYP3A4"},
+    ]
+  },
+  '2E1': {
+    descricao: "Representa uma fração pequena do CYP hepático, mas tem alta relevância toxicológica. Metaboliza paracetamol (via secundária, produz o metabólito hepatotóxico NAPQI) e etanol. Pouco polimorfismo clinicamente significativo comparado a 2D6/2C19.",
+    fenotipos: "Indução crônica por álcool é o fator de maior relevância clínica — não há classificação de fenótipo PM/UM amplamente usada na prática para esta enzima.",
+    substratos_externos: ["Paracetamol (via secundária — gera NAPQI hepatotóxico)", "Etanol", "Clorzoxazona"],
+    inibidores_externos: [
+      {nome:"Dissulfiram", potencia:"Forte", nota:"Usado no tratamento do alcoolismo — também inibe aldeído desidrogenase"},
+    ],
+    indutores_externos: [
+      {nome:"Álcool (uso crônico)", potencia:"Forte", nota:"Etilismo crônico induz 2E1 → ↑ produção de NAPQI → maior risco de hepatotoxicidade por paracetamol em doses terapêuticas"},
+      {nome:"Isoniazida", potencia:"Moderado", nota:"Antituberculostático — também associado a hepatotoxicidade"},
+      {nome:"Tabagismo", potencia:"Leve", nota:"Indução leve"},
+    ]
+  }
+};
+
+
+const nts = [
+  {
+    nome:"Serotonina (5-HT)", cor:"#e0f2fe", corBorda:"#0369a1",
+    sintese:"Triptofano → 5-HTP (TPH) → 5-HT (AADC)",
+    degradacao:"MAO-A → 5-HIAA",
+    funcoes:"Humor, sono, apetite, temperatura, cognição, comportamento sexual, modulação da dor, ansiedade.",
+    receptores:[
+      {nome:"SERT (transportador)", tipo:"transporte", desc:"Recaptação de 5-HT para o neurônio pré-sináptico. Alvo dos ISRS e IRSN."},
+      {nome:"5-HT₁A", tipo:"Gi-acoplado", desc:"Pré-sináptico: autorreceptor somatodendrítico — inibe disparo serotoninérgico. Pós-sináptico: ansiolítico, antidepressivo. Alvo: buspirona (agonista parcial), vortioxetina, aripiprazol."},
+      {nome:"5-HT₁B", tipo:"Gi-acoplado", desc:"Autorreceptor terminal — inibe liberação de 5-HT. Heterorreceptor em neurônios dopaminérgicos."},
+      {nome:"5-HT₂A", tipo:"Gq-acoplado", desc:"Pós-sináptico cortical. Bloqueio → efeito antipsicótico (2ª geração), ansiolítico, redução de efeitos sexuais. Agonismo → alucinações (psilocibina, LSD)."},
+      {nome:"5-HT₂C", tipo:"Gq-acoplado", desc:"Controle do apetite (saciedade), regulação dopaminérgica. Bloqueio → aumento de peso, aumento de DA e NE (via desinibição)."},
+      {nome:"5-HT₃", tipo:"Canal iônico (Na⁺/K⁺)", desc:"Único receptor 5-HT ionotrópico. Pré-sináptico: modula liberação de NT. TGI: náusea/vômito. Bloqueio: antiemético (ondansetron), reduz efeitos GI dos ISRS (mirtazapina, vortioxetina)."},
+      {nome:"5-HT₇", tipo:"Gs-acoplado", desc:"Ritmo circadiano, cognição, humor. Bloqueio por lurasidona e outros AP2 → possível benefício cognitivo e antidepressivo."},
+    ]
+  },
+  {
+    nome:"Noradrenalina (NE)", cor:"#fee2e2", corBorda:"#991b1b",
+    sintese:"Tirosina → DOPA (TH) → DA (AADC) → NE (DBH)",
+    degradacao:"MAO-A/B → DHPG | COMT → normetanefrina",
+    funcoes:"Atenção, alerta, memória de trabalho, regulação do humor, resposta ao estresse (fight-or-flight), dor descendente.",
+    receptores:[
+      {nome:"NET (transportador)", tipo:"transporte", desc:"Recaptação de NE. Alvo dos IRSN, TCAs, bupropiona, atomoxetina."},
+      {nome:"α₁ (pós-sináptico)", tipo:"Gq-acoplado", desc:"↑ atenção e alertamento. Bloqueio → sedação, hipotensão ortostática (TCAs, antipsicóticos atípicos)."},
+      {nome:"α₂ (pré-sináptico)", tipo:"Gi-acoplado", desc:"Autorreceptor: inibe liberação de NE (feedback negativo). Bloqueio → ↑ NE (mirtazapina). Agonismo → ↓ tônus simpático (clonidina, guanfacina — TDAH)."},
+      {nome:"β₁", tipo:"Gs-acoplado", desc:"Efeitos cardíacos. No SNC: consolidação da memória emocional (amígdala)."},
+    ]
+  },
+  {
+    nome:"Dopamina (DA)", cor:"#d1fae5", corBorda:"#065f46",
+    sintese:"Tirosina → DOPA (TH) → DA (AADC)",
+    degradacao:"MAO-A/B → DOPAC | COMT → 3-metoxitiramina",
+    funcoes:"Motivação, recompensa, prazer, movimento (estriado), cognição (CPF), regulação hormonal (hipófise), iniciativa.",
+    vias:[
+      "Mesolímbica: área tegmental ventral → nucleus accumbens — recompensa, motivação. Hiperatividade → psicose positiva.",
+      "Mesocortical: ATV → córtex pré-frontal — cognição, planejamento. Hipoatividade → sintomas negativos.",
+      "Nigroestriatal: substância negra → estriado — controle motor. Bloqueio → SEP.",
+      "Tuberoinfundibular: hipotálamo → hipófise — inibe prolactina. Bloqueio → hiperprolactinemia.",
+    ],
+    receptores:[
+      {nome:"DAT (transportador)", tipo:"transporte", desc:"Recaptação de DA. Alvo de metilfenidato, cocaína, bupropiona."},
+      {nome:"D₁ / D₅", tipo:"Gs-acoplado", desc:"Pós-sináptico. CPF: memória de trabalho (curva em U — excesso ou déficit impacta função). Via direta estriatal."},
+      {nome:"D₂", tipo:"Gi-acoplado", desc:"Pré e pós-sináptico. Alvo principal dos antipsicóticos. Bloqueio mesolímbico → antipscótico. Bloqueio nigroestriatal → SEP. Bloqueio TI → hiperprolactinemia. Agonismo parcial → aripiprazol, brexpiprazol."},
+      {nome:"D₃", tipo:"Gi-acoplado", desc:"Sistema límbico. Envolvido em comportamento motivacional, recompensa. Alvo emergente para substâncias e psicose."},
+      {nome:"D₄", tipo:"Gi-acoplado", desc:"CPF. Modulação cognitiva. Alta afinidade da clozapina (possível contribuição para perfil único)."},
+    ]
+  },
+  {
+    nome:"GABA", cor:"#ede9fe", corBorda:"#6d28d9",
+    sintese:"Glutamato → GABA (GAD — ácido glutâmico descarboxilase)",
+    degradacao:"GABA-T → succinato semialdéído (valproato inibe GABA-T)",
+    funcoes:"Principal neurotransmissor inibitório do SNC. Controla excitabilidade neuronal, ansiedade, sono, tônus muscular, convulsões.",
+    receptores:[
+      {nome:"GABA-A", tipo:"Canal Cl⁻ (ionotrópico)", desc:"Hiperpolarização rápida via influxo de Cl⁻. Sítio do benzodiazepínico (↑ frequência abertura canal). Sítio do barbitúrico (↑ duração abertura). Sítio neuroesteróide (brexanolona). Alvo: BZDs, barbitúricos, zolpidem, brexanolona."},
+      {nome:"GABA-B", tipo:"Gi-acoplado (metabotrópico)", desc:"Pré e pós-sináptico. Pré: inibe liberação de NT. Pós: hiperpolarização via ↑ K⁺. Alvo: baclofeno (espasticidade, dependência de álcool)."},
+    ]
+  },
+  {
+    nome:"Glutamato", cor:"#fef3c7", corBorda:"#92400e",
+    sintese:"α-cetoglutarato (ciclo de Krebs) → glutamato | glutamina → glutamato (glutaminase)",
+    degradacao:"Recaptação por transportadores EAATs (neurônio e astrócito) → glutamina (glutamina sintetase)",
+    funcoes:"Principal neurotransmissor excitatório do SNC. Plasticidade sináptica (LTP/LTD), memória, aprendizagem, cognição. Excesso → excitotoxicidade.",
+    receptores:[
+      {nome:"NMDA", tipo:"Canal iônico (Na⁺/Ca²⁺/K⁺)", desc:"Voltagem e ligante-dependente (co-agonistas: glutamato + glicina/D-serina). Bloqueado por Mg²⁺ em repouso. Envolvido em plasticidade sináptica e cognição. Bloqueio → efeitos dissociativos (cetamina, PCP). Esketamina (intranasal) para depressão resistente atua aqui."},
+      {nome:"AMPA", tipo:"Canal iônico (Na⁺/K⁺)", desc:"Transmissão glutamatérgica rápida. Regula expressão de BDNF. Modulação positiva → potencial antidepressivo."},
+      {nome:"Kainate", tipo:"Canal iônico", desc:"Modulação pré-sináptica da liberação de glutamato e GABA."},
+      {nome:"mGluR (metabotrópicos)", tipo:"Gq / Gi-acoplado", desc:"Regulação fina da neurotransmissão glutamatérgica. Alvos em investigação para esquizofrenia e depressão."},
+    ]
+  },
+  {
+    nome:"Histamina (H)", cor:"#ffedd5", corBorda:"#9a3412",
+    sintese:"Histidina → histamina (histidina descarboxilase)",
+    degradacao:"MAO-B → ácido imidazolacético | HMT → metilhistamina",
+    funcoes:"Sono/vigília (neurônios histaminérgicos do núcleo tuberomamilar), regulação do apetite, temperatura corporal, aprendizagem.",
+    receptores:[
+      {nome:"H₁", tipo:"Gq-acoplado", desc:"Bloqueio → sedação, aumento do apetite, ganho de peso. Alvo colateral de TCAs, antipsicóticos de baixa potência, mirtazapina, quetiapina."},
+      {nome:"H₂", tipo:"Gs-acoplado", desc:"Secreção gástrica (famotidina, ranitidina). Efeitos SNC limitados."},
+    ]
+  },
+  {
+    nome:"Acetilcolina — SNC (ACh)", cor:"#fce7f3", corBorda:"#9d174d",
+    sintese:"Colina + acetil-CoA → ACh (colina acetiltransferase)",
+    degradacao:"AChE → colina + acetato",
+    funcoes:"Atenção, memória (sistema colinérgico basal — núcleo de Meynert), sono REM, cognição, plasticidade. Déficit → doença de Alzheimer.",
+    receptores:[
+      {nome:"M₁ (muscarínico)", tipo:"Gq-acoplado", desc:"Córtex e hipocampo: aprendizagem, memória. Bloqueio → confusão, amnésia, delírio (efeito anticolinérgico central de TCAs, antipsicóticos, antihistamínicos)."},
+      {nome:"Nicotínico — neuronal", tipo:"Canal iônico", desc:"Pré-sináptico: modula liberação de DA, NE, 5-HT, ACh. Estimulação → atenção, cognição, efeito dos psicoestimulantes."},
+    ]
+  },
+  {
+    nome:"Orexina / Hipocretina", cor:"#fdf2f8", corBorda:"#86198f",
+    sintese:"Peptídeo produzido exclusivamente pelo hipotálamo lateral (neurônios orexinérgicos)",
+    degradacao:"Degradação proteolítica; meia-vida plasmática ~30 min",
+    funcoes:"Promoção e manutenção da vigília, regulação do sono REM, tônus muscular, apetite, resposta ao estresse. Déficit: narcolepsia com cataplexia.",
+    receptores:[
+      {nome:"OX₁R (orexina-1)", tipo:"Gq-acoplado", desc:"Maior afinidade pela orexina-A. Expresso em locus coeruleus (NE). Envolvido na resposta ao estresse e recompensa."},
+      {nome:"OX₂R (orexina-2)", tipo:"Gq-acoplado", desc:"Afinidade por orexina-A e B. Expresso no núcleo tuberomamilar (histamina) e raphé (5-HT). Principal alvo dos DORAs (suvorexanto, lemborexanto) para indução do sono."},
+    ]
+  },
+];
+
+
+
+
+
+
+// ===================== FAVORITOS (declarado antes de populateSelects) =====================
+var favoritos = [];
+try {
+  var savedFav = window.name && window.name.indexOf('favpsico:') === 0 ? window.name.substring(9) : '';
+  if (savedFav) favoritos = JSON.parse(savedFav);
+} catch(e) { favoritos = []; }
+
+// ===================== POPULATE SELECTS =====================
+var areaFiltroAtual = '';
+
+function populateAreaSelect() {
+  var sa = document.getElementById('sel-area');
+  if (!sa || typeof areas === 'undefined') return;
+  for (var i = 0; i < areas.length; i++) {
+    var o = document.createElement('option');
+    o.value = areas[i].key;
+    o.textContent = areas[i].label;
+    sa.appendChild(o);
+  }
+}
+
+function onAreaChange() {
+  areaFiltroAtual = document.getElementById('sel-area').value;
+  populateFilteredSelects();
+}
+
+// Selects que respeitam o filtro de área (consulta/navegação)
+function populateFilteredSelects() {
+  var sf = document.getElementById('sel-farmaco');
+  var sc = document.getElementById('sel-classe');
+  var scyp = document.getElementById('sel-cyp');
+  sf.innerHTML = '<option value="">— escolha —</option>';
+  sc.innerHTML = '<option value="">— escolha —</option>';
+  scyp.innerHTML = '<option value="">— escolha —</option>';
+  var i, j, og, og2, o, f, c;
+  for (i = 0; i < classes.length; i++) {
+    c = classes[i];
+    if (areaFiltroAtual && c.area !== areaFiltroAtual) continue;
+    og = document.createElement('optgroup'); og.label = c.label;
+    og2 = document.createElement('optgroup'); og2.label = c.label;
+    var any = false;
+    for (j = 0; j < farmacos.length; j++) {
+      f = farmacos[j];
+      if (f.classeKey === c.key) {
+        og.appendChild(makeOpt(f.nome));
+        og2.appendChild(makeOpt(f.nome));
+        any = true;
+      }
+    }
+    if (any) {
+      sf.appendChild(og);
+      scyp.appendChild(og2);
+      o = document.createElement('option');
+      o.value = c.key;
+      o.textContent = c.label;
+      sc.appendChild(o);
+    }
+  }
+  // reset dependent panels
+  var resF = document.getElementById('res-farmaco'); if (resF) resF.innerHTML = '';
+  var resC = document.getElementById('res-classe'); if (resC) resC.innerHTML = '';
+}
+
+// Selects que SEMPRE cruzam todas as áreas (Interação e Comparar)
+function populateCrossAreaSelects() {
+  var sint1 = document.getElementById('interacao-1');
+  var sint2 = document.getElementById('interacao-2');
+  var scmp1 = document.getElementById('comparar-1');
+  var scmp2 = document.getElementById('comparar-2');
+  var scmp3 = document.getElementById('comparar-3');
+  var i, j, og3, og4, og5, og6, f, c;
+  for (i = 0; i < classes.length; i++) {
+    c = classes[i];
+    og3 = document.createElement('optgroup'); og3.label = c.label + ' — ' + areaLabel(c.area);
+    og4 = document.createElement('optgroup'); og4.label = c.label + ' — ' + areaLabel(c.area);
+    og5 = document.createElement('optgroup'); og5.label = c.label + ' — ' + areaLabel(c.area);
+    og6 = document.createElement('optgroup'); og6.label = c.label + ' — ' + areaLabel(c.area);
+    var any = false;
+    for (j = 0; j < farmacos.length; j++) {
+      f = farmacos[j];
+      if (f.classeKey === c.key) {
+        og3.appendChild(makeOpt(f.nome));
+        og4.appendChild(makeOpt(f.nome));
+        og5.appendChild(makeOpt(f.nome));
+        og6.appendChild(makeOpt(f.nome));
+        any = true;
+      }
+    }
+    if (!any) continue;
+    if (sint1) sint1.appendChild(og3);
+    if (sint2) sint2.appendChild(og4.cloneNode(true));
+    if (scmp1) scmp1.appendChild(og5);
+    if (scmp2) scmp2.appendChild(og5.cloneNode(true));
+    if (scmp3) scmp3.appendChild(og6);
+  }
+}
+
+function areaLabel(key) {
+  if (typeof areas === 'undefined') return '';
+  for (var i = 0; i < areas.length; i++) if (areas[i].key === key) return areas[i].label;
+  return key;
+}
+
+function makeOpt(nome) {
+  var o = document.createElement('option');
+  o.value = nome;
+  o.textContent = nome;
+  return o;
+}
+
+function populateSelects() {
+  populateAreaSelect();
+  populateFilteredSelects();
+  populateCrossAreaSelects();
+  renderFavoritos();
+}
+populateSelects();
+
+// ===================== TABS =====================
+function setTab(t) {
+  var ids = ['farmaco','classe','indicacao','nt','cyp','interacao','comparar','quiz'];
+  for (var i = 0; i < ids.length; i++) {
+    var panel = document.getElementById('panel-' + ids[i]);
+    var tab = document.getElementById('tab-' + ids[i]);
+    if (panel) panel.style.display = (t === ids[i]) ? '' : 'none';
+    if (tab) tab.className = 'tab' + (t === ids[i] ? ' active' : '');
+  }
+  if (t === 'nt') renderNT();
+}
+
+// ===================== FAVORITOS =====================
+function saveFavoritos() {
+  try { window.name = 'favpsico:' + JSON.stringify(favoritos); } catch(e) {}
+}
+
+function toggleFavorito(nome) {
+  var idx = favoritos.indexOf(nome);
+  if (idx >= 0) { favoritos.splice(idx, 1); } else { favoritos.push(nome); }
+  saveFavoritos();
+  renderFarmaco();
+  renderFavoritos();
+}
+
+function renderFavoritos() {
+  var div = document.getElementById('lista-favoritos');
+  if (!div) return;
+  if (!favoritos.length) { div.innerHTML = '<div class="empty">Nenhum fármaco favoritado ainda. Toque na estrela ☆ ao abrir um fármaco para adicionar.</div>'; return; }
+  var html = '';
+  for (var i = 0; i < favoritos.length; i++) {
+    var nomeF = favoritos[i];
+    html += "<div class='btn-item' style=\"display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0ec;cursor:pointer\" onclick='abrirFavorito(" + JSON.stringify(nomeF) + ")'>" +
+      '<span style="font-size:13px">' + nomeF + '</span><span style="color:#f59e0b">&#9733;</span></div>';
+  }
+  div.innerHTML = html;
+}
+
+function abrirFavorito(nome) {
+  setTab('farmaco');
+  document.getElementById('sel-farmaco').value = nome;
+  renderFarmaco();
+}
+
+// ===================== COPIAR RESUMO =====================
+function copiarResumo(nome) {
+  var f = null;
+  for (var i = 0; i < farmacos.length; i++) { if (farmacos[i].nome === nome) { f = farmacos[i]; break; } }
+  if (!f) return;
+  var texto = f.nome + (f.apsen ? ' (' + f.apsen + ')' : '') + '\n';
+  texto += 'Classe: ' + f.classe + '\n\n';
+  texto += 'Mecanismo: ' + f.mecanismo + '\n\n';
+  texto += 'Indicações: ' + f.indicacoesTexto + '\n\n';
+  if (f.dose) texto += 'Dose: ' + f.dose + '\n';
+  if (f.nivelSerico) texto += 'Nível sérico: ' + f.nivelSerico + '\n';
+  texto += '\nCYP — Substrato: ' + (f.cyp_substrato.join(', ') || '—') + '\n';
+  texto += 'CYP — Inibe: ' + (f.cyp_inibidor.join(', ') || '—') + '\n';
+  texto += 'CYP — Induz: ' + (f.cyp_indutor.join(', ') || '—') + '\n\n';
+  texto += 'Alertas:\n';
+  for (var j = 0; j < f.alertas.length; j++) texto += '- ' + f.alertas[j] + '\n';
+  for (var j = 0; j < f.alertasRed.length; j++) texto += '- [CRÍTICO] ' + f.alertasRed[j] + '\n';
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(texto).then(function(){
+      alert('Resumo de ' + f.nome + ' copiado!');
+    }).catch(function(){
+      fallbackCopy(texto, f.nome);
+    });
+  } else {
+    fallbackCopy(texto, f.nome);
+  }
+}
+
+function fallbackCopy(texto, nome) {
+  var ta = document.createElement('textarea');
+  ta.value = texto;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); alert('Resumo de ' + nome + ' copiado!'); } catch(e) { alert('Não foi possível copiar automaticamente.'); }
+  document.body.removeChild(ta);
+}
+
+// ===================== BUSCA GLOBAL =====================
+function buscaGlobal(q) {
+  var div = document.getElementById('res-busca-global');
+  if (!div) return;
+  if (!q || q.length < 2) { div.innerHTML = ''; return; }
+  q = q.toLowerCase();
+  var matches = [];
+  for (var i = 0; i < farmacos.length; i++) {
+    var f = farmacos[i];
+    var blob = (f.nome + ' ' + f.classe + ' ' + (f.apsen||'') + ' ' + f.indicacoesTexto + ' ' + f.aminas.join(' ')).toLowerCase();
+    if (blob.indexOf(q) >= 0) matches.push(f);
+  }
+  if (!matches.length) { div.innerHTML = '<div class="empty">Nenhum resultado.</div>'; return; }
+  var html = '';
+  for (var i = 0; i < matches.length; i++) {
+    var f = matches[i];
+    var bc = classBadge[f.classeKey] || '';
+    html += "<div class='btn-item' onclick='irParaFarmaco(" + JSON.stringify(f.nome) + ")'>" +
+      '<span>' + f.nome + (f.apsen ? ' <span style="color:#059669;font-size:11px">(' + f.apsen.split(' —')[0] + ')</span>' : '') + '</span>' +
+      '<span class="btn-badge">' + f.classeKey.toUpperCase() + '</span></div>';
+  }
+  div.innerHTML = html;
+}
+
+function irParaFarmaco(nome) {
+  setTab('farmaco');
+  document.getElementById('sel-farmaco').value = nome;
+  renderFarmaco();
+  document.getElementById('busca-global-input').value = '';
+  document.getElementById('res-busca-global').innerHTML = '';
+}
+
+// ===================== SEARCH FILTER =====================
+function filterFarmacos(q) {
+  var sf = document.getElementById('sel-farmaco');
+  var opts = sf.getElementsByTagName('option');
+  q = q.toLowerCase();
+  for (var i = 0; i < opts.length; i++) {
+    if (opts[i].value) {
+      opts[i].style.display = opts[i].value.toLowerCase().indexOf(q) >= 0 ? '' : 'none';
+    }
+  }
+}
+
+function filterCypFarmacos(q) {
+  var sc = document.getElementById('sel-cyp');
+  var opts = sc.getElementsByTagName('option');
+  q = q.toLowerCase();
+  for (var i = 0; i < opts.length; i++) {
+    if (opts[i].value) {
+      opts[i].style.display = opts[i].value.toLowerCase().indexOf(q) >= 0 ? '' : 'none';
+    }
+  }
+}
+
+// ===================== STARS =====================
+function stars(val, max, red) {
+  var h = '<div class="stars">';
+  for (var i = 0; i < max; i++) {
+    h += '<div class="star' + (i < val ? ' on' + (red ? ' red' : '') : '') + '"></div>';
+  }
+  h += '</div>';
+  return h;
+}
+
+// ===================== RENDER FARMACO =====================
+function renderFarmaco() {
+  var nome = document.getElementById('sel-farmaco').value;
+  var div = document.getElementById('res-farmaco');
+  if (!nome) { div.innerHTML = ''; return; }
+  var f = null;
+  for (var i = 0; i < farmacos.length; i++) { if (farmacos[i].nome === nome) { f = farmacos[i]; break; } }
+  if (!f) { div.innerHTML = '<div class="empty">Não encontrado.</div>'; return; }
+  var bc = classBadge[f.classeKey] || '';
+  var aminas = f.aminas.map(function(a) { return '<span class="tag">' + a + '</span>'; }).join('');
+  var cypsS = f.cyp_substrato.map(function(c) { return '<span class="tag cyp-tag">Substrato: ' + c + '</span>'; }).join('');
+  var cypsI = f.cyp_inibidor.map(function(c) { return '<span class="tag cyp-tag">Inibe: ' + c + '</span>'; }).join('');
+  var cypsIn = f.cyp_indutor.map(function(c) { return '<span class="tag cyp-tag">Induz: ' + c + '</span>'; }).join('');
+  var dose = f.dose ? '<div class="section-title">Dose</div><div class="info-text">' + f.dose + '</div>' : '';
+  var nivel = f.nivelSerico ? '<div class="section-title">Nível sérico alvo</div><div class="info-text" style="font-weight:500">' + f.nivelSerico + '</div>' : '';
+  var obs = f.obs ? '<div class="section-title">Observação clínica</div><div class="info-text">' + f.obs + '</div>' : '';
+  var efLabels = [
+    {k:'sedacao',l:'Sedação'},{k:'hipotensao',l:'Hipotensão'},{k:'antiACh',l:'Anticolinérgico'},
+    {k:'convulsoes',l:'Convulsões'},{k:'gi',l:'Efeitos GI'},{k:'sexuais',l:'Disfunção sexual'},
+    {k:'ganho_peso',l:'Ganho de peso'},{k:'cardiaco',l:'Efeitos cardíacos'},{k:'agitacao',l:'Agitação/insônia'}
+  ];
+  var redKeys = ['convulsoes','cardiaco','hipotensao'];
+  var efRows = '';
+  for (var i = 0; i < efLabels.length; i++) {
+    var e = efLabels[i];
+    var v = f.efeitos[e.k];
+    if (v === undefined) continue;
+    var isRed = redKeys.indexOf(e.k) >= 0;
+    var labels = ['0','leve','moderado','acentuado','grave'];
+    efRows += '<div class="effect-row"><span class="effect-label">' + e.l + '</span>' + stars(v, 4, isRed) + '<span style="font-size:11px;color:#888;margin-left:4px">' + labels[v] + '</span></div>';
+  }
+  var alertasHtml = f.alertas.map(function(a) { return '<div class="alert" style="margin-bottom:4px">&#9888; ' + a + '</div>'; }).join('');
+  var alertasRedHtml = f.alertasRed.map(function(a) { return '<div class="alert red" style="margin-bottom:4px">&#128683; ' + a + '</div>'; }).join('');
+  var apsenTag = f.apsen ? '<span class="tag" style="background:#d1fae5;border-color:#6ee7b7;color:#065f46;font-weight:500">&#128137; Apsen: ' + f.apsen + '</span>' : '';
+  var isFav = favoritos.indexOf(f.nome) >= 0;
+  var favBtn = "<span onclick='toggleFavorito(" + JSON.stringify(f.nome) + ")' style=\"cursor:pointer;font-size:18px;float:right\" title=\"Favoritar\">" + (isFav ? '&#9733;' : '&#9734;') + '</span>';
+  var copyBtn = "<button onclick='copiarResumo(" + JSON.stringify(f.nome) + ")' style=\"font-size:11px;padding:4px 10px;border-radius:6px;border:1px solid #ccc;background:#fff;cursor:pointer;color:#555;margin-top:6px\">&#128203; Copiar resumo</button>";
+  div.innerHTML = '<div class="card">' +
+    favBtn +
+    '<div class="card-title">' + f.nome + '</div>' +
+    '<div style="margin-bottom:10px"><span class="badge ' + bc + '">' + f.classe + '</span>' + (apsenTag ? ' ' + apsenTag : '') + '</div>' +
+    '<div class="section-title">Aminas / receptores-alvo</div>' +
+    '<div style="margin-bottom:10px">' + aminas + '</div>' +
+    '<div class="section-title">Mecanismo de ação</div>' +
+    '<div class="info-text" style="margin-bottom:10px">' + f.mecanismo + '</div>' +
+    '<div class="section-title">Indicações</div>' +
+    '<div style="margin-bottom:10px"><span class="tag ind-tag">' + f.indicacoesTexto + '</span></div>' +
+    dose + nivel +
+    '<hr class="divider">' +
+    '<div class="section-title">Perfil de efeitos colaterais</div>' + efRows +
+    '<hr class="divider">' +
+    '<div class="section-title">Metabolismo — CYPs</div>' +
+    '<div style="margin-bottom:10px">' + cypsS + cypsI + cypsIn + ((!cypsS && !cypsI && !cypsIn) ? '<span class="tag">Não metabolizado por CYP principal</span>' : '') + '</div>' +
+    '<hr class="divider">' +
+    '<div class="section-title">Alertas e cuidados</div>' + alertasHtml + alertasRedHtml +
+    (obs ? '<hr class="divider">' + obs : '') +
+    '<div style="margin-top:10px">' + copyBtn + '</div>' +
+    '</div>';
+}
+
+// ===================== RENDER CLASSE =====================
+function renderClasse() {
+  var key = document.getElementById('sel-classe').value;
+  var div = document.getElementById('res-classe');
+  if (!key) { div.innerHTML = ''; return; }
+  var bc = classBadge[key] || '';
+  var html = '';
+  for (var i = 0; i < farmacos.length; i++) {
+    var f = farmacos[i];
+    if (f.classeKey !== key) continue;
+    var aminas = f.aminas.slice(0, 2).map(function(a) { return '<span class="tag">' + a + '</span>'; }).join('');
+    var cyps = f.cyp_substrato.slice(0,2).concat(f.cyp_inibidor.slice(0,1)).map(function(c) { return '<span class="tag cyp-tag">' + c + '</span>'; }).join('');
+    html += '<div class="card">' +
+      '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px">' +
+      '<div class="card-title">' + f.nome + '</div>' +
+      '<span class="badge ' + bc + '">' + key.toUpperCase() + '</span></div>' +
+      '<div style="margin-bottom:6px">' + aminas + '</div>' +
+      '<div class="info-text" style="margin-bottom:6px;font-size:12px">' + f.mecanismo.substring(0, 120) + '...</div>' +
+      '<span class="tag ind-tag" style="font-size:10px">' + f.indicacoesTexto.split(',')[0] + '</span>' +
+      (cyps ? '<div style="margin-top:4px">' + cyps + '</div>' : '') +
+      (f.dose ? '<div style="margin-top:6px;font-size:12px;color:#888">Dose: ' + f.dose + '</div>' : '') +
+      '</div>';
+  }
+  div.innerHTML = html || '<div class="empty">Nenhum fármaco.</div>';
+}
+
+// ===================== RENDER INDICAÇÃO =====================
+function renderIndicacao() {
+  var ind = document.getElementById('sel-indicacao').value;
+  var div = document.getElementById('res-indicacao');
+  if (!ind) { div.innerHTML = ''; return; }
+  var html = '';
+  for (var i = 0; i < farmacos.length; i++) {
+    var f = farmacos[i];
+    if (f.indicacoes.indexOf(ind) < 0) continue;
+    var bc = classBadge[f.classeKey] || '';
+    html += '<div class="card">' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">' +
+      '<div class="card-title">' + f.nome + '</div>' +
+      '<span class="badge ' + bc + '">' + f.classe + '</span></div>' +
+      '<div class="info-text" style="font-size:12px;margin-bottom:6px">' + f.mecanismo.substring(0, 150) + '...</div>' +
+      (f.dose ? '<div style="font-size:12px;color:#888">Dose: ' + f.dose + '</div>' : '') +
+      (f.nivelSerico ? '<div style="font-size:12px;color:#888">Nível alvo: ' + f.nivelSerico + '</div>' : '') +
+      (f.alertasRed.length ? '<div class="alert red" style="margin-top:6px">&#128683; ' + f.alertasRed[0] + '</div>' : '') +
+      '</div>';
+  }
+  div.innerHTML = html || '<div class="empty">Nenhum fármaco encontrado.</div>';
+}
+
+// ===================== RENDER NT =====================
+function renderNT() {
+  var div = document.getElementById('res-nt');
+  if (div.innerHTML) return;
+  var html = '';
+  for (var i = 0; i < nts.length; i++) {
+    var nt = nts[i];
+    var recs = '';
+    for (var j = 0; j < nt.receptores.length; j++) {
+      var r = nt.receptores[j];
+      recs += '<div class="rec-item"><div class="rec-name">' + r.nome + ' <span style="font-size:10px;color:#888;font-weight:400">(' + r.tipo + ')</span></div><div class="rec-desc">' + r.desc + '</div></div>';
+    }
+    var vias = '';
+    if (nt.vias) {
+      vias = '<div class="section-title">Vias dopaminérgicas</div><div class="rec-desc" style="margin-bottom:8px">';
+      for (var k = 0; k < nt.vias.length; k++) { vias += '<div style="margin-bottom:4px">&#8226; ' + nt.vias[k] + '</div>'; }
+      vias += '</div>';
+    }
+    html += '<div class="nt-card" style="border-left:4px solid ' + nt.corBorda + '">' +
+      '<div class="nt-title" style="color:' + nt.corBorda + '">' + nt.nome + '</div>' +
+      '<div class="section-title">Síntese</div><div class="rec-desc" style="margin-bottom:6px">' + nt.sintese + '</div>' +
+      '<div class="section-title">Degradação</div><div class="rec-desc" style="margin-bottom:6px">' + nt.degradacao + '</div>' +
+      '<div class="section-title">Funções</div><div class="rec-desc" style="margin-bottom:8px">' + nt.funcoes + '</div>' +
+      vias +
+      '<div class="section-title">Receptores</div><div class="rec-list">' + recs + '</div>' +
+      '</div>';
+  }
+  div.innerHTML = html;
+}
+
+
+// ===================== RENDER CYP =====================
+function renderCYP() {
+  var nome = document.getElementById('sel-cyp').value;
+  var div = document.getElementById('res-cyp');
+  if (!nome) { div.innerHTML = ''; return; }
+  var f = null;
+  for (var i = 0; i < farmacos.length; i++) { if (farmacos[i].nome === nome) { f = farmacos[i]; break; } }
+  if (!f) { div.innerHTML = '<div class="empty">Não encontrado.</div>'; return; }
+
+  function potColor(p) {
+    if (p === 'Forte' || p === 'Forte / Moderado') return 'color:#b91c1c;background:#fee2e2';
+    if (p === 'Moderado' || p === 'Leve-Moderado') return 'color:#b45309;background:#fef3c7';
+    return 'color:#555;background:#f5f5f0';
+  }
+  function potTag(p) {
+    return '<span style="font-size:10px;padding:2px 6px;border-radius:12px;' + potColor(p) + ';font-weight:500">' + p + '</span>';
+  }
+  function extractCyp(cypStr) {
+    var m = cypStr.match(/([0-9][A-Z][0-9]+)/);
+    return m ? m[1] : cypStr.replace(/\(.*\)/,'').trim();
+  }
+
+  var html = '<div class="card" style="margin-bottom:10px"><div class="card-title">' + f.nome + ' — Perfil CYP</div>';
+  if (f.cyp_substrato.length) {
+    html += '<div style="font-size:12px;margin-bottom:4px"><span style="color:#1d4ed8;font-weight:500">Substrato de:</span> ';
+    html += f.cyp_substrato.map(function(c){return '<span class="tag cyp-tag">'+c+'</span>';}).join('');
+    html += '</div>';
+  }
+  if (f.cyp_inibidor.length) {
+    html += '<div style="font-size:12px;margin-bottom:4px"><span style="color:#b91c1c;font-weight:500">Inibe:</span> ';
+    html += f.cyp_inibidor.map(function(c){return '<span class="tag" style="background:#fee2e2;border-color:#fca5a5;color:#7f1d1d">'+c+'</span>';}).join('');
+    html += '</div>';
+  }
+  if (f.cyp_indutor.length) {
+    html += '<div style="font-size:12px;margin-bottom:4px"><span style="color:#b45309;font-weight:500">Induz:</span> ';
+    html += f.cyp_indutor.map(function(c){return '<span class="tag" style="background:#fef3c7;border-color:#fcd34d;color:#78350f">'+c+'</span>';}).join('');
+    html += '</div>';
+  }
+  if (!f.cyp_substrato.length && !f.cyp_inibidor.length && !f.cyp_indutor.length) {
+    html += '<div class="info-text" style="color:#888">Não metabolizado por CYP principal (ex: excreção renal direta ou conjugação).</div>';
+  }
+  html += '</div>';
+
+  // Substrato blocks
+  for (var s = 0; s < f.cyp_substrato.length; s++) {
+    var cypStr = f.cyp_substrato[s];
+    var cypCode = extractCyp(cypStr);
+    var db = cypDB[cypCode];
+    var inibF = [], indF = [], i2;
+    for (i2 = 0; i2 < farmacos.length; i2++) {
+      var fx = farmacos[i2];
+      if (fx.nome === nome) continue;
+      for (var ci = 0; ci < fx.cyp_inibidor.length; ci++) { if (fx.cyp_inibidor[ci].indexOf(cypCode) >= 0) { inibF.push(fx); break; } }
+    }
+    for (i2 = 0; i2 < farmacos.length; i2++) {
+      var fx = farmacos[i2];
+      if (fx.nome === nome) continue;
+      for (var ci = 0; ci < fx.cyp_indutor.length; ci++) { if (fx.cyp_indutor[ci].indexOf(cypCode) >= 0) { indF.push(fx); break; } }
+    }
+    html += '<div class="card" style="border-left:4px solid #3b82f6;margin-bottom:10px">';
+    html += '<div style="font-size:13px;font-weight:500;color:#1d4ed8;margin-bottom:4px">&#128204; ' + nome + ' é substrato de CYP' + cypCode + '</div>';
+    if (db) html += '<div class="info-text" style="font-size:11px;margin-bottom:10px;color:#555">' + db.descricao + '</div>';
+    if (db && db.substratos_externos && db.substratos_externos.length) {
+      html += '<div style="font-size:11px;color:#888;margin-bottom:10px"><strong style="color:#555">Outros substratos comuns desta CYP:</strong> ' + db.substratos_externos.join(', ') + '</div>';
+    }
+
+    html += '<div class="section-title" style="color:#ef4444">&#8679; Inibidores de CYP' + cypCode + ' → &#8593; nível de ' + nome + ' (risco de toxicidade)</div>';
+    if (inibF.length) {
+      html += '<div style="margin-bottom:4px;font-size:11px;color:#888">Fármacos desta lista:</div>';
+      for (i2 = 0; i2 < inibF.length; i2++) {
+        var pot = ''; for (var ci=0; ci<inibF[i2].cyp_inibidor.length; ci++) { if(inibF[i2].cyp_inibidor[ci].indexOf(cypCode)>=0){pot=inibF[i2].cyp_inibidor[ci];break;} }
+        var potencia = pot.toLowerCase().indexOf('forte')>=0?'Forte':pot.toLowerCase().indexOf('moderado')>=0?'Moderado':'Leve';
+        html += '<div class="effect-row"><span style="flex:1;font-size:13px">'+inibF[i2].nome+'</span>'+potTag(potencia)+'</div>';
+      }
+    }
+    if (db && db.inibidores_externos.length) {
+      html += '<div style="margin-top:6px;margin-bottom:4px;font-size:11px;color:#888">Outros fármacos relevantes:</div>';
+      for (i2 = 0; i2 < db.inibidores_externos.length; i2++) {
+        var ext = db.inibidores_externos[i2];
+        html += '<div class="effect-row"><span style="flex:1;font-size:13px">'+ext.nome+'</span>'+potTag(ext.potencia)+'</div>';
+        if (ext.nota) html += '<div style="font-size:11px;color:#888;padding:0 0 4px 4px">'+ext.nota+'</div>';
+      }
+    }
+
+    html += '<hr class="divider"><div class="section-title" style="color:#f59e0b">&#8681; Indutores de CYP' + cypCode + ' → &#8595; nível de ' + nome + ' (risco de falha terapêutica)</div>';
+    if (indF.length) {
+      html += '<div style="margin-bottom:4px;font-size:11px;color:#888">Fármacos desta lista:</div>';
+      for (i2 = 0; i2 < indF.length; i2++) {
+        html += '<div class="effect-row"><span style="flex:1;font-size:13px">'+indF[i2].nome+'</span>'+potTag('Forte')+'</div>';
+      }
+    }
+    if (db && db.indutores_externos.length) {
+      html += '<div style="margin-top:6px;margin-bottom:4px;font-size:11px;color:#888">Outros indutores relevantes:</div>';
+      for (i2 = 0; i2 < db.indutores_externos.length; i2++) {
+        var ext = db.indutores_externos[i2];
+        html += '<div class="effect-row"><span style="flex:1;font-size:13px">'+ext.nome+'</span>'+potTag(ext.potencia)+'</div>';
+        if (ext.nota) html += '<div style="font-size:11px;color:#888;padding:0 0 4px 4px">'+ext.nota+'</div>';
+      }
+    }
+    if (db && db.fenotipos) {
+      html += '<hr class="divider"><div class="section-title">&#x1F9EC; Variação genética (CYP' + cypCode + ')</div><div class="info-text" style="font-size:12px">' + db.fenotipos + '</div>';
+    }
+    html += '<hr class="divider"><div style="font-size:11px;color:#888">Diretrizes CPIC e variantes alélicas: <a href="https://www.clinpgx.org/" target="_blank" style="color:#1a56db;font-weight:500">ClinPGx.org</a></div>';
+    html += '</div>';
+  }
+
+  // Inibidor block
+  if (f.cyp_inibidor.length) {
+    html += '<div class="card" style="border-left:4px solid #ef4444;margin-bottom:10px">';
+    html += '<div style="font-size:13px;font-weight:500;color:#b91c1c;margin-bottom:8px">&#128683; ' + nome + ' INIBE estas CYPs → &#8593; nível dos substratos abaixo</div>';
+    for (var ii = 0; ii < f.cyp_inibidor.length; ii++) {
+      var cypCode2 = extractCyp(f.cyp_inibidor[ii]);
+      var pot2 = f.cyp_inibidor[ii].toLowerCase().indexOf('forte')>=0?'Forte':f.cyp_inibidor[ii].toLowerCase().indexOf('moderado')>=0?'Moderado':'Leve';
+      html += '<div style="margin-bottom:8px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span style="font-size:13px;font-weight:500">CYP' + cypCode2 + '</span>' + potTag(pot2) + '</div>';
+      var subst = [];
+      for (var si=0; si<farmacos.length; si++) {
+        var fs2 = farmacos[si]; if(fs2.nome===nome) continue;
+        for (var ci2=0; ci2<fs2.cyp_substrato.length; ci2++) { if(fs2.cyp_substrato[ci2].indexOf(cypCode2)>=0){subst.push(fs2);break;} }
+      }
+      if (subst.length) {
+        for (var si=0; si<subst.length; si++) {
+          var bc2 = classBadge[subst[si].classeKey]||'';
+          html += '<div class="effect-row"><span style="flex:1;font-size:13px">'+subst[si].nome+'</span><span class="badge '+bc2+'">'+subst[si].classeKey.toUpperCase()+'</span><span style="font-size:11px;color:#ef4444">&#8593; nível</span></div>';
+        }
+      } else { html += '<div style="font-size:12px;color:#888">Nenhum substrato cadastrado nesta lista.</div>'; }
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  // Indutor block
+  if (f.cyp_indutor.length) {
+    html += '<div class="card" style="border-left:4px solid #f59e0b;margin-bottom:10px">';
+    html += '<div style="font-size:13px;font-weight:500;color:#b45309;margin-bottom:8px">&#9889; ' + nome + ' INDUZ estas CYPs → &#8595; nível dos substratos abaixo</div>';
+    for (var ii2 = 0; ii2 < f.cyp_indutor.length; ii2++) {
+      var cypCode3 = extractCyp(f.cyp_indutor[ii2]);
+      html += '<div style="margin-bottom:8px"><div style="font-size:13px;font-weight:500;margin-bottom:4px">CYP' + cypCode3 + '</div>';
+      var subst2 = [];
+      for (var si2=0; si2<farmacos.length; si2++) {
+        var fs3 = farmacos[si2]; if(fs3.nome===nome) continue;
+        for (var ci3=0; ci3<fs3.cyp_substrato.length; ci3++) { if(fs3.cyp_substrato[ci3].indexOf(cypCode3)>=0){subst2.push(fs3);break;} }
+      }
+      if (subst2.length) {
+        for (var si2=0; si2<subst2.length; si2++) {
+          var bc3 = classBadge[subst2[si2].classeKey]||'';
+          html += '<div class="effect-row"><span style="flex:1;font-size:13px">'+subst2[si2].nome+'</span><span class="badge '+bc3+'">'+subst2[si2].classeKey.toUpperCase()+'</span><span style="font-size:11px;color:#f59e0b">&#8595; nível</span></div>';
+        }
+      } else { html += '<div style="font-size:12px;color:#888">Nenhum substrato cadastrado nesta lista.</div>'; }
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  div.innerHTML = html;
+}
+
+// ===================== CHECADOR DE INTERAÇÃO DUPLA =====================
+function checarInteracao() {
+  var n1 = document.getElementById('interacao-1').value;
+  var n2 = document.getElementById('interacao-2').value;
+  var div = document.getElementById('res-interacao');
+  if (!n1 || !n2) { div.innerHTML = ''; return; }
+  if (n1 === n2) { div.innerHTML = '<div class="empty">Selecione dois fármacos diferentes.</div>'; return; }
+  var f1 = null, f2 = null;
+  for (var i = 0; i < farmacos.length; i++) {
+    if (farmacos[i].nome === n1) f1 = farmacos[i];
+    if (farmacos[i].nome === n2) f2 = farmacos[i];
+  }
+  if (!f1 || !f2) { div.innerHTML = '<div class="empty">Fármaco não encontrado.</div>'; return; }
+
+  function extractCyp(s) {
+    var m = s.match(/([0-9][A-Z][0-9]+)/);
+    return m ? m[1] : s.replace(/\(.*\)/,'').trim();
+  }
+
+  var achados = [];
+
+  for (var i = 0; i < f1.cyp_inibidor.length; i++) {
+    var cyp1 = extractCyp(f1.cyp_inibidor[i]);
+    for (var j = 0; j < f2.cyp_substrato.length; j++) {
+      var cyp2 = extractCyp(f2.cyp_substrato[j]);
+      if (cyp1 === cyp2) {
+        var pot = f1.cyp_inibidor[i].toLowerCase().indexOf('forte')>=0 ? 'Forte' : f1.cyp_inibidor[i].toLowerCase().indexOf('moderado')>=0 ? 'Moderado' : 'Leve';
+        achados.push({tipo:'farmacocinetica', gravidade: pot==='Forte'?'alta':pot==='Moderado'?'media':'baixa',
+          texto: f1.nome + ' inibe CYP' + cyp1 + ', que metaboliza ' + f2.nome + ' — risco de aumento do nível de ' + f2.nome + ' e toxicidade (inibição ' + pot.toLowerCase() + ').'});
+      }
+    }
+  }
+  for (var i = 0; i < f2.cyp_inibidor.length; i++) {
+    var cyp1 = extractCyp(f2.cyp_inibidor[i]);
+    for (var j = 0; j < f1.cyp_substrato.length; j++) {
+      var cyp2 = extractCyp(f1.cyp_substrato[j]);
+      if (cyp1 === cyp2) {
+        var pot = f2.cyp_inibidor[i].toLowerCase().indexOf('forte')>=0 ? 'Forte' : f2.cyp_inibidor[i].toLowerCase().indexOf('moderado')>=0 ? 'Moderado' : 'Leve';
+        achados.push({tipo:'farmacocinetica', gravidade: pot==='Forte'?'alta':pot==='Moderado'?'media':'baixa',
+          texto: f2.nome + ' inibe CYP' + cyp1 + ', que metaboliza ' + f1.nome + ' — risco de aumento do nível de ' + f1.nome + ' e toxicidade (inibição ' + pot.toLowerCase() + ').'});
+      }
+    }
+  }
+  for (var i = 0; i < f1.cyp_indutor.length; i++) {
+    var cyp1 = extractCyp(f1.cyp_indutor[i]);
+    for (var j = 0; j < f2.cyp_substrato.length; j++) {
+      var cyp2 = extractCyp(f2.cyp_substrato[j]);
+      if (cyp1 === cyp2) {
+        achados.push({tipo:'farmacocinetica', gravidade:'media',
+          texto: f1.nome + ' induz CYP' + cyp1 + ', que metaboliza ' + f2.nome + ' — risco de queda do nível de ' + f2.nome + ' e falha terapêutica.'});
+      }
+    }
+  }
+  for (var i = 0; i < f2.cyp_indutor.length; i++) {
+    var cyp1 = extractCyp(f2.cyp_indutor[i]);
+    for (var j = 0; j < f1.cyp_substrato.length; j++) {
+      var cyp2 = extractCyp(f1.cyp_substrato[j]);
+      if (cyp1 === cyp2) {
+        achados.push({tipo:'farmacocinetica', gravidade:'media',
+          texto: f2.nome + ' induz CYP' + cyp1 + ', que metaboliza ' + f1.nome + ' — risco de queda do nível de ' + f1.nome + ' e falha terapêutica.'});
+      }
+    }
+  }
+
+  var serotoninergicos = ['isrs','irsn','tca','imao','atip'];
+  var ambosSeroton = serotoninergicos.indexOf(f1.classeKey) >= 0 && serotoninergicos.indexOf(f2.classeKey) >= 0;
+  function temSerotonina(f) {
+    for (var k = 0; k < f.aminas.length; k++) { if (f.aminas[k].indexOf('5-HT') >= 0 || f.aminas[k].indexOf('SERT') >= 0) return true; }
+    return false;
+  }
+  if (ambosSeroton && temSerotonina(f1) && temSerotonina(f2)) {
+    achados.push({tipo:'farmacodinamica', gravidade:'alta',
+      texto: 'Ambos atuam no sistema serotoninérgico — risco de síndrome serotoninérgica (agitação, hipertermia, rigidez muscular, instabilidade autonômica). Especialmente grave se um deles for IMAO.'});
+  }
+  if (f1.classeKey === 'imao' || f2.classeKey === 'imao') {
+    var outro = f1.classeKey === 'imao' ? f2 : f1;
+    if (['isrs','irsn','tca','atip'].indexOf(outro.classeKey) >= 0) {
+      achados.push({tipo:'farmacodinamica', gravidade:'alta',
+        texto: 'Combinação com IMAO contraindicada na maioria dos casos — risco de síndrome serotoninérgica grave ou crise hipertensiva. Intervalo mínimo de 14 dias (5 semanas para fluoxetina) entre as trocas.'});
+    }
+  }
+
+  var f1Sed = f1.efeitos && f1.efeitos.sedacao >= 2;
+  var f2Sed = f2.efeitos && f2.efeitos.sedacao >= 2;
+  if (f1Sed && f2Sed) {
+    achados.push({tipo:'farmacodinamica', gravidade:'media',
+      texto: 'Ambos têm sedação significativa — efeito aditivo: sonolência excessiva, prejuízo cognitivo e psicomotor, risco de quedas em idosos e depressão respiratória se associados a opioides ou álcool.'});
+  }
+
+  var html = '<div class="card">';
+  html += '<div class="card-title">' + f1.nome + ' + ' + f2.nome + '</div>';
+  if (!achados.length) {
+    html += '<div class="info-text" style="margin-top:8px">Nenhuma interação farmacocinética (CYP) ou farmacodinâmica óbvia identificada nesta base entre os dois fármacos selecionados. Isso não exclui interações não mapeadas — sempre considerar julgamento clínico e consultar fontes adicionais.</div>';
+  } else {
+    var cores = {alta:'#ef4444', media:'#f59e0b', baixa:'#6b7280'};
+    var labels = {alta:'Atenção alta', media:'Atenção moderada', baixa:'Atenção leve'};
+    for (var k = 0; k < achados.length; k++) {
+      var a = achados[k];
+      html += '<div style="border-left:4px solid ' + cores[a.gravidade] + ';padding:8px 12px;margin-top:10px;background:#f8f8f5;border-radius:6px">';
+      html += '<div style="font-size:11px;font-weight:600;color:' + cores[a.gravidade] + ';margin-bottom:4px;text-transform:uppercase">' + labels[a.gravidade] + ' — ' + (a.tipo === 'farmacocinetica' ? 'Farmacocinética (CYP)' : 'Farmacodinâmica') + '</div>';
+      html += '<div style="font-size:13px;color:#333">' + a.texto + '</div>';
+      html += '</div>';
+    }
+  }
+  html += '<hr class="divider"><div style="font-size:11px;color:#888">Para detalhamento completo de cada fármaco, consulte as fichas individuais na aba "Por fármaco". Para variantes genéticas: <a href="https://www.clinpgx.org/" target="_blank" style="color:#1a56db">ClinPGx.org</a></div>';
+  html += '</div>';
+  div.innerHTML = html;
+}
+
+// ===================== COMPARADOR LADO A LADO =====================
+function compararFarmacos() {
+  var n1 = document.getElementById('comparar-1').value;
+  var n2 = document.getElementById('comparar-2').value;
+  var el3 = document.getElementById('comparar-3');
+  var n3 = el3 ? el3.value : '';
+  var div = document.getElementById('res-comparar');
+  if (!n1 || !n2) { div.innerHTML = ''; return; }
+  var f1 = null, f2 = null, f3 = null;
+  for (var i = 0; i < farmacos.length; i++) {
+    if (farmacos[i].nome === n1) f1 = farmacos[i];
+    if (farmacos[i].nome === n2) f2 = farmacos[i];
+    if (n3 && farmacos[i].nome === n3) f3 = farmacos[i];
+  }
+  if (!f1 || !f2) { div.innerHTML = ''; return; }
+
+  var efLabels = [
+    {k:'sedacao',l:'Sedação'},{k:'hipotensao',l:'Hipotensão'},{k:'antiACh',l:'Anticolinérgico'},
+    {k:'convulsoes',l:'Convulsões'},{k:'gi',l:'Efeitos GI'},{k:'sexuais',l:'Disfunção sexual'},
+    {k:'ganho_peso',l:'Ganho de peso'},{k:'cardiaco',l:'Cardíaco'},{k:'agitacao',l:'Agitação/insônia'}
+  ];
+
+  function col(f) {
+    var h = '<div style="flex:1;min-width:0">';
+    h += '<div style="font-size:14px;font-weight:500;margin-bottom:2px">' + f.nome + '</div>';
+    if (f.apsen) h += '<div style="font-size:11px;color:#059669;margin-bottom:8px">' + f.apsen + '</div>';
+    h += '<div style="font-size:11px;color:#888;margin-bottom:8px">' + f.classe + '</div>';
+    for (var i = 0; i < efLabels.length; i++) {
+      var v = f.efeitos[efLabels[i].k];
+      if (v === undefined) continue;
+      h += '<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:3px 0;border-bottom:1px solid #f0f0ec">' +
+        '<span style="color:#888">' + efLabels[i].l + '</span>' + stars(v, 4, ['convulsoes','cardiaco','hipotensao'].indexOf(efLabels[i].k)>=0) + '</div>';
+    }
+    h += '<div style="font-size:11px;color:#888;margin-top:8px">CYP substrato: ' + (f.cyp_substrato.join(', ')||'—') + '</div>';
+    h += '<div style="font-size:11px;color:#888">Dose: ' + (f.dose||'—') + '</div>';
+    h += '</div>';
+    return h;
+  }
+
+  var cols = col(f1) + col(f2) + (f3 ? col(f3) : '');
+  div.innerHTML = '<div class="card"><div style="display:flex;gap:16px;flex-wrap:wrap">' + cols + '</div></div>';
+}
+
+// ===================== QUIZ =====================
+var quizAtual = null;
+function novoQuiz() {
+  var idx = Math.floor(Math.random() * farmacos.length);
+  quizAtual = farmacos[idx];
+  var div = document.getElementById('quiz-area');
+  div.innerHTML = '<div class="card">' +
+    '<div class="section-title">Qual é o mecanismo de ação e a CYP principal deste fármaco?</div>' +
+    '<div class="card-title" style="margin-top:6px">' + quizAtual.nome + '</div>' +
+    '<div style="margin-top:10px"><span class="badge ' + (classBadge[quizAtual.classeKey]||'') + '">' + quizAtual.classe + '</span></div>' +
+    '<button onclick="revelarQuiz()" style="margin-top:14px;font-size:13px;padding:8px 16px;border-radius:8px;border:1px solid #a0b8f5;background:#e8f0fe;color:#1a56db;cursor:pointer;font-weight:500">Revelar resposta</button>' +
+    '<div id="quiz-resposta"></div>' +
+    '</div>';
+}
+
+function revelarQuiz() {
+  if (!quizAtual) return;
+  var div = document.getElementById('quiz-resposta');
+  var aminas = quizAtual.aminas.map(function(a) { return '<span class="tag">' + a + '</span>'; }).join('');
+  div.innerHTML = '<hr class="divider">' +
+    '<div class="section-title">Mecanismo</div><div class="info-text" style="margin-bottom:8px">' + quizAtual.mecanismo + '</div>' +
+    '<div class="section-title">Receptores/aminas</div><div style="margin-bottom:8px">' + aminas + '</div>' +
+    '<div class="section-title">CYP</div><div class="info-text">Substrato: ' + (quizAtual.cyp_substrato.join(', ')||'—') + '</div>';
+}
+</script>
+</body>
+</html>
