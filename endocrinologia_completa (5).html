@@ -1,0 +1,3291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Endocrinologia — Sistema Hormonal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
+
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --surface2: #1a1e28;
+    --border: #252a38;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --dim: #9ca3af;
+
+    --pancreas: #f59e0b;
+    --tireoide: #10b981;
+    --adrenal: #ef4444;
+    --hipofise: #8b5cf6;
+    --hipotalamo: #6366f1;
+    --gonadas: #ec4899;
+    --paratireoide: #06b6d4;
+    --pineal: #a78bfa;
+
+    --peptideo: #60a5fa;
+    --esteroide: #34d399;
+    --aminoacido: #fbbf24;
+
+    --radius: 12px;
+    --radius-sm: 8px;
+    --active-color: var(--pancreas);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  header { padding: 20px 20px 0; }
+
+  .site-nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .site-nav a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    letter-spacing: 0.03em;
+    transition: all 0.2s;
+  }
+
+  .site-nav a.active {
+    color: var(--tireoide);
+    border-color: var(--tireoide);
+    background: rgba(16,185,129,0.08);
+  }
+
+  .site-nav a:hover:not(.active) {
+    color: var(--text);
+    border-color: #3a3f52;
+  }
+
+  .page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+
+  .page-sub {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+
+  .filter-row {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 10px;
+    scrollbar-width: none;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .filter-row::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    white-space: nowrap;
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--dim);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .filter-btn.active-pancreas    { background: var(--pancreas);    border-color: var(--pancreas);    color: #000; font-weight: 600; }
+  .filter-btn.active-tireoide   { background: var(--tireoide);   border-color: var(--tireoide);   color: #000; font-weight: 600; }
+  .filter-btn.active-adrenal    { background: var(--adrenal);    border-color: var(--adrenal);    color: #fff; font-weight: 600; }
+  .filter-btn.active-hipofise   { background: var(--hipofise);   border-color: var(--hipofise);   color: #fff; font-weight: 600; }
+  .filter-btn.active-hipotalamo { background: var(--hipotalamo); border-color: var(--hipotalamo); color: #fff; font-weight: 600; }
+  .filter-btn.active-gonadas    { background: var(--gonadas);    border-color: var(--gonadas);    color: #fff; font-weight: 600; }
+  .filter-btn.active-paratireoide{ background: var(--paratireoide); border-color: var(--paratireoide); color: #000; font-weight: 600; }
+  .filter-btn.active-pineal     { background: var(--pineal);     border-color: var(--pineal);     color: #000; font-weight: 600; }
+  .filter-btn.active-all        { background: #3a3f52; border-color: #4a5068; color: var(--text); font-weight: 600; }
+
+  .filter-btn:hover { border-color: #3a3f52; color: var(--text); }
+
+  .quimica-filters {
+    display: flex;
+    gap: 8px;
+    padding: 0 20px;
+    margin-bottom: 16px;
+  }
+
+  .q-btn {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .q-btn[data-quimica="peptideo"]    { border-color: rgba(96,165,250,0.3); color: var(--peptideo); }
+  .q-btn[data-quimica="esteroide"]   { border-color: rgba(52,211,153,0.3); color: var(--esteroide); }
+  .q-btn[data-quimica="aminoacido"]  { border-color: rgba(251,191,36,0.3);  color: var(--aminoacido); }
+  .q-btn.active { opacity: 1; filter: brightness(1.3); background: rgba(255,255,255,0.06); }
+  .q-btn:not(.active) { opacity: 0.6; }
+
+  .search-wrap {
+    position: relative;
+    margin: 0 20px 20px;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 16px 10px 38px;
+    color: var(--text);
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-wrap input:focus { border-color: var(--tireoide); }
+  .search-wrap input::placeholder { color: var(--muted); }
+
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 14px;
+    pointer-events: none;
+  }
+
+  /* Contador de resultados */
+  .result-count {
+    padding: 0 20px 10px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* Glândula header */
+  .gland-section { margin-bottom: 4px; }
+
+  .gland-header {
+    margin: 0 20px 12px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    border-left-width: 3px;
+    border-left-style: solid;
+  }
+
+  .gland-icon { font-size: 26px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
+
+  .gland-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .gland-desc { font-size: 11px; color: var(--dim); line-height: 1.5; }
+
+  .gland-badge {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 10px;
+    align-self: center;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* Cards */
+  .cards { padding: 0 20px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: #353a50; }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .card-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .card-name { font-weight: 600; font-size: 14px; flex: 1; }
+
+  .card-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+
+  .tag {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 10px;
+    letter-spacing: 0.03em;
+  }
+
+  .tag-peptideo  { background: rgba(96,165,250,0.12);  color: var(--peptideo); }
+  .tag-esteroide { background: rgba(52,211,153,0.12);  color: var(--esteroide); }
+  .tag-aminoacido{ background: rgba(251,191,36,0.12);  color: var(--aminoacido); }
+
+  .chevron { color: var(--muted); font-size: 11px; transition: transform 0.2s; flex-shrink: 0; }
+  .card.open .chevron { transform: rotate(180deg); }
+
+  .card-body {
+    display: none;
+    padding: 0 16px 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .card.open .card-body { display: block; }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 12px 0 6px;
+  }
+
+  .action-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+
+  .action-list li {
+    font-size: 12px;
+    color: var(--dim);
+    padding-left: 12px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .action-list li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+  }
+
+  .quimica-box {
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--dim);
+    line-height: 1.6;
+  }
+
+  .quimica-box strong { color: var(--text); font-weight: 500; }
+
+  .receptor-row, .farmaco-row { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .receptor-chip {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--dim);
+  }
+
+  .receptor-chip.hi { border-color: currentColor; }
+
+  .farmaco-chip {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 8px;
+    background: rgba(139,92,246,0.08);
+    border: 1px solid rgba(139,92,246,0.25);
+    color: #a78bfa;
+  }
+
+  .bottom-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 14px;
+    z-index: 100;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s;
+    min-width: 56px;
+  }
+
+  .nav-item.active { color: var(--tireoide); }
+  .nav-item span { font-size: 18px; }
+
+  .main-content { padding-bottom: 80px; }
+
+  .hidden { display: none !important; }
+
+  /* Separador de seção */
+  .section-divider {
+    margin: 8px 20px 16px;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── ABAS INTERNAS ── */
+  .page-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 0 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-tab {
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+  }
+
+  .page-tab.active {
+    color: var(--tireoide);
+    border-bottom-color: var(--tireoide);
+  }
+
+  .page-tab:hover:not(.active) { color: var(--text); }
+
+  /* ── RESUMO ── */
+  #panel-resumo { padding: 0 20px 32px; }
+
+  .resumo-intro {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 20px;
+    border-left: 3px solid var(--tireoide);
+    font-size: 13px;
+    color: var(--dim);
+    line-height: 1.7;
+  }
+
+  .resumo-intro strong { color: var(--text); }
+
+  .resumo-section {
+    margin-bottom: 20px;
+  }
+
+  .resumo-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .resumo-title .rtag {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  .resumo-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--dim);
+  }
+
+  .resumo-card strong { color: var(--text); font-weight: 500; }
+
+  .resumo-card .rc-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .resumo-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 6px;
+  }
+
+  .resumo-card ul li {
+    padding-left: 12px;
+    position: relative;
+  }
+
+  .resumo-card ul li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+  }
+
+  /* Mecanismo pill grid */
+  .mec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .mec-card {
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    padding: 12px;
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.6;
+  }
+
+  .mec-card .mc-title {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  /* Eixos flowchart */
+  .eixo-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  .eixo-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--dim);
+  }
+
+  .eixo-step .es-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+    color: #000;
+  }
+
+  .eixo-arrow {
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1;
+    margin: -2px 0;
+    padding-left: 16px;
+  }
+
+  .eixo-step strong { color: var(--text); }
+
+  /* Tabela resumo glândulas */
+  .gland-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-top: 8px;
+  }
+
+  .gland-table thead th {
+    padding: 8px 10px;
+    background: var(--surface2);
+    color: var(--muted);
+    font-weight: 600;
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .gland-table tbody tr {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .gland-table tbody td {
+    padding: 8px 10px;
+    color: var(--dim);
+    vertical-align: top;
+  }
+
+  .gland-table tbody td:first-child {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .gland-color-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .ref-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .ref-list li {
+    font-size: 11px;
+    color: var(--muted);
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .ref-list li::before {
+    content: attr(data-ref);
+    position: absolute;
+    left: 0;
+    color: var(--tireoide);
+    font-weight: 600;
+  }
+
+  /* ── DOENÇAS ── */
+  .doenca-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 8px;
+    transition: border-color 0.2s;
+  }
+
+  .doenca-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .doenca-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .doenca-name {
+    font-size: 13px;
+    font-weight: 600;
+    flex: 1;
+    color: var(--text);
+  }
+
+  .doenca-tags {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .dtag {
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 8px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .dtag-hiper  { background: rgba(239,68,68,0.12);   color: #f87171; }
+  .dtag-hipo   { background: rgba(96,165,250,0.12);  color: #60a5fa; }
+  .dtag-auto   { background: rgba(167,139,250,0.12); color: #a78bfa; }
+  .dtag-neo    { background: rgba(251,191,36,0.12);  color: #fbbf24; }
+  .dtag-meta   { background: rgba(52,211,153,0.12);  color: #34d399; }
+
+  .doenca-body {
+    display: none;
+    padding: 0 14px 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .doenca-card.open .doenca-body { display: block; }
+  .doenca-card.open .chevron { transform: rotate(180deg); }
+
+  .dsec {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 10px 0 5px;
+  }
+
+  .dfisio {
+    font-size: 12px;
+    color: var(--dim);
+    background: var(--surface2);
+    border-radius: 6px;
+    padding: 8px 10px;
+    line-height: 1.5;
+  }
+
+  .dfisio strong { color: var(--text); font-weight: 500; }
+
+  .sint-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .sint-box {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 8px 10px;
+  }
+
+  .sint-box .sb-title {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .sint-box ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .sint-box ul li {
+    font-size: 11px;
+    color: var(--dim);
+    padding-left: 10px;
+    position: relative;
+    line-height: 1.4;
+  }
+
+  .sint-box ul li::before {
+    content: '·';
+    position: absolute;
+    left: 2px;
+    font-weight: 700;
+  }
+
+  .drow {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .dchip {
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--dim);
+  }
+
+  .dchip-dx  { border-color: rgba(96,165,250,0.3);  color: #60a5fa;  background: rgba(96,165,250,0.06); }
+  .dchip-tx  { border-color: rgba(52,211,153,0.3);  color: #34d399;  background: rgba(52,211,153,0.06); }
+
+  .doenca-filter-row {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 14px;
+    scrollbar-width: none;
+  }
+  .doenca-filter-row::-webkit-scrollbar { display: none; }
+
+  .df-btn {
+    white-space: nowrap;
+    padding: 5px 13px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--dim);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .df-btn:hover { border-color: #3a3f52; color: var(--text); }
+  .diagrama-wrap {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 16px;
+    margin-bottom: 10px;
+  }
+
+  .diagrama-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .diagrama-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .diagrama-wrap svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>
+</head>
+<body>
+<div class="main-content">
+
+<header>
+  <nav class="site-nav">
+    <a href="#">SNA — Receptores</a>
+    <a href="#">Psicofarmacologia</a>
+    <a href="#" class="active">Endocrinologia</a>
+  </nav>
+  <h1 class="page-title">Endocrinologia</h1>
+  <p class="page-sub">Glândulas · Hormônios · Ações · Estrutura química</p>
+</header>
+
+<!-- Abas internas -->
+<div class="page-tabs">
+  <button class="page-tab active" onclick="switchTab('resumo', this)">📋 Resumo</button>
+  <button class="page-tab" onclick="switchTab('hormônios', this)">⚗️ Hormônios</button>
+</div>
+
+<!-- ════════════════════ PAINEL RESUMO ════════════════════ -->
+<div id="panel-resumo">
+
+  <!-- Intro -->
+  <div class="resumo-intro">
+    O sistema endócrino é uma rede de <strong>glândulas sem ductos</strong> que secretam hormônios diretamente na corrente sanguínea. Junto ao sistema nervoso, é o principal sistema de comunicação e controle do organismo — responsável pela homeostase, metabolismo, crescimento e reprodução. A regulação é feita predominantemente por <strong>feedback negativo</strong>.
+  </div>
+
+  <!-- 1. Mecanismos de ação -->
+  <div class="resumo-section">
+    <div class="resumo-title">
+      Mecanismos de Ação Hormonal
+      <span class="rtag" style="background:rgba(16,185,129,0.12); color:var(--tireoide);">Farmacologia</span>
+    </div>
+    <div class="mec-grid">
+      <div class="mec-card">
+        <div class="mc-title" style="color:var(--peptideo)">🔵 Peptídeos e Aminas</div>
+        Hidrofílicos — <strong>não atravessam</strong> a membrana. Ligam-se a receptores de superfície (GPCRs, tirosina quinases). Usam <strong>2º mensageiros</strong>: AMPc, IP3, Ca²⁺. Efeito em <strong>minutos</strong>.
+      </div>
+      <div class="mec-card">
+        <div class="mc-title" style="color:var(--esteroide)">🟢 Esteroides e Tireoidanos</div>
+        Lipofílicos — <strong>atravessam</strong> a membrana. Receptores <strong>nucleares</strong> (NR). Ligam-se ao DNA via HRE → alteram transcrição gênica. Efeito em <strong>horas a dias</strong>.
+      </div>
+    </div>
+    <div class="resumo-card" style="margin-top:10px">
+      <div class="rc-title">⚡ Ações Não-Genômicas dos Esteroides</div>
+      Efeitos em <strong>segundos a minutos</strong> — sem transcrição gênica. Envolvem receptores de membrana plasmática, alteração rápida de excitabilidade celular e abertura de canais iônicos. Área de intensa pesquisa atual.
+    </div>
+
+    <!-- Diagrama síntese peptídico -->
+    <div class="diagrama-wrap">
+      <div class="diagrama-title">🔬 Síntese de Hormônios Peptídicos</div>
+      <div class="diagrama-sub">Guyton & Hall, Cap. 75</div>
+
+      <!--
+        Layout em HTML puro — sem SVG.
+        Cada etapa = linha com ícone + seta entre elas.
+        Muito mais fácil de controlar em mobile.
+      -->
+      <div style="display:flex; flex-direction:column; gap:0; align-items:center; width:100%;">
+
+        <!-- NÚCLEO -->
+        <div style="width:100%; background:#0d1117; border:1.5px solid #6366f1; border-radius:12px; padding:8px 10px; text-align:center;">
+          <div style="font-size:10px; font-weight:600; color:#a5b4fc; margin-bottom:2px;">🔵 Núcleo</div>
+          <div style="font-size:9px; color:#818cf8; letter-spacing:0.05em;">DNA ⇌ DNA</div>
+          <div style="font-size:8px; color:#4b5563; margin-top:1px;">Dupla hélice</div>
+        </div>
+
+        <!-- seta -->
+        <div style="display:flex; align-items:center; gap:6px; padding:3px 0;">
+          <div style="width:1px; height:16px; border-left:1.5px dashed #60a5fa;"></div>
+          <div style="font-size:9px; font-weight:600; color:#60a5fa; background:#1e3a5f; padding:2px 8px; border-radius:10px;">Transcrição</div>
+        </div>
+
+        <!-- RNAm -->
+        <div style="width:80%; background:#0f2d4a; border:1px solid #3b82f6; border-radius:10px; padding:7px 10px; text-align:center;">
+          <div style="font-size:10px; font-weight:600; color:#93c5fd; margin-bottom:1px;">〰 RNAm</div>
+          <div style="font-size:8px; color:#4b5563;">mensageiro</div>
+        </div>
+
+        <!-- seta -->
+        <div style="display:flex; align-items:center; gap:6px; padding:3px 0;">
+          <div style="width:1px; height:16px; border-left:1.5px dashed #a78bfa;"></div>
+          <div style="font-size:9px; font-weight:600; color:#a78bfa; background:#2d1b69; padding:2px 8px; border-radius:10px;">Translação</div>
+        </div>
+
+        <!-- Retículo -->
+        <div style="width:100%; background:#0f1f35; border:1px solid #2563eb; border-radius:10px; padding:7px 10px; text-align:center;">
+          <div style="font-size:10px; font-weight:600; color:#93c5fd; margin-bottom:2px;">〰〰 Retículo Endoplasmático</div>
+          <div style="font-size:8px; color:#4b5563;">Pré-pró-hormônio → Pró-hormônio</div>
+          <div style="display:inline-block; margin-top:4px; font-size:8px; color:#60a5fa; background:rgba(96,165,250,0.1); border:1px solid rgba(96,165,250,0.2); padding:1px 8px; border-radius:8px;">Síntese</div>
+        </div>
+
+        <!-- seta -->
+        <div style="height:20px; width:1px; border-left:1.5px dashed #34d399; margin:2px 0;"></div>
+
+        <!-- Golgi -->
+        <div style="width:100%; border-radius:10px; padding:8px 10px; text-align:center; background:#0a1f15; border:1px solid #059669; position:relative; overflow:hidden;">
+          <!-- cisternas simuladas com bordas -->
+          <div style="position:absolute; top:4px; left:10%; right:10%; height:2px; border-radius:2px; background:#059669; opacity:0.6;"></div>
+          <div style="position:absolute; top:9px; left:7%; right:7%; height:2px; border-radius:2px; background:#10b981; opacity:0.7;"></div>
+          <div style="position:absolute; top:14px; left:7%; right:7%; height:2px; border-radius:2px; background:#34d399; opacity:0.8;"></div>
+          <div style="position:absolute; top:19px; left:10%; right:10%; height:2px; border-radius:2px; background:#6ee7b7; opacity:0.6;"></div>
+          <div style="font-size:10px; font-weight:600; color:#6ee7b7; margin-top:20px; margin-bottom:2px;">Complexo de Golgi</div>
+          <div style="font-size:8px; color:#4b5563; margin-bottom:2px;">Acondicionamento e maturação</div>
+          <div style="display:inline-block; font-size:8px; color:#34d399; background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.2); padding:1px 8px; border-radius:8px;">Acondicionamento</div>
+        </div>
+
+        <!-- seta -->
+        <div style="height:20px; width:1px; border-left:1.5px dashed #f59e0b; margin:2px 0;"></div>
+
+        <!-- Vesículas + exocitose -->
+        <div style="width:100%; background:#1c1400; border:1px solid #f59e0b; border-radius:10px; padding:8px 10px;">
+          <div style="text-align:center; font-size:10px; font-weight:600; color:#fbbf24; margin-bottom:6px;">Vesículas Secretórias</div>
+          <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+            <!-- 3 vesículas -->
+            <div style="width:28px; height:28px; border-radius:50%; border:1.5px solid #f59e0b; background:#1c1400; display:flex; align-items:center; justify-content:center; font-size:9px;">·· </div>
+            <div style="width:32px; height:32px; border-radius:50%; border:1.5px solid #f59e0b; background:#1c1400; display:flex; align-items:center; justify-content:center; font-size:10px;">··</div>
+            <div style="width:28px; height:28px; border-radius:50%; border:1.5px solid #f59e0b; background:#1c1400; display:flex; align-items:center; justify-content:center; font-size:9px;">··</div>
+            <!-- seta exocitose -->
+            <div style="display:flex; flex-direction:column; align-items:center; margin-left:4px;">
+              <div style="font-size:8px; font-weight:600; color:#fbbf24;">Exocitose</div>
+              <div style="font-size:14px; color:#f59e0b; line-height:1;">→</div>
+              <div style="font-size:7px; color:#6b7280; text-align:center; line-height:1.3;">corrente<br>sanguínea</div>
+            </div>
+          </div>
+          <div style="text-align:center; margin-top:4px;">
+            <span style="display:inline-block; font-size:8px; color:#f59e0b; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.2); padding:1px 8px; border-radius:8px;">Armazenamento</span>
+          </div>
+        </div>
+
+      </div><!-- /coluna -->
+
+      <!-- Legenda -->
+      <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;">
+        <span style="font-size:10px; color:#6366f1;">⬡ Núcleo/DNA</span>
+        <span style="font-size:10px; color:#60a5fa;">⬡ RNAm</span>
+        <span style="font-size:10px; color:#a78bfa;">⬡ Translação</span>
+        <span style="font-size:10px; color:#3b82f6;">⬡ Retículo E.</span>
+        <span style="font-size:10px; color:#34d399;">⬡ Golgi</span>
+        <span style="font-size:10px; color:#f59e0b;">⬡ Vesículas</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Tabela glândulas -->
+  <div class="resumo-section">
+    <div class="resumo-title">
+      Mapa das Glândulas Endócrinas
+      <span class="rtag" style="background:rgba(245,158,11,0.12); color:var(--pancreas);">22 hormônios</span>
+    </div>
+    <div class="resumo-card" style="padding: 0; overflow: hidden;">
+      <table class="gland-table">
+        <thead>
+          <tr>
+            <th>Glândula</th>
+            <th>Hormônios principais</th>
+            <th>Ação central</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="gland-color-dot" style="background:var(--hipotalamo)"></span>Hipotálamo</td>
+            <td>TRH, CRH, GnRH, GHRH, Somatostatina</td>
+            <td>Controle da adeno-hipófise via sistema porta</td>
+          </tr>
+          <tr>
+            <td><span class="gland-color-dot" style="background:var(--hipofise)"></span>Hipófise</td>
+            <td>GH, TSH, ACTH, FSH, LH, PRL, ADH, Ocitocina</td>
+            <td>Regulador mestre — hormônios tróficos e neuro-hipofisários</td>
+          </tr>
+          <tr>
+            <td><span class="gland-color-dot" style="background:var(--tireoide)"></span>Tireoide</td>
+            <td>T3, T4, Calcitonina</td>
+            <td>↑ Metabolismo basal · ↓ Ca²⁺ sérico</td>
+          </tr>
+          <tr>
+            <td><span class="gland-color-dot" style="background:var(--paratireoide)"></span>Paratireoide</td>
+            <td>PTH</td>
+            <td>↑ Ca²⁺ sérico (osso + rim + vitamina D)</td>
+          </tr>
+          <tr>
+            <td><span class="gland-color-dot" style="background:var(--adrenal)"></span>Adrenal</td>
+            <td>Cortisol, Aldosterona, DHEA, Adrenalina</td>
+            <td>Resposta ao estresse · Volume e PA · Luta-ou-fuga</td>
+          </tr>
+          <tr>
+            <td><span class="gland-color-dot" style="background:var(--pancreas)"></span>Pâncreas</td>
+            <td>Insulina, Glucagon, Somatostatina</td>
+            <td>Regulação da glicemia (antagonismo insulina ↔ glucagon)</td>
+          </tr>
+          <tr>
+            <td><span class="gland-color-dot" style="background:var(--gonadas)"></span>Gônadas</td>
+            <td>Testosterona, Estradiol, Progesterona</td>
+            <td>Desenvolvimento sexual · Reprodução · Ciclo menstrual</td>
+          </tr>
+          <tr>
+            <td><span class="gland-color-dot" style="background:var(--pineal)"></span>Pineal</td>
+            <td>Melatonina</td>
+            <td>Ritmo circadiano · Ciclo sono-vigília</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3. Eixo HPA -->
+  <div class="resumo-section">
+    <div class="resumo-title">
+      Eixo HPA — Hipotálamo–Hipófise–Adrenal
+      <span class="rtag" style="background:rgba(239,68,68,0.12); color:var(--adrenal);">Estresse</span>
+    </div>
+    <div class="resumo-card">
+      <div class="rc-title">Cascata de ativação em resposta ao estresse</div>
+      <div class="eixo-flow">
+        <div class="eixo-step">
+          <div class="es-num" style="background:var(--hipotalamo)">1</div>
+          <div>Estímulo estressor → <strong>Hipotálamo</strong> secreta <strong>CRH</strong></div>
+        </div>
+        <div class="eixo-arrow">↓</div>
+        <div class="eixo-step">
+          <div class="es-num" style="background:var(--hipofise)">2</div>
+          <div>CRH → <strong>Hipófise anterior</strong> secreta <strong>ACTH</strong></div>
+        </div>
+        <div class="eixo-arrow">↓</div>
+        <div class="eixo-step">
+          <div class="es-num" style="background:var(--adrenal)">3</div>
+          <div>ACTH → <strong>Córtex adrenal</strong> sintetiza e libera <strong>Cortisol</strong></div>
+        </div>
+        <div class="eixo-arrow">↓</div>
+        <div class="eixo-step">
+          <div class="es-num" style="background:var(--tireoide)">↺</div>
+          <div><strong>Feedback negativo:</strong> Cortisol inibe CRH (hipotálamo) e ACTH (hipófise)</div>
+        </div>
+      </div>
+      <div style="margin-top:10px; font-size:11px; color:var(--muted);">
+        Ações do cortisol: ↑ gliconeogênese · modulação vascular · imunossupressão · anti-inflamatório
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Regulação Ca²⁺ e Glicose -->
+  <div class="resumo-section">
+    <div class="resumo-title">Regulação de Ca²⁺ e Glicose</div>
+    <div class="resumo-card">
+      <div class="rc-title" style="color:var(--pancreas)">🍬 Glicemia — Pâncreas Endócrino</div>
+      <ul>
+        <li><strong>Hiperglicemia</strong> → célula β → <strong>Insulina</strong> → captação de glicose (GLUT-4), glicogênese, lipogênese</li>
+        <li><strong>Hipoglicemia</strong> → célula α → <strong>Glucagon</strong> → glicogenólise e gliconeogênese hepática</li>
+        <li>Células δ → <strong>Somatostatina</strong> → freio parácrino de ambos os hormônios</li>
+      </ul>
+    </div>
+    <div class="resumo-card">
+      <div class="rc-title" style="color:var(--paratireoide)">🦴 Calcemia — PTH ↔ Calcitonina</div>
+      <ul>
+        <li><strong>↓ Ca²⁺</strong> → Paratireoide → <strong>PTH</strong> → ↑ reabsorção óssea + ↑ Ca²⁺ renal + ↑ vitamina D ativa</li>
+        <li><strong>↑ Ca²⁺</strong> → Células C da tireoide → <strong>Calcitonina</strong> → ↓ reabsorção óssea</li>
+        <li>Vitamina D (calcitriol) — ↑ absorção intestinal de Ca²⁺ (mediada pelo PTH)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5. DOENÇAS ENDÓCRINAS -->
+  <div class="resumo-section">
+    <div class="resumo-title">
+      Principais Doenças Endócrinas
+      <span class="rtag" style="background:rgba(239,68,68,0.12); color:#f87171;">18 patologias</span>
+    </div>
+
+    <!-- Filtro rápido -->
+    <div class="doenca-filter-row" id="doencaFilter">
+      <button class="df-btn" style="background:#3a3f52; border-color:#4a5068; color:var(--text);" data-dg="all">Todas</button>
+      <button class="df-btn" data-dg="tireoide"     style="border-color:rgba(16,185,129,0.4);  color:var(--tireoide);">Tireoide</button>
+      <button class="df-btn" data-dg="pancreas"     style="border-color:rgba(245,158,11,0.4);  color:var(--pancreas);">Pâncreas</button>
+      <button class="df-btn" data-dg="adrenal"      style="border-color:rgba(239,68,68,0.4);   color:var(--adrenal);">Adrenal</button>
+      <button class="df-btn" data-dg="hipofise"     style="border-color:rgba(139,92,246,0.4);  color:var(--hipofise);">Hipófise</button>
+      <button class="df-btn" data-dg="paratireoide" style="border-color:rgba(6,182,212,0.4);   color:var(--paratireoide);">Paratireoide</button>
+      <button class="df-btn" data-dg="gonadas"      style="border-color:rgba(236,72,153,0.4);  color:var(--gonadas);">Gônadas</button>
+    </div>
+
+    <!-- ── TIREOIDE ── -->
+    <div class="doenca-card" data-dg="tireoide">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--tireoide)"></div>
+        <div class="doenca-name">Hipotireoidismo</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-hipo">Hipo</span>
+          <span class="dtag" style="background:rgba(16,185,129,0.1);color:var(--tireoide);">Tireoide</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio">↓ T3/T4 → <strong>↓ metabolismo basal</strong>. Primário (Hashimoto autoimune, mais comum) ou secundário (↓ TSH hipofisário). Hashimoto: anticorpos anti-TPO e anti-tireoglobulina destroem folículos.</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--tireoide)">Clássicos</div>
+            <ul>
+              <li>Fadiga e sonolência</li>
+              <li>Ganho de peso</li>
+              <li>Intolerância ao frio</li>
+              <li>Pele seca e fria</li>
+              <li>Bradicardia</li>
+              <li>Constipação</li>
+              <li>Mixedema (face/mãos)</li>
+              <li>↓ reflexos tendinosos</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Também presentes</div>
+            <ul>
+              <li>Depressão</li>
+              <li>Queda de cabelo</li>
+              <li>Voz rouca</li>
+              <li>Menorragia</li>
+              <li>↑ Colesterol LDL</li>
+              <li>Derrame pericárdico</li>
+              <li>Coma mixedematoso (grave)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">↑ TSH</span>
+          <span class="dchip dchip-dx">↓ T4 livre</span>
+          <span class="dchip dchip-dx">Anti-TPO +</span>
+          <span class="dchip dchip-dx">Colesterol total ↑</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">Levotiroxina (T4) oral</span>
+          <span class="dchip dchip-tx">Meta: TSH 0,5–2,5 mUI/L</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="doenca-card" data-dg="tireoide">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--tireoide)"></div>
+        <div class="doenca-name">Hipertireoidismo — Doença de Graves</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-hiper">Hiper</span>
+          <span class="dtag dtag-auto">Autoimune</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio">Anticorpos <strong>TRAb</strong> (anti-receptor de TSH) ativam o TSHR → produção contínua de T3/T4 independente de TSH. Graves: causa mais comum (80%). Também: bócio multinodular tóxico, adenoma tóxico.</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--tireoide)">Clássicos</div>
+            <ul>
+              <li>Taquicardia / palpitações</li>
+              <li>Perda de peso</li>
+              <li>Intolerância ao calor</li>
+              <li>Tremor fino de mãos</li>
+              <li>Sudorese excessiva</li>
+              <li>Ansiedade / irritabilidade</li>
+              <li>Bócio difuso</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Graves específicos</div>
+            <ul>
+              <li>Exoftalmia (proptose)</li>
+              <li>Mixedema pré-tibial</li>
+              <li>Acropaquia</li>
+              <li>Fraqueza muscular proximal</li>
+              <li>Diarreia</li>
+              <li>FA (idosos)</li>
+              <li>Crise tireotóxica (urgência)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">↓ TSH (&lt;0,1)</span>
+          <span class="dchip dchip-dx">↑ T4/T3 livres</span>
+          <span class="dchip dchip-dx">TRAb +</span>
+          <span class="dchip dchip-dx">Cintilografia (captação difusa)</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">Metimazol / PTU</span>
+          <span class="dchip dchip-tx">Iodo radioativo (¹³¹I)</span>
+          <span class="dchip dchip-tx">β-bloqueador (sintomas)</span>
+          <span class="dchip dchip-tx">Tireoidectomia</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="doenca-card" data-dg="tireoide">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--tireoide)"></div>
+        <div class="doenca-name">Carcinoma de Tireoide</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-neo">Neoplasia</span>
+          <span class="dtag" style="background:rgba(16,185,129,0.1);color:var(--tireoide);">Tireoide</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio">Papilífero (80%, melhor prognóstico, mutação <strong>BRAF V600E</strong>) · Folicular (10–15%) · Medular (células C, secreta <strong>calcitonina</strong> — marcador tumoral) · Anaplásico (raro, pior prognóstico).</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--tireoide)">Apresentação</div>
+            <ul>
+              <li>Nódulo tireoidiano indolor</li>
+              <li>Crescimento progressivo</li>
+              <li>Linfonodos cervicais</li>
+              <li>Voz rouca (invasão n. laríngeo)</li>
+              <li>Disfagia</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Medular</div>
+            <ul>
+              <li>↑ Calcitonina sérica</li>
+              <li>Diarreia (ectopia hormonal)</li>
+              <li>Flush facial</li>
+              <li>Associação MEN2A/2B</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">USG cervical</span>
+          <span class="dchip dchip-dx">PAAF (punção)</span>
+          <span class="dchip dchip-dx">↑ Calcitonina (medular)</span>
+          <span class="dchip dchip-dx">Tireoglobulina (pós-cirurgia)</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">Tireoidectomia total</span>
+          <span class="dchip dchip-tx">¹³¹I ablação (papilífero)</span>
+          <span class="dchip dchip-tx">Levotiroxina supressiva</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PÂNCREAS ── -->
+    <div class="doenca-card" data-dg="pancreas">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--pancreas)"></div>
+        <div class="doenca-name">Diabetes Mellitus Tipo 1</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-auto">Autoimune</span>
+          <span class="dtag dtag-hipo">↓ Insulina</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio">Destruição autoimune das <strong>células β</strong> por linfócitos T (anticorpos anti-GAD, anti-IA2, anti-insulina). Deficiência absoluta de insulina → hiperglicemia + cetoacidose diabética (CAD).</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--pancreas)">Clássicos (4 P's)</div>
+            <ul>
+              <li>Poliúria</li>
+              <li>Polidipsia</li>
+              <li>Polifagia</li>
+              <li>Perda de peso</li>
+              <li>Início abrupto</li>
+              <li>Jovens/crianças</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">CAD (urgência)</div>
+            <ul>
+              <li>Náusea e vômitos</li>
+              <li>Dor abdominal</li>
+              <li>Hálito cetônico</li>
+              <li>Respiração de Kussmaul</li>
+              <li>Confusão / coma</li>
+              <li>pH &lt; 7,3</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">Glicemia ≥ 200 mg/dL + sintomas</span>
+          <span class="dchip dchip-dx">HbA1c ≥ 6,5%</span>
+          <span class="dchip dchip-dx">Anti-GAD / anti-IA2 +</span>
+          <span class="dchip dchip-dx">Peptídeo C ↓</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">Insulinoterapia intensiva</span>
+          <span class="dchip dchip-tx">Basal + bolus</span>
+          <span class="dchip dchip-tx">Monitorização glicêmica contínua</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="doenca-card" data-dg="pancreas">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--pancreas)"></div>
+        <div class="doenca-name">Diabetes Mellitus Tipo 2</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-meta">Metabólica</span>
+          <span class="dtag" style="background:rgba(245,158,11,0.1);color:var(--pancreas);">Resistência</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio"><strong>Resistência à insulina</strong> periférica (músculo, fígado, adipócito) → hiperinsulinemia compensatória → exaustão progressiva das células β → deficiência relativa de insulina. Forte componente genético + obesidade.</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--pancreas)">Frequentes</div>
+            <ul>
+              <li>Assintomático (anos)</li>
+              <li>Fadiga</li>
+              <li>Poliúria / polidipsia leves</li>
+              <li>Infecções recorrentes</li>
+              <li>Cicatrização lenta</li>
+              <li>Acantose nigricante</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Complicações crônicas</div>
+            <ul>
+              <li>Retinopatia diabética</li>
+              <li>Nefropatia (microalbuminúria)</li>
+              <li>Neuropatia periférica</li>
+              <li>Doença cardiovascular</li>
+              <li>Pé diabético</li>
+              <li>EHH (urgência)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">Glicemia jejum ≥ 126 mg/dL</span>
+          <span class="dchip dchip-dx">HbA1c ≥ 6,5%</span>
+          <span class="dchip dchip-dx">TOTG 2h ≥ 200 mg/dL</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">Metformina (1ª linha)</span>
+          <span class="dchip dchip-tx">iSGLT2 / GLP-1 RA</span>
+          <span class="dchip dchip-tx">Dieta + exercício</span>
+          <span class="dchip dchip-tx">Insulina (se necessário)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="doenca-card" data-dg="pancreas">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--pancreas)"></div>
+        <div class="doenca-name">Hipoglicemia</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-hipo">Hipo</span>
+          <span class="dtag" style="background:rgba(245,158,11,0.1);color:var(--pancreas);">Glicemia</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio">Glicemia &lt; 70 mg/dL → ativação do <strong>eixo adrenérgico</strong> (adrenalina, glucagon) e, se grave, neuroglicopenia. Causas: excesso de insulina/sulfonilureia, jejum prolongado, insulinoma, insuficiência adrenal.</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--pancreas)">Adrenérgicos</div>
+            <ul>
+              <li>Sudorese fria</li>
+              <li>Taquicardia / palpitações</li>
+              <li>Tremor</li>
+              <li>Fome intensa</li>
+              <li>Ansiedade / palidez</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Neuroglicopênicos</div>
+            <ul>
+              <li>Confusão mental</li>
+              <li>Visão turva</li>
+              <li>Cefaleia</li>
+              <li>Convulsão</li>
+              <li>Coma (grave)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">Glicemia &lt; 70 mg/dL</span>
+          <span class="dchip dchip-dx">Tríade de Whipple</span>
+          <span class="dchip dchip-dx">Insulina + peptídeo C (insulinoma)</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">Glicose oral (leve)</span>
+          <span class="dchip dchip-tx">Glicose IV 50% (grave)</span>
+          <span class="dchip dchip-tx">Glucagon IM/SC</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADRENAL ── -->
+    <div class="doenca-card" data-dg="adrenal">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--adrenal)"></div>
+        <div class="doenca-name">Síndrome de Cushing</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-hiper">Hiper</span>
+          <span class="dtag" style="background:rgba(239,68,68,0.1);color:var(--adrenal);">Cortisol</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio">Excesso crônico de <strong>glicocorticoides</strong>. Exógena (corticoterapia — mais comum). Endógena: Doença de Cushing (adenoma hipofisário ↑ ACTH, 70%), tumor adrenal (ACTH independente), secreção ectópica de ACTH (pequenas células pulmão).</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--adrenal)">Clássicos</div>
+            <ul>
+              <li>Obesidade central</li>
+              <li>Face de lua cheia</li>
+              <li>Giba dorsocervical</li>
+              <li>Estrias violáceas largas</li>
+              <li>Hipertensão arterial</li>
+              <li>Hiperglicemia</li>
+              <li>Fraqueza muscular proximal</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Outros</div>
+            <ul>
+              <li>Osteoporose</li>
+              <li>Pele fina / equimoses</li>
+              <li>Hirsutismo (feminino)</li>
+              <li>Oligo/amenorreia</li>
+              <li>Depressão / psicose</li>
+              <li>↑ infecções oportunistas</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">Cortisol urinário livre 24h ↑</span>
+          <span class="dchip dchip-dx">Teste supressão dexametasona</span>
+          <span class="dchip dchip-dx">Cortisol salivar noturno ↑</span>
+          <span class="dchip dchip-dx">ACTH (diferencia causa)</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">Cirurgia (adenoma hipofisário/adrenal)</span>
+          <span class="dchip dchip-tx">Pasireotida / Metirapona</span>
+          <span class="dchip dchip-tx">Retirada gradual corticoide (exógeno)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="doenca-card" data-dg="adrenal">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--adrenal)"></div>
+        <div class="doenca-name">Doença de Addison</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-hipo">Hipo</span>
+          <span class="dtag dtag-auto">Autoimune</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio">Insuficiência adrenal <strong>primária</strong> — destruição do córtex adrenal (autoimune 80–90%, tuberculose, metástases). ↓ Cortisol + ↓ Aldosterona → ↑ ACTH compensatório (hiperpigmentação).</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--adrenal)">Clássicos</div>
+            <ul>
+              <li>Fadiga intensa</li>
+              <li>Hipotensão postural</li>
+              <li>Hiperpigmentação cutânea</li>
+              <li>Náusea / vômitos</li>
+              <li>Perda de peso</li>
+              <li>Hiponatremia</li>
+              <li>Hipercalemia</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Crise adrenal (urgência)</div>
+            <ul>
+              <li>Hipotensão grave</li>
+              <li>Dor abdominal aguda</li>
+              <li>Hipoglicemia</li>
+              <li>Febre</li>
+              <li>Confusão / choque</li>
+              <li>Gatilho: infecção/trauma</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">Cortisol basal ↓</span>
+          <span class="dchip dchip-dx">ACTH ↑ (primária)</span>
+          <span class="dchip dchip-dx">Teste estimulação ACTH (cosyntropin)</span>
+          <span class="dchip dchip-dx">Anti-21-hidroxilase +</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">Hidrocortisona 15–25 mg/dia</span>
+          <span class="dchip dchip-tx">Fludrocortisona (mineralocort.)</span>
+          <span class="dchip dchip-tx">Dose de estresse (doença/cirurgia)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="doenca-card" data-dg="adrenal">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--adrenal)"></div>
+        <div class="doenca-name">Feocromocitoma</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-neo">Neoplasia</span>
+          <span class="dtag" style="background:rgba(239,68,68,0.1);color:var(--adrenal);">Adrenal</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio">Tumor de células cromafins da <strong>medula adrenal</strong> → secreção episódica de adrenalina e noradrenalina. "Regra dos 10%": 10% malignos, 10% bilaterais, 10% extra-adrenais (paragangliomas). Associação MEN2, VHL, NF1.</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--adrenal)">Tríade clássica</div>
+            <ul>
+              <li>Cefaleia pulsátil intensa</li>
+              <li>Sudorese profusa</li>
+              <li>Palpitações</li>
+              <li>HAS episódica ou persistente</li>
+              <li>Palidez (vs. rubor no carcinoide)</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Outros</div>
+            <ul>
+              <li>Ansiedade / tremor</li>
+              <li>Hiperglicemia</li>
+              <li>Perda de peso</li>
+              <li>Crise hipertensiva ao palpar abdome</li>
+              <li>Cardiomiopatia de Takotsubo</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">Metanefrinas urinárias/plasmáticas ↑</span>
+          <span class="dchip dchip-dx">TC/RM adrenal</span>
+          <span class="dchip dchip-dx">Cintilografia MIBG</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">Bloqueio α primeiro (fenoxibenzamina)</span>
+          <span class="dchip dchip-tx">Depois β-bloqueador</span>
+          <span class="dchip dchip-tx">Adrenalectomia laparoscópica</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="doenca-card" data-dg="adrenal">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--adrenal)"></div>
+        <div class="doenca-name">Hiperaldosteronismo Primário (Conn)</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-hiper">Hiper</span>
+          <span class="dtag" style="background:rgba(239,68,68,0.1);color:var(--adrenal);">Aldosterona</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio">Secreção autônoma de <strong>aldosterona</strong> pela zona glomerulosa (adenoma — 65%, hiperplasia bilateral — 35%) → ↑ reabsorção de Na⁺ e H₂O + ↑ excreção de K⁺ e H⁺. Causa mais comum de HAS secundária.</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--adrenal)">Clássicos</div>
+            <ul>
+              <li>HAS resistente</li>
+              <li>Hipocalemia</li>
+              <li>Fraqueza muscular</li>
+              <li>Cãibras</li>
+              <li>Poliúria / polidipsia</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Complicações</div>
+            <ul>
+              <li>Alcalose metabólica</li>
+              <li>Arritmias (↓ K⁺)</li>
+              <li>Paralisia periódica</li>
+              <li>Nefropatia hipocalêmica</li>
+              <li>AVC / IAM precoce</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">Relação Aldosterona/Renina ↑</span>
+          <span class="dchip dchip-dx">Aldosterona ↑, Renina ↓</span>
+          <span class="dchip dchip-dx">TC adrenal</span>
+          <span class="dchip dchip-dx">Cateterismo veias adrenais</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">Adenoma: adrenalectomia</span>
+          <span class="dchip dchip-tx">Hiperplasia: espironolactona</span>
+          <span class="dchip dchip-tx">Eplerenona (menos efeitos)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── HIPÓFISE ── -->
+    <div class="doenca-card" data-dg="hipofise">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--hipofise)"></div>
+        <div class="doenca-name">Acromegalia / Gigantismo</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-hiper">Hiper GH</span>
+          <span class="dtag dtag-neo">Neoplasia</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio">Adenoma hipofisário somatotrófico → ↑ <strong>GH</strong> → ↑ <strong>IGF-1</strong>. Pré-puberal (epífises abertas) = <strong>gigantismo</strong>. Pós-puberal = <strong>acromegalia</strong> (crescimento de partes moles e ossos acroscópicos).</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--hipofise)">Acromegalia</div>
+            <ul>
+              <li>↑ Mãos / pés / nariz</li>
+              <li>Prognatismo</li>
+              <li>Macroglossia</li>
+              <li>Cefaleia</li>
+              <li>Hemianopsia (compressão quiasma)</li>
+              <li>Síndrome do túnel do carpo</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Complicações</div>
+            <ul>
+              <li>HAS / cardiomegalia</li>
+              <li>DM2 (resistência insulínica)</li>
+              <li>Apneia do sono</li>
+              <li>Artropatia</li>
+              <li>↑ risco neoplasias (cólon)</li>
+              <li>Hipopituitarismo por compressão</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">IGF-1 ↑</span>
+          <span class="dchip dchip-dx">GH não suprimido pelo TOTG</span>
+          <span class="dchip dchip-dx">RM hipófise (adenoma)</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">Cirurgia transesfenoidal</span>
+          <span class="dchip dchip-tx">Octreotida / Lanreotida</span>
+          <span class="dchip dchip-tx">Pegvisomant (antag. GHR)</span>
+          <span class="dchip dchip-tx">Radioterapia</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="doenca-card" data-dg="hipofise">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--hipofise)"></div>
+        <div class="doenca-name">Diabetes Insipidus</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-hipo">↓ ADH</span>
+          <span class="dtag" style="background:rgba(139,92,246,0.1);color:var(--hipofise);">Hipófise</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio"><strong>Central:</strong> ↓ produção de ADH (trauma, cirurgia, tumor, autoimune). <strong>Nefrogênico:</strong> rim resistente ao ADH (mutação V2R, lítio, hipercalcemia). Resultado: incapacidade de concentrar urina → poliúria hipotônica.</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--hipofise)">Clássicos</div>
+            <ul>
+              <li>Poliúria intensa (3–20 L/dia)</li>
+              <li>Polidipsia intensa</li>
+              <li>Urina muito diluída (DU &lt;1005)</li>
+              <li>Preferência por água gelada</li>
+              <li>Nictúria</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Se restrição hídrica</div>
+            <ul>
+              <li>Desidratação grave</li>
+              <li>Hipernatremia</li>
+              <li>Hiperosmolalidade</li>
+              <li>Confusão / coma</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">Osmolalidade urinária ↓</span>
+          <span class="dchip dchip-dx">Teste de restrição hídrica</span>
+          <span class="dchip dchip-dx">Desmopressina (diferencia central/nefrogênico)</span>
+          <span class="dchip dchip-dx">Copeptina plasmática</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">Central: Desmopressina (DDAVP)</span>
+          <span class="dchip dchip-tx">Nefrogênico: tiazídicos + dieta hipossódica</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="doenca-card" data-dg="hipofise">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--hipofise)"></div>
+        <div class="doenca-name">Hiperprolactinemia</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-hiper">Hiper PRL</span>
+          <span class="dtag" style="background:rgba(139,92,246,0.1);color:var(--hipofise);">Hipófise</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio">↑ Prolactina → inibe GnRH → ↓ LH/FSH → hipogonadismo. Causas: prolactinoma (mais comum), antipsicóticos (bloqueio D2), hipotireoidismo (↑ TRH → ↑ PRL), gravidez, macroprolactina.</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--hipofise)">Mulher</div>
+            <ul>
+              <li>Galactorreia</li>
+              <li>Amenorreia / oligomenorreia</li>
+              <li>Infertilidade</li>
+              <li>Dispareunia (↓ estrogênio)</li>
+              <li>Osteoporose</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Homem</div>
+            <ul>
+              <li>Disfunção erétil</li>
+              <li>↓ Libido</li>
+              <li>Ginecomastia</li>
+              <li>Infertilidade</li>
+              <li>Galactorreia (rara)</li>
+              <li>Cefaleia (macroadenoma)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">Prolactina sérica ↑</span>
+          <span class="dchip dchip-dx">RM hipófise</span>
+          <span class="dchip dchip-dx">TSH (excluir hipotireoidismo)</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">Cabergolina (agonista D2)</span>
+          <span class="dchip dchip-tx">Bromocriptina</span>
+          <span class="dchip dchip-tx">Cirurgia (resistência/macroadenoma)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PARATIREOIDE ── -->
+    <div class="doenca-card" data-dg="paratireoide">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--paratireoide)"></div>
+        <div class="doenca-name">Hiperparatireoidismo Primário</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-hiper">↑ PTH</span>
+          <span class="dtag dtag-neo">Adenoma</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio">Adenoma paratireoidiano (85%) → ↑ PTH autônomo → hipercalcemia. Regra mnemônica: <strong>"Pedras, Ossos, Gemidos e Trovas Psíquicas"</strong> (litíase, osteíte fibrosa, sintomas GI, neuropsiquiátricos).</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--paratireoide)">Hipercalcemia</div>
+            <ul>
+              <li>Litíase renal (cálculo de Ca)</li>
+              <li>Poliúria / polidipsia</li>
+              <li>Constipação / náusea</li>
+              <li>Fraqueza / fadiga</li>
+              <li>Dor óssea / fraturas</li>
+              <li>Depressão / confusão</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Urgência hipercalcêmica</div>
+            <ul>
+              <li>Ca²⁺ &gt; 14 mg/dL</li>
+              <li>Desidratação grave</li>
+              <li>Encurtamento QT</li>
+              <li>Arritmia / PCR</li>
+              <li>Pancreatite aguda</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">↑ Ca²⁺ sérico</span>
+          <span class="dchip dchip-dx">↑ PTH imunoativo</span>
+          <span class="dchip dchip-dx">↓ Fosfato</span>
+          <span class="dchip dchip-dx">USG / cintilografia paratireoide</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">Paratireoidectomia (sintomático)</span>
+          <span class="dchip dchip-tx">Cinacalcete (calcimimético)</span>
+          <span class="dchip dchip-tx">Hidratação IV (crise)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="doenca-card" data-dg="paratireoide">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--paratireoide)"></div>
+        <div class="doenca-name">Hipoparatireoidismo</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-hipo">↓ PTH</span>
+          <span class="dtag" style="background:rgba(6,182,212,0.1);color:var(--paratireoide);">↓ Ca²⁺</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio">↓ PTH → ↓ Ca²⁺ sérico → hiperexcitabilidade neuromuscular. Causa mais comum: <strong>pós-tireoidectomia</strong> (remoção inadvertida). Também: autoimune (síndrome poliglandular), síndrome Di George.</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--paratireoide)">Hipocalcemia</div>
+            <ul>
+              <li>Parestesias (perioral, dedos)</li>
+              <li>Espasmo carpopedal (tetania)</li>
+              <li>Sinal de Chvostek +</li>
+              <li>Sinal de Trousseau +</li>
+              <li>Convulsões</li>
+              <li>Prolongamento QT</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Crônicos</div>
+            <ul>
+              <li>Catarata</li>
+              <li>Calcificações basais</li>
+              <li>Depressão / ansiedade</li>
+              <li>Pele seca / unhas frágeis</li>
+              <li>Candidíase mucocutânea</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">↓ Ca²⁺ sérico</span>
+          <span class="dchip dchip-dx">↓ PTH</span>
+          <span class="dchip dchip-dx">↑ Fósforo</span>
+          <span class="dchip dchip-dx">ECG (QT longo)</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">Cálcio oral + Vit D (calcitriol)</span>
+          <span class="dchip dchip-tx">Gluconato de Ca IV (agudo)</span>
+          <span class="dchip dchip-tx">PTH recombinante (casos selecionados)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── GÔNADAS ── -->
+    <div class="doenca-card" data-dg="gonadas">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--gonadas)"></div>
+        <div class="doenca-name">Síndrome dos Ovários Policísticos (SOP)</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-hiper">Hiper Androgênio</span>
+          <span class="dtag dtag-meta">Metabólica</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio">Resistência à insulina → ↑ insulina → ↑ LH → ↑ androgênios ovarianos → inibição da maturação folicular → anovulação crônica. Critérios de Rotterdam: 2 de 3 (oligo/anovulação, hiperandrogenismo clínico/laboratorial, ovários policísticos à USG).</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--gonadas)">Clássicos</div>
+            <ul>
+              <li>Oligomenorreia / amenorreia</li>
+              <li>Hirsutismo (escala Ferriman)</li>
+              <li>Acne persistente</li>
+              <li>Infertilidade</li>
+              <li>Ovários aumentados (USG)</li>
+              <li>Acantose nigricante</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Risco associado</div>
+            <ul>
+              <li>DM2 (↑ 5–10×)</li>
+              <li>Síndrome metabólica</li>
+              <li>HAS</li>
+              <li>Dislipidemia</li>
+              <li>↑ Endométrio (anovulação)</li>
+              <li>Depressão / ansiedade</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">Testosterona livre ↑</span>
+          <span class="dchip dchip-dx">LH/FSH ratio &gt; 2</span>
+          <span class="dchip dchip-dx">USG pélvica (≥12 folículos/ovário)</span>
+          <span class="dchip dchip-dx">Excluir hiperprolactinemia e HAC</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">ACO (regularização + antiandrogenismo)</span>
+          <span class="dchip dchip-tx">Metformina (resistência insulínica)</span>
+          <span class="dchip dchip-tx">Clomifeno / letrozol (fertilidade)</span>
+          <span class="dchip dchip-tx">Dieta + exercício</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="doenca-card" data-dg="gonadas">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--gonadas)"></div>
+        <div class="doenca-name">Hipogonadismo Masculino</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-hipo">↓ Testosterona</span>
+          <span class="dtag" style="background:rgba(236,72,153,0.1);color:var(--gonadas);">Gônadas</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio"><strong>Primário</strong> (hipergonadotrófico): testículos não respondem — Klinefelter (47,XXY), orquite, quimioterapia. ↑ LH/FSH, ↓ T. <strong>Secundário</strong> (hipogonadotrófico): ↓ GnRH/LH — hiperprolactinemia, Kallmann, obesidade mórbida.</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--gonadas)">Adulto</div>
+            <ul>
+              <li>↓ Libido</li>
+              <li>Disfunção erétil</li>
+              <li>Infertilidade</li>
+              <li>Fadiga / depressão</li>
+              <li>↓ Massa muscular</li>
+              <li>Osteoporose</li>
+              <li>Ginecomastia</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Pré-puberal</div>
+            <ul>
+              <li>Ausência de puberdade</li>
+              <li>Voz não muda</li>
+              <li>Micropênis</li>
+              <li>Criptorquidia</li>
+              <li>Hábito eunucoide</li>
+              <li>↓ Pilificação</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">Testosterona total matinal ↓</span>
+          <span class="dchip dchip-dx">LH / FSH (primário ↑ / secundário ↓)</span>
+          <span class="dchip dchip-dx">Cariótipo (Klinefelter)</span>
+          <span class="dchip dchip-dx">RM hipófise (secundário)</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">TRT (gel, injeção, adesivo)</span>
+          <span class="dchip dchip-tx">hCG (se deseja fertilidade)</span>
+          <span class="dchip dchip-tx">Tratar causa base</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="doenca-card" data-dg="gonadas">
+      <div class="doenca-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="doenca-dot" style="background:var(--gonadas)"></div>
+        <div class="doenca-name">Insuficiência Ovariana Prematura (IOP)</div>
+        <div class="doenca-tags">
+          <span class="dtag dtag-hipo">↓ Estrogênio</span>
+          <span class="dtag" style="background:rgba(236,72,153,0.1);color:var(--gonadas);">Gônadas</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="doenca-body">
+        <div class="dsec">Fisiopatologia</div>
+        <div class="dfisio">Falência ovariana antes dos <strong>40 anos</strong> → ↓ estrogênio + ↑ FSH/LH. Causas: autoimune (associação com Addison, tireoidite), cromossomica (Turner 45,X), iatrogênica (quimio, radioterapia), idiopática.</div>
+        <div class="dsec">Sinais e Sintomas</div>
+        <div class="sint-grid">
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--gonadas)">Clínicos</div>
+            <ul>
+              <li>Amenorreia &lt; 40 anos</li>
+              <li>Fogachos / sudorese noturna</li>
+              <li>Dispareunia (atrofia vaginal)</li>
+              <li>↓ Libido</li>
+              <li>Infertilidade</li>
+              <li>Labilidade emocional</li>
+            </ul>
+          </div>
+          <div class="sint-box">
+            <div class="sb-title" style="color:var(--muted)">Complicações</div>
+            <ul>
+              <li>Osteoporose precoce</li>
+              <li>↑ Risco cardiovascular</li>
+              <li>Depressão</li>
+              <li>Demência (↓ estrogênio)</li>
+              <li>Associação autoimune (pesquisar)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dsec">Diagnóstico</div>
+        <div class="drow">
+          <span class="dchip dchip-dx">FSH &gt; 25 UI/L (2×, com 1 mês)</span>
+          <span class="dchip dchip-dx">↓ Estradiol</span>
+          <span class="dchip dchip-dx">Cariótipo</span>
+          <span class="dchip dchip-dx">Anticorpos antiovário</span>
+        </div>
+        <div class="dsec">Tratamento</div>
+        <div class="drow">
+          <span class="dchip dchip-tx">TRH (estrogênio + progestogênio)</span>
+          <span class="dchip dchip-tx">Cálcio + Vitamina D</span>
+          <span class="dchip dchip-tx">Apoio psicológico</span>
+          <span class="dchip dchip-tx">Doação de óvulo (fertilidade)</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /resumo-section doenças -->
+
+  <!-- 6. Referências -->
+  <div class="resumo-section">
+    <div class="resumo-title">Referências</div>
+    <div class="resumo-card">
+      <ul class="ref-list">
+        <li data-ref="[1]">Guyton, A. C., & Hall, J. E. (2016). <em>Tratado de Fisiologia Médica</em> (13ª ed.). Elsevier.</li>
+        <li data-ref="[2]">Kenhub (2022). Sistema endócrino: Anatomia e funções.</li>
+        <li data-ref="[3]">MSD Manuals (2025). Glândulas endócrinas — Biologia do sistema endócrino.</li>
+        <li data-ref="[4]">Barrett, K. E. et al. (2021). <em>Fisiologia Endócrina</em> (5ª ed.). Lange.</li>
+        <li data-ref="[5]">Damião, B., Oliveira, C. M., & Rodrigues, M. R. (2019). Ações genômicas e não-genômicas dos hormônios esteroides. <em>Revista Farmácia Generalista</em>, 1(2), 46–66.</li>
+        <li data-ref="[6]">LabRx (2026). O que é o eixo hipotálamo-hipófise-adrenal e como funciona?</li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- /panel-resumo -->
+
+<!-- ════════════════════ PAINEL HORMÔNIOS ════════════════════ -->
+<div id="panel-hormonios" style="display:none">
+
+<!-- Filtros glândula -->
+<div class="filter-row" id="filterGlandula">
+  <button class="filter-btn active-all" data-filter="all">Todas</button>
+  <button class="filter-btn" data-filter="hipotalamo">Hipotálamo</button>
+  <button class="filter-btn" data-filter="hipofise">Hipófise</button>
+  <button class="filter-btn" data-filter="tireoide">Tireoide</button>
+  <button class="filter-btn" data-filter="paratireoide">Paratireoide</button>
+  <button class="filter-btn" data-filter="adrenal">Adrenal</button>
+  <button class="filter-btn" data-filter="pancreas">Pâncreas</button>
+  <button class="filter-btn" data-filter="gonadas">Gônadas</button>
+  <button class="filter-btn" data-filter="pineal">Pineal</button>
+</div>
+
+<!-- Filtros química -->
+<div class="quimica-filters" id="filterQuimica">
+  <button class="q-btn" data-quimica="peptideo">⬡ Peptídeo/Proteína</button>
+  <button class="q-btn" data-quimica="esteroide">⬡ Esteroide</button>
+  <button class="q-btn" data-quimica="aminoacido">⬡ Derivado de aa</button>
+</div>
+
+<!-- Busca -->
+<div class="search-wrap">
+  <span class="search-icon">🔍</span>
+  <input type="text" id="searchInput" placeholder="Buscar hormônio, glândula, receptor...">
+</div>
+
+<div class="result-count" id="resultCount"></div>
+
+<!-- ═══════════════════════════════════ HIPOTÁLAMO -->
+<div class="gland-section" data-glandula="hipotalamo">
+  <div class="gland-header" style="border-left-color: var(--hipotalamo);">
+    <div class="gland-icon">🧠</div>
+    <div>
+      <div class="gland-name" style="color: var(--hipotalamo);">Hipotálamo</div>
+      <div class="gland-desc">Núcleos paraventriculares e arqueados · Controle neuroendócrino superior<br>Eixo Hipotálamo–Hipófise–Órgão-alvo</div>
+    </div>
+    <div class="gland-badge" style="background: rgba(99,102,241,0.15); color: var(--hipotalamo);">5 hormônios</div>
+  </div>
+  <div class="cards">
+
+    <div class="card" data-glandula="hipotalamo" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--hipotalamo)"></div>
+        <div class="card-name">TRH — Hormônio Liberador de Tireotropina</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem e estímulo</div>
+        <div class="quimica-box">Núcleo paraventricular do hipotálamo · Estímulo: ↓T3/T4, frio, estresse</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Tripeptídeo</strong> · pGlu-His-Pro-NH₂ · PM ≈ 362 Da · Estrutura cíclica com piroglutamato N-terminal</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li style="--color:var(--hipotalamo)">↑ secreção de <strong>TSH</strong> pela hipófise anterior</li>
+          <li>↑ secreção de <strong>prolactina</strong> (ação secundária)</li>
+          <li>Modulação de neurônios dopaminérgicos (efeito antidepressivo estudado)</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--hipotalamo); border-color:var(--hipotalamo)">TRHR1/2</span>
+          <span class="receptor-chip">GPCR — Gq</span>
+          <span class="receptor-chip">↑ IP3 / DAG</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Protirelin (teste diagnóstico)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="hipotalamo" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--hipotalamo)"></div>
+        <div class="card-name">GnRH — Hormônio Liberador de Gonadotrofinas</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem e estímulo</div>
+        <div class="quimica-box">Núcleo arqueado · Secreção pulsátil (pulsos a cada 60–120 min) · Estímulo: puberdade, quispecptina</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Decapeptídeo</strong> · 10 aa · pGlu-His-Trp-Ser-Tyr-Gly-Leu-Arg-Pro-Gly-NH₂ · PM ≈ 1182 Da</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>↑ secreção de <strong>LH e FSH</strong> pela hipófise (pulsátil → estimulante; contínuo → supressor)</li>
+          <li>Controle do ciclo menstrual e espermatogênese</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--hipotalamo); border-color:var(--hipotalamo)">GnRHR</span>
+          <span class="receptor-chip">GPCR — Gq</span>
+          <span class="receptor-chip">↑ PKC</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Leuprolida (análogo)</span>
+          <span class="farmaco-chip">Goserelina</span>
+          <span class="farmaco-chip">Cetrorelix (antagonista)</span>
+          <span class="farmaco-chip">Degarelix</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="hipotalamo" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--hipotalamo)"></div>
+        <div class="card-name">GHRH — Hormônio Liberador de GH</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem e estímulo</div>
+        <div class="quimica-box">Núcleo arqueado · Estímulo: hipoglicemia, sono profundo, exercício, grelina</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Polipeptídeo</strong> · 44 aa · Membro da família secretina · PM ≈ 5040 Da · N-terminal essencial para atividade</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>↑ síntese e secreção de <strong>GH</strong> pelas células somatotróficas da hipófise</li>
+          <li>↑ expressão do gene GH</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--hipotalamo); border-color:var(--hipotalamo)">GHRHR</span>
+          <span class="receptor-chip">GPCR — Gs</span>
+          <span class="receptor-chip">↑ AMPc → PKA</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Sermorelin (análogo diagnóstico)</span>
+          <span class="farmaco-chip">Tesamorelin (HIV lipodistrofia)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="hipotalamo" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--hipotalamo)"></div>
+        <div class="card-name">CRH — Hormônio Liberador de Corticotropina</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem e estímulo</div>
+        <div class="quimica-box">Núcleo paraventricular · Estímulo: estresse físico/psicológico, hipoglicemia, citocinas inflamatórias · Inibido por cortisol (feedback negativo)</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Polipeptídeo</strong> · 41 aa · PM ≈ 4758 Da · α-hélice anfifílica</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>↑ secreção de <strong>ACTH</strong> pela hipófise → ↑ cortisol adrenal</li>
+          <li>Efeitos no SNC: ansiedade, ativação simpática, supressão de apetite</li>
+          <li>Modulação imune (receptores periféricos)</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--hipotalamo); border-color:var(--hipotalamo)">CRH-R1 / CRH-R2</span>
+          <span class="receptor-chip">GPCR — Gs</span>
+          <span class="receptor-chip">↑ AMPc</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Corticorelin (teste diagnóstico)</span>
+          <span class="farmaco-chip">Antalarmin (antag. experimental)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="hipotalamo" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--hipotalamo)"></div>
+        <div class="card-name">Somatostatina (SRIF) — hipotalâmica</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem e estímulo</div>
+        <div class="quimica-box">Núcleo periventricular · Estímulo: ↑ GH, IGF-1, hiperglicemia · Inibe a própria liberação de GH</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Peptídeo cíclico</strong> · SST-14 (14 aa) e SST-28 · 1 ponte dissulfeto · PM ≈ 1638 Da · Meia-vida ~3 min</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>↓ secreção de <strong>GH</strong> (inibição tônica)</li>
+          <li>↓ TSH, prolactina, ACTH (efeito secundário)</li>
+          <li>↓ secreção pancreática de insulina e glucagon</li>
+          <li>↓ motilidade GI e secreção ácida</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--hipotalamo); border-color:var(--hipotalamo)">SSTR1–5</span>
+          <span class="receptor-chip">GPCR — Gi</span>
+          <span class="receptor-chip">↓ AMPc · ↑ K⁺</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Octreotida</span>
+          <span class="farmaco-chip">Lanreotida</span>
+          <span class="farmaco-chip">Pasireotida (Cushing)</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /cards hipotálamo -->
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════ HIPÓFISE -->
+<div class="gland-section" data-glandula="hipofise">
+  <div class="gland-header" style="border-left-color: var(--hipofise);">
+    <div class="gland-icon">🔮</div>
+    <div>
+      <div class="gland-name" style="color: var(--hipofise);">Hipófise (Pituitária)</div>
+      <div class="gland-desc">Anterior (adeno): GH, TSH, ACTH, FSH, LH, PRL · Posterior (neuro): ADH, Ocitocina<br>Sela túrcica do osso esfenoide</div>
+    </div>
+    <div class="gland-badge" style="background: rgba(139,92,246,0.15); color: var(--hipofise);">7 hormônios</div>
+  </div>
+  <div class="cards">
+
+    <div class="card" data-glandula="hipofise" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--hipofise)"></div>
+        <div class="card-name">GH — Hormônio do Crescimento (Somatotropina)</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Células somatotróficas da hipófise anterior · Secreção pulsátil, pico no sono profundo (fase III-IV NREM)</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Polipeptídeo</strong> · 191 aa · 2 pontes dissulfeto · PM ≈ 22 kDa · Homologia com prolactina (~16%)</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li><strong>Diretas:</strong> lipolítica, ↑ glicemia (anti-insulínica), ↑ síntese proteica</li>
+          <li><strong>Indiretas via IGF-1:</strong> crescimento longitudinal (crescimento de cartilagem epifisária)</li>
+          <li>↑ síntese de IGF-1 no fígado (mediador principal do crescimento)</li>
+          <li>↑ retenção de N, P, Ca, Na</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--hipofise); border-color:var(--hipofise)">GHR (classe I citocina)</span>
+          <span class="receptor-chip">JAK2/STAT5</span>
+          <span class="receptor-chip">PI3K · MAPK</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Somatropina (reposição)</span>
+          <span class="farmaco-chip">Pegvisomant (antag. acromegalia)</span>
+          <span class="farmaco-chip">Octreotida (↓ GH)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="hipofise" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--hipofise)"></div>
+        <div class="card-name">TSH — Tireotropina</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Células tireotrofinhas · Estimulado por TRH, inibido por T3/T4 (feedback negativo longo)</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Glicoproteína heterodimera</strong> · Subunidade α (92 aa, compartilhada com FSH/LH/hCG) + subunidade β (118 aa, específica) · PM ≈ 28 kDa</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>↑ captação de iodeto pela tireoide (↑ NIS)</li>
+          <li>↑ síntese e secreção de T3 e T4</li>
+          <li>↑ crescimento e vascularização da glândula (bócio em hipestímulo crônico)</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--hipofise); border-color:var(--hipofise)">TSHR</span>
+          <span class="receptor-chip">GPCR — Gs/Gq</span>
+          <span class="receptor-chip">↑ AMPc · ↑ IP3</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Tireotropina alfa (diagnóstico)</span>
+          <span class="farmaco-chip">Levotiroxina (↓ TSH por feedback)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="hipofise" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--hipofise)"></div>
+        <div class="card-name">ACTH — Corticotropina</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Células corticotróficas · Derivado da POMC (pró-opiomelanocortina) · Pico matinal (ritmo circadiano)</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Polipeptídeo</strong> · 39 aa · Derivado de POMC (241 aa) por clivagem proteolítica · Primeiros 24 aa = porção biologicamente ativa</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>↑ síntese e secreção de <strong>cortisol, aldosterona e androgênios</strong> adrenais</li>
+          <li>↑ expressão de StAR (transporte de colesterol mitocondrial)</li>
+          <li>Efeito melanotrófico (pigmentação — via receptor MC1R)</li>
+          <li>Hipertrofia/hiperplasia do córtex adrenal</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--hipofise); border-color:var(--hipofise)">MC2R (adrenal)</span>
+          <span class="receptor-chip">GPCR — Gs</span>
+          <span class="receptor-chip">↑ AMPc → PKA → StAR</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Cosyntropin (tetracosactida — teste)</span>
+          <span class="farmaco-chip">Pasireotida (↓ ACTH em Cushing)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="hipofise" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--hipofise)"></div>
+        <div class="card-name">FSH e LH — Gonadotrofinas</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Células gonadotróficas · Estimuladas por GnRH pulsátil · FSH e LH co-secretadas pela mesma célula</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Glicoproteínas heterodiméricas</strong> · Subunidade α comum (92 aa) + subunidade β específica · FSH-β: 111 aa · LH-β: 121 aa · PM ≈ 30–34 kDa</div>
+        <div class="section-label">Ações — FSH</div>
+        <ul class="action-list">
+          <li><strong>♀</strong> Crescimento e maturação folicular; ↑ aromatase (conversão androgênio → estrogênio)</li>
+          <li><strong>♂</strong> Espermatogênese; ↑ proteína ligadora de androgênio (ABP) nas células de Sertoli</li>
+        </ul>
+        <div class="section-label">Ações — LH</div>
+        <ul class="action-list">
+          <li><strong>♀</strong> Pico de LH → ovulação; formação e manutenção do corpo lúteo; ↑ progesterona</li>
+          <li><strong>♂</strong> Estimula células de Leydig → ↑ testosterona</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--hipofise); border-color:var(--hipofise)">FSHR / LHR</span>
+          <span class="receptor-chip">GPCR — Gs</span>
+          <span class="receptor-chip">↑ AMPc</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Folitropina α/β (FSH recomb.)</span>
+          <span class="farmaco-chip">hCG (mimetiza LH)</span>
+          <span class="farmaco-chip">Clomifeno (↑ FSH/LH indiretamente)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="hipofise" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--hipofise)"></div>
+        <div class="card-name">Prolactina (PRL)</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Células lactotróficas · Controle predominantemente inibitório pela dopamina (D2) · TRH e estrogênio estimulam</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Polipeptídeo</strong> · 199 aa · 3 pontes dissulfeto · PM ≈ 23 kDa · Homologia com GH (~16%) e lactogênio placentário</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>↑ produção de leite (ação nas glândulas mamárias pós-parto)</li>
+          <li>Inibição do eixo GnRH → ↓ LH/FSH → amenorreia lactacional</li>
+          <li>↑ resposta imune (efeito imunomodulador)</li>
+          <li>Hiperprolactinemia: galactorreia, disfunção erétil, infertilidade</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--hipofise); border-color:var(--hipofise)">PRLR (classe I citocina)</span>
+          <span class="receptor-chip">JAK2/STAT5</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Bromocriptina (agonista D2 → ↓ PRL)</span>
+          <span class="farmaco-chip">Cabergolina</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="hipofise" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--hipofise)"></div>
+        <div class="card-name">ADH — Vasopressina (AVP)</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Neurônios magnocelulares do núcleo supraóptico → armazenada e liberada pela neuro-hipófise · Estímulo: ↑ osmolalidade, ↓ volemia</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Nonapeptídeo cíclico</strong> · 9 aa · 1 ponte dissulfeto (Cys1–Cys6) · PM ≈ 1084 Da · Semelhante à ocitocina (difere em posição 3 e 8)</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li><strong>V2 (renal):</strong> ↑ inserção de aquaporina-2 no ducto coletor → ↑ reabsorção de água</li>
+          <li><strong>V1a (vascular):</strong> vasoconstrição por ↑ Ca²⁺ intracelular</li>
+          <li><strong>V1b (hipofisário):</strong> ↑ ACTH em resposta ao estresse</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--hipofise); border-color:var(--hipofise)">V1a · V1b · V2</span>
+          <span class="receptor-chip">V1: Gq · V2: Gs</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Desmopressina (DDAVP — V2 seletivo)</span>
+          <span class="farmaco-chip">Tolvaptan (antag. V2 — sínd. SIADH)</span>
+          <span class="farmaco-chip">Vasopressina (choque)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="hipofise" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--hipofise)"></div>
+        <div class="card-name">Ocitocina</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Neurônios magnocelulares do núcleo paraventricular → neuro-hipófise · Estímulo: dilatação cervical (reflexo de Ferguson), sucção mamária</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Nonapeptídeo cíclico</strong> · 9 aa · 1 ponte dissulfeto · PM ≈ 1007 Da · Difere do ADH nos resíduos 3 (Ile→Phe) e 8 (Leu→Arg)</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>Contração do miométrio uterino (parto e expulsão da placenta)</li>
+          <li>Ejeção de leite (contração de células mioepiteliais mamárias)</li>
+          <li>Efeitos no SNC: apego, vínculo social, redução de ansiedade ("hormônio do amor")</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--hipofise); border-color:var(--hipofise)">OXTR</span>
+          <span class="receptor-chip">GPCR — Gq</span>
+          <span class="receptor-chip">↑ IP3 → ↑ Ca²⁺</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Ocitocina sintética (indução do parto)</span>
+          <span class="farmaco-chip">Atosiban (antagonista — tocólise)</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════ TIREOIDE -->
+<div class="gland-section" data-glandula="tireoide">
+  <div class="gland-header" style="border-left-color: var(--tireoide);">
+    <div class="gland-icon">🦋</div>
+    <div>
+      <div class="gland-name" style="color: var(--tireoide);">Tireoide</div>
+      <div class="gland-desc">Folículos tireoideus (T3, T4) · Células parafoliculares C (calcitonina)<br>Requer iodo · Maior glândula endócrina</div>
+    </div>
+    <div class="gland-badge" style="background: rgba(16,185,129,0.15); color: var(--tireoide);">3 hormônios</div>
+  </div>
+  <div class="cards">
+
+    <div class="card" data-glandula="tireoide" data-quimica="aminoacido">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--tireoide)"></div>
+        <div class="card-name">T4 — Tiroxina</div>
+        <div class="card-tags"><span class="tag tag-aminoacido">Derivado de aa</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Folículos tireoideus · Iodação de tirosinas na tireoglobulina · Proporção de secreção: T4 ≈ 93%, T3 ≈ 7%</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Iodotironina</strong> · Derivado de tirosina · 4 átomos de iodo · PM ≈ 777 Da · Pró-hormônio: convertido em T3 (ativo) pela deiodinase D1/D2 nos tecidos</div>
+        <div class="section-label">Ações (via T3)</div>
+        <ul class="action-list">
+          <li>↑ taxa metabólica basal (↑ consumo de O₂ e produção de calor)</li>
+          <li>↑ síntese de receptores β-adrenérgicos (potencializa ação catecolamínica)</li>
+          <li>Desenvolvimento do SNC fetal (crítico 1º trimestre)</li>
+          <li>↑ crescimento ósseo e muscular</li>
+          <li>↑ glicogenólise, gliconeogênese, lipólise</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--tireoide); border-color:var(--tireoide)">TRα / TRβ</span>
+          <span class="receptor-chip">Receptor nuclear</span>
+          <span class="receptor-chip">Modula transcrição gênica</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Levotiroxina (T4 sintético)</span>
+          <span class="farmaco-chip">Propiltiouracil (↓ síntese + ↓ conversão)</span>
+          <span class="farmaco-chip">Metimazol (↓ síntese)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="tireoide" data-quimica="aminoacido">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--tireoide)"></div>
+        <div class="card-name">T3 — Tri-iodotironina</div>
+        <div class="card-tags"><span class="tag tag-aminoacido">Derivado de aa</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">~20% da tireoide · ~80% de conversão periférica de T4 pela deiodinase D1 (fígado/rim) e D2 (hipófise, músculo, SNC)</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Iodotironina</strong> · 3 átomos de iodo · PM ≈ 651 Da · 3–5× mais potente que T4 · Meia-vida ~1 dia (vs. ~7 dias do T4) · rT3 = forma inativa reversa</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>Forma biologicamente <strong>ativa</strong> — mesmas ações do T4 amplificadas</li>
+          <li>Afinidade 10–15× maior pelo receptor nuclear TRβ vs. T4</li>
+          <li>Controle de feedback negativo no hipotálamo/hipófise</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--tireoide); border-color:var(--tireoide)">TRα / TRβ</span>
+          <span class="receptor-chip">Receptor nuclear</span>
+          <span class="receptor-chip">Alta afinidade</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Liotironina (T3 sintético)</span>
+          <span class="farmaco-chip">Liotrix (T4+T3)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="tireoide" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--tireoide)"></div>
+        <div class="card-name">Calcitonina</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Células parafoliculares C · Estímulo: hipercalcemia · Antagonista funcional do PTH</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Polipeptídeo</strong> · 32 aa · 1 ponte dissulfeto (N-terminal) · PM ≈ 3418 Da · Salmão 40–50× mais potente que a humana</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>↓ atividade dos osteoclastos → ↓ reabsorção óssea → ↓ Ca²⁺ sérico</li>
+          <li>↑ excreção renal de Ca²⁺ e fosfato</li>
+          <li>Efeito analgésico (receptores centrais — uso em dor óssea)</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--tireoide); border-color:var(--tireoide)">CTR (calcitonin R)</span>
+          <span class="receptor-chip">GPCR — Gs/Gq</span>
+          <span class="receptor-chip">↑ AMPc · ↑ Ca²⁺</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Calcitonina de salmão (osteoporose)</span>
+          <span class="farmaco-chip">Marcador tumoral: hipertireoidismo medular</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════ PARATIREOIDE -->
+<div class="gland-section" data-glandula="paratireoide">
+  <div class="gland-header" style="border-left-color: var(--paratireoide);">
+    <div class="gland-icon">🔵</div>
+    <div>
+      <div class="gland-name" style="color: var(--paratireoide);">Paratireoide</div>
+      <div class="gland-desc">4 glândulas na face posterior da tireoide · Células principais (PTH)<br>Principal regulador do cálcio e fósforo</div>
+    </div>
+    <div class="gland-badge" style="background: rgba(6,182,212,0.15); color: var(--paratireoide);">1 hormônio</div>
+  </div>
+  <div class="cards">
+
+    <div class="card" data-glandula="paratireoide" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--paratireoide)"></div>
+        <div class="card-name">PTH — Paratormônio</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem e estímulo</div>
+        <div class="quimica-box">Células principais · Estímulo: ↓ Ca²⁺ sérico (sensor CaSR) · Inibido por hipercalcemia e vitamina D ativa</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Polipeptídeo</strong> · 84 aa · PM ≈ 9425 Da · Primeiros 34 aa = atividade plena · Sintetizado como pré-pro-PTH (115 aa)</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li><strong>Osso:</strong> ↑ atividade osteoclástica → ↑ reabsorção → ↑ Ca²⁺ e fosfato sérico</li>
+          <li><strong>Rim:</strong> ↑ reabsorção tubular de Ca²⁺ · ↓ reabsorção de fosfato (fosfatúria)</li>
+          <li><strong>Rim:</strong> ↑ 1α-hidroxilase → ↑ calcitriol (vitamina D ativa)</li>
+          <li><strong>Intestino (indireto via calcitriol):</strong> ↑ absorção de Ca²⁺</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--paratireoide); border-color:var(--paratireoide)">PTH1R / PTH2R</span>
+          <span class="receptor-chip">GPCR — Gs/Gq</span>
+          <span class="receptor-chip">↑ AMPc · ↑ PKC</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Teriparatida (PTH 1-34 — osteoporose)</span>
+          <span class="farmaco-chip">Abaloparatida (análogo PTHrP)</span>
+          <span class="farmaco-chip">Cinacalcet (calcimimético → ↓ PTH)</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════ ADRENAL -->
+<div class="gland-section" data-glandula="adrenal">
+  <div class="gland-header" style="border-left-color: var(--adrenal);">
+    <div class="gland-icon">⚡</div>
+    <div>
+      <div class="gland-name" style="color: var(--adrenal);">Glândulas Adrenais (Suprarrenais)</div>
+      <div class="gland-desc">Córtex: Zona glomerulosa (aldosterona) · Fasciculada (cortisol) · Reticular (androgênios)<br>Medula: Catecolaminas (adrenalina, noradrenalina)</div>
+    </div>
+    <div class="gland-badge" style="background: rgba(239,68,68,0.15); color: var(--adrenal);">4 hormônios</div>
+  </div>
+  <div class="cards">
+
+    <div class="card" data-glandula="adrenal" data-quimica="esteroide">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--adrenal)"></div>
+        <div class="card-name">Cortisol (Hidrocortisona)</div>
+        <div class="card-tags"><span class="tag tag-esteroide">Esteroide</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Zona fasciculada do córtex adrenal · Estimulado por ACTH · Ritmo circadiano com pico matinal · Derivado do colesterol via StAR</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Glicocorticoide</strong> · Núcleo ciclopentanoperidrofenantreno (4 anéis) · 21 carbonos · PM ≈ 362 Da · Hidroxila em C11, C17, C21</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li><strong>Metabólicas:</strong> ↑ gliconeogênese, ↑ proteólise muscular, ↑ lipólise periférica + lipogênese central</li>
+          <li><strong>Anti-inflamatórias:</strong> ↓ fosfolipase A2 (via lipocortina) · ↓ COX-2 · ↓ citocinas</li>
+          <li><strong>Imunossupressoras:</strong> ↓ linfócitos T, eosinófilos; ↑ neutrófilos e plaquetas</li>
+          <li><strong>Cardiovasculares:</strong> ↑ sensibilidade vascular às catecolaminas</li>
+          <li>Feedback negativo no eixo HPA (↓ CRH e ACTH)</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--adrenal); border-color:var(--adrenal)">GR (NR3C1)</span>
+          <span class="receptor-chip">Receptor nuclear</span>
+          <span class="receptor-chip">Translocação nuclear</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Hidrocortisona</span>
+          <span class="farmaco-chip">Prednisona</span>
+          <span class="farmaco-chip">Dexametasona (sem ativ. mineralocort.)</span>
+          <span class="farmaco-chip">Metirapona (↓ síntese)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="adrenal" data-quimica="esteroide">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--adrenal)"></div>
+        <div class="card-name">Aldosterona</div>
+        <div class="card-tags"><span class="tag tag-esteroide">Esteroide</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Zona glomerulosa · Estímulo principal: angiotensina II (SRAA) · Também estimulada por hipercalemia e, em menor grau, por ACTH</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Mineralocorticoide</strong> · 21 carbonos · Aldeído em C18 (único entre corticosteroides) · PM ≈ 360 Da</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>↑ canais de Na⁺ (ENaC) e Na⁺/K⁺-ATPase no túbulo contornado distal e ducto coletor</li>
+          <li>↑ reabsorção de Na⁺ e água → ↑ volemia e PA</li>
+          <li>↑ excreção de K⁺ e H⁺ (hipocalemia e alcalose no hiperaldosteronismo)</li>
+          <li>Efeitos fibróticos cardíacos (remodelamento — alvo terapêutico)</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--adrenal); border-color:var(--adrenal)">MR (NR3C2)</span>
+          <span class="receptor-chip">Receptor nuclear</span>
+          <span class="receptor-chip">↑ SGK1 → ↑ ENaC</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Espironolactona (antagonista MR)</span>
+          <span class="farmaco-chip">Eplerenona (seletivo)</span>
+          <span class="farmaco-chip">Fludrocortisona (agonista)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="adrenal" data-quimica="esteroide">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--adrenal)"></div>
+        <div class="card-name">DHEA e Androstenediona</div>
+        <div class="card-tags"><span class="tag tag-esteroide">Esteroide</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Zona reticular do córtex adrenal · Estimulados por ACTH · Pico na adrenarca (~6–8 anos) · Importância maior na mulher</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Androgênios C19</strong> · DHEA: PM ≈ 288 Da (fraco androgênio) · DHEAS: forma sulfatada circulante mais abundante · Convertidos em testosterona/estradiol nos tecidos periféricos</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>Precursores de estrogênios e testosterona em tecidos periféricos</li>
+          <li>Pelos axilares e pubianos na adrenarca</li>
+          <li>Na mulher: contribuição significativa para a libido</li>
+          <li>Excesso (HAC): virilização feminina e precocidade sexual</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--adrenal); border-color:var(--adrenal)">AR (após conversão)</span>
+          <span class="receptor-chip">Receptor nuclear</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">DHEA (suplemento)</span>
+          <span class="farmaco-chip">Abiraterona (↓ síntese — CA próstata)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="adrenal" data-quimica="aminoacido">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--adrenal)"></div>
+        <div class="card-name">Adrenalina e Noradrenalina (Medula)</div>
+        <div class="card-tags"><span class="tag tag-aminoacido">Derivado de aa</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Células cromafins da medula adrenal · Adrenalina ≈ 80%, Noradrenalina ≈ 20% · Liberação por estímulo simpático colinérgico (Ach → nicotínico)</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Catecolaminas</strong> · Derivadas da tirosina · Via: Tirosina → Dopa → Dopamina → NE → Adrenalina (PNMT) · Adrenalina: PM ≈ 183 Da · Núcleo catecol + amina</div>
+        <div class="section-label">Ações (resposta luta-ou-fuga)</div>
+        <ul class="action-list">
+          <li>↑ FC e força contrátil (β1) · ↑ PA (α1 > β2)</li>
+          <li>Broncodilatação (β2) · Midríase (α1)</li>
+          <li>↑ glicogenólise hepática e muscular · ↑ glicemia</li>
+          <li>↑ lipólise (β3 no adipócito)</li>
+          <li>↓ motilidade GI · ↑ renina renal (β1)</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--adrenal); border-color:var(--adrenal)">α1 · α2 · β1 · β2 · β3</span>
+          <span class="receptor-chip">GPCR</span>
+          <span class="receptor-chip">Ver módulo SNA</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Adrenalina (anafilaxia, PCR)</span>
+          <span class="farmaco-chip">Noradrenalina (choque)</span>
+          <span class="farmaco-chip">Fenoxibenzamina (bloq. α — feocromocitoma)</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════ PÂNCREAS -->
+<div class="gland-section" data-glandula="pancreas">
+  <div class="gland-header" style="border-left-color: var(--pancreas);">
+    <div class="gland-icon">🫀</div>
+    <div>
+      <div class="gland-name" style="color: var(--pancreas);">Pâncreas Endócrino</div>
+      <div class="gland-desc">Ilhotas de Langerhans: α (glucagon), β (insulina), δ (somatostatina), PP<br>Retroperitoneal · Dupla função exócrina/endócrina</div>
+    </div>
+    <div class="gland-badge" style="background: rgba(245,158,11,0.15); color: var(--pancreas);">3 hormônios</div>
+  </div>
+  <div class="cards">
+
+    <div class="card" data-glandula="pancreas" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--pancreas)"></div>
+        <div class="card-name">Insulina</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Célula de origem</div>
+        <div class="quimica-box">Célula <strong>β</strong> · Estímulo: hiperglicemia, aminoácidos, GIP, GLP-1, acetilcolina</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Polipeptídeo</strong> · 51 aa · Cadeias A (21 aa) + B (30 aa) · 2 pontes dissulfeto interchain + 1 intrachain · PM ≈ 5808 Da · Pré-pro-insulina → pró-insulina → insulina + peptídeo C</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>↑ captação de glicose em músculo e adipócito (translocação GLUT-4)</li>
+          <li>↑ glicogênese hepática e muscular · ↓ glicogenólise</li>
+          <li>↓ gliconeogênese hepática</li>
+          <li>↑ lipogênese · ↓ lipólise no adipócito</li>
+          <li>↑ síntese proteica · ↓ proteólise — hormônio anabólico do estado alimentado</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--pancreas); border-color:var(--pancreas)">IR (tirosina quinase)</span>
+          <span class="receptor-chip">Via PI3K/Akt</span>
+          <span class="receptor-chip">Via MAPK/ERK</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Insulina Regular</span>
+          <span class="farmaco-chip">NPH</span>
+          <span class="farmaco-chip">Glargina / Detemir</span>
+          <span class="farmaco-chip">Lispro / Asparte / Glulisina</span>
+          <span class="farmaco-chip">Metformina (sensibilizador)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="pancreas" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--pancreas)"></div>
+        <div class="card-name">Glucagon</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Célula de origem</div>
+        <div class="quimica-box">Célula <strong>α</strong> · Estímulo: hipoglicemia, aminoácidos, adrenalina, jejum prolongado</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Polipeptídeo linear</strong> · 29 aa · Sem pontes dissulfeto · PM ≈ 3485 Da · Família secretina/GLP-1/GIP</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>↑ glicogenólise hepática (efeito principal e rápido)</li>
+          <li>↑ gliconeogênese a partir de aminoácidos e glicerol</li>
+          <li>↑ cetogênese hepática</li>
+          <li>↑ lipólise no adipócito — hormônio do jejum</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--pancreas); border-color:var(--pancreas)">GCGR</span>
+          <span class="receptor-chip">GPCR — Gs</span>
+          <span class="receptor-chip">↑ AMPc → PKA</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Glucagon kit (hipoglicemia grave)</span>
+          <span class="farmaco-chip">Semaglutida (GLP-1 RA)</span>
+          <span class="farmaco-chip">Tirzepatida (dual GIP/GLP-1)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="pancreas" data-quimica="peptideo">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--pancreas)"></div>
+        <div class="card-name">Somatostatina pancreática</div>
+        <div class="card-tags"><span class="tag tag-peptideo">Peptídeo</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Célula de origem</div>
+        <div class="quimica-box">Célula <strong>δ</strong> · Regulação parácrina local · Estímulo: hiperglicemia, hiperaminoacidemia, CCK</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Peptídeo cíclico</strong> · SST-14 (14 aa) · 1 ponte dissulfeto · PM ≈ 1638 Da · Meia-vida ~3 min</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>↓ secreção de insulina e glucagon (regulação parácrina)</li>
+          <li>↓ absorção intestinal de glicose e aminoácidos</li>
+          <li>↓ motilidade GI e secreção ácida — "freio" pós-prandial</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--pancreas); border-color:var(--pancreas)">SSTR1–5</span>
+          <span class="receptor-chip">GPCR — Gi</span>
+          <span class="receptor-chip">↓ AMPc · ↑ K⁺</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Octreotida</span>
+          <span class="farmaco-chip">Lanreotida</span>
+          <span class="farmaco-chip">Pasireotida</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════ GÔNADAS -->
+<div class="gland-section" data-glandula="gonadas">
+  <div class="gland-header" style="border-left-color: var(--gonadas);">
+    <div class="gland-icon">🧬</div>
+    <div>
+      <div class="gland-name" style="color: var(--gonadas);">Gônadas</div>
+      <div class="gland-desc">Testículos (células de Leydig e Sertoli) · Ovários (folículos e corpo lúteo)<br>Controlados pelo eixo Hipotálamo–Hipófise–Gonadal</div>
+    </div>
+    <div class="gland-badge" style="background: rgba(236,72,153,0.15); color: var(--gonadas);">3 hormônios</div>
+  </div>
+  <div class="cards">
+
+    <div class="card" data-glandula="gonadas" data-quimica="esteroide">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--gonadas)"></div>
+        <div class="card-name">Testosterona</div>
+        <div class="card-tags"><span class="tag tag-esteroide">Esteroide</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Células de Leydig (testículos) — estimuladas por LH · Ovários e adrenais (pequenas quantidades em mulheres) · Conversão periférica de androstenediona</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Androgênio C19</strong> · Núcleo esteroide 4 anéis · PM ≈ 288 Da · Convertida em DHT (mais potente, pela 5α-redutase) e estradiol (pela aromatase)</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li><strong>Desenvolvimento:</strong> diferenciação sexual masculina fetal (com DHT)</li>
+          <li><strong>Puberdade:</strong> espermatogênese, crescimento peniano, pilificação, mudança vocal</li>
+          <li><strong>Anabólicas:</strong> ↑ massa muscular, ↑ densidade óssea, ↑ eritropoiese</li>
+          <li><strong>Comportamentais:</strong> libido, agressividade, humor</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--gonadas); border-color:var(--gonadas)">AR (NR3C4)</span>
+          <span class="receptor-chip">Receptor nuclear</span>
+          <span class="receptor-chip">DHT: maior afinidade</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Testosterona (TRT)</span>
+          <span class="farmaco-chip">Finasterida (↓ 5α-redutase → ↓ DHT)</span>
+          <span class="farmaco-chip">Espironolactona (antiandrogenio)</span>
+          <span class="farmaco-chip">Bicalutamida (antagonista AR)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="gonadas" data-quimica="esteroide">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--gonadas)"></div>
+        <div class="card-name">Estradiol (E2)</div>
+        <div class="card-tags"><span class="tag tag-esteroide">Esteroide</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Células da granulosa folicular (aromatase) · Corpo lúteo · Adrenal e tecido adiposo (pós-menopausa) · Estimulado por FSH</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Estrogênio C18</strong> · Anel A aromático (único entre esteroides) · PM ≈ 272 Da · 3 formas: E1 (estrona), E2 (estradiol, mais potente), E3 (estriol, predominante na gravidez)</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>Desenvolvimento e manutenção dos caracteres sexuais femininos</li>
+          <li>Proliferação endometrial (fase folicular)</li>
+          <li>↑ SHBG, ↑ HDL, ↓ LDL</li>
+          <li>Proteção óssea (↓ reabsorção osteoclástica)</li>
+          <li>Feedback positivo no pico de LH (ovulação) e negativo no eixo HHG</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--gonadas); border-color:var(--gonadas)">ERα / ERβ (NR3A1/2)</span>
+          <span class="receptor-chip">Receptor nuclear</span>
+          <span class="receptor-chip">GPER (membrana)</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Etinilestradiol (ACO)</span>
+          <span class="farmaco-chip">Tamoxifeno (SERM — CA mama)</span>
+          <span class="farmaco-chip">Letrozol (inibidor aromatase)</span>
+          <span class="farmaco-chip">TRH (pós-menopausa)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-glandula="gonadas" data-quimica="esteroide">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--gonadas)"></div>
+        <div class="card-name">Progesterona</div>
+        <div class="card-tags"><span class="tag tag-esteroide">Esteroide</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Corpo lúteo (fase lútea) · Placenta (gestação — principal fonte após 8ª semana) · Adrenal (pequenas quantidades) · Estimulada por LH</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Progestágeno C21</strong> · Precursor de todos os outros esteroides · PM ≈ 314 Da · Grupo cetona em C3 e C20</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>↑ receptividade endometrial (fase secretora — preparo para implantação)</li>
+          <li>↓ contratilidade uterina (manutenção da gravidez)</li>
+          <li>↑ temperatura basal corporal (~0,5°C pós-ovulação)</li>
+          <li>↑ secreção de muco cervical espesso (↓ penetração espermática)</li>
+          <li>Inibição do pico de LH (feedback negativo)</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--gonadas); border-color:var(--gonadas)">PR-A / PR-B (NR3C3)</span>
+          <span class="receptor-chip">Receptor nuclear</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Progesterona micronizada</span>
+          <span class="farmaco-chip">Levonorgestrel (progestínio ACO)</span>
+          <span class="farmaco-chip">Mifepristona (antagonista PR)</span>
+          <span class="farmaco-chip">Didrogesterona (ameaça de aborto)</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════ PINEAL -->
+<div class="gland-section" data-glandula="pineal">
+  <div class="gland-header" style="border-left-color: var(--pineal);">
+    <div class="gland-icon">🌙</div>
+    <div>
+      <div class="gland-name" style="color: var(--pineal);">Glândula Pineal (Epífise)</div>
+      <div class="gland-desc">Pinealócitos · Localização: entre os colículos superiores<br>"Relógio biológico" — sincronização circadiana com ciclo claro-escuro</div>
+    </div>
+    <div class="gland-badge" style="background: rgba(167,139,250,0.15); color: var(--pineal);">1 hormônio</div>
+  </div>
+  <div class="cards">
+
+    <div class="card" data-glandula="pineal" data-quimica="aminoacido">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-dot" style="background:var(--pineal)"></div>
+        <div class="card-name">Melatonina</div>
+        <div class="card-tags"><span class="tag tag-aminoacido">Derivado de aa</span></div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Origem</div>
+        <div class="quimica-box">Pinealócitos · Síntese noturna: suprimida pela luz (via retina → núcleo supraquiasmático → pineal) · Pico entre 2–4h da madrugada</div>
+        <div class="section-label">Estrutura química</div>
+        <div class="quimica-box"><strong>Indolamina</strong> · Derivada da serotonina (que deriva do triptofano) · N-acetil-5-metoxitriptamina · PM ≈ 232 Da · Altamente lipofílica</div>
+        <div class="section-label">Ações</div>
+        <ul class="action-list">
+          <li>Sincronização do ritmo circadiano (zeitgeber endócrino)</li>
+          <li>↑ propensão ao sono (↓ temperatura corporal, ↓ vigília)</li>
+          <li>Regulação sazonal (reprodução em animais fotoperiodicistas)</li>
+          <li>Antioxidante (eliminação de radicais livres)</li>
+          <li>Imunomodulação (↑ citocinas Th1)</li>
+        </ul>
+        <div class="section-label">Receptor</div>
+        <div class="receptor-row">
+          <span class="receptor-chip hi" style="color:var(--pineal); border-color:var(--pineal)">MT1 / MT2</span>
+          <span class="receptor-chip">GPCR — Gi</span>
+          <span class="receptor-chip">↓ AMPc</span>
+        </div>
+        <div class="section-label">Fármacos</div>
+        <div class="farmaco-row">
+          <span class="farmaco-chip">Melatonina (suplemento — jet lag)</span>
+          <span class="farmaco-chip">Ramelteon (agonista MT1/MT2 — insônia)</span>
+          <span class="farmaco-chip">Tasimelteon (DSWPD)</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /panel-hormonios -->
+
+</div><!-- /main-content -->
+
+<!-- Bottom nav -->
+<div class="bottom-bar">
+  <div class="nav-item">
+    <span>🔬</span>
+    <div>SNA</div>
+  </div>
+  <div class="nav-item">
+    <span>🧠</span>
+    <div>Psico</div>
+  </div>
+  <div class="nav-item active">
+    <span>⚗️</span>
+    <div>Endócrino</div>
+  </div>
+  <div class="nav-item">
+    <span>⚡</span>
+    <div>CYPs</div>
+  </div>
+</div>
+
+<script>
+  // Troca de abas
+  function switchTab(tab, btn) {
+    document.getElementById('panel-resumo').style.display   = tab === 'resumo'    ? '' : 'none';
+    document.getElementById('panel-hormonios').style.display = tab === 'hormônios' ? '' : 'none';
+    document.querySelectorAll('.page-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // Toggle card
+  function toggleCard(header) {
+    header.parentElement.classList.toggle('open');
+  }
+
+  // Estado de filtros
+  let activeGlandula = 'all';
+  let activeQuimica = null;
+  let searchTerm = '';
+
+  function applyFilters() {
+    const cards = document.querySelectorAll('.card');
+    const sections = document.querySelectorAll('.gland-section');
+
+    cards.forEach(card => {
+      const g = card.dataset.glandula;
+      const q = card.dataset.quimica;
+      const text = card.textContent.toLowerCase();
+
+      const gMatch = activeGlandula === 'all' || g === activeGlandula;
+      const qMatch = !activeQuimica || q === activeQuimica;
+      const sMatch = !searchTerm || text.includes(searchTerm);
+
+      card.style.display = (gMatch && qMatch && sMatch) ? '' : 'none';
+    });
+
+    // Mostrar/ocultar seções de glândula
+    sections.forEach(section => {
+      const g = section.dataset.glandula;
+      const visibleCards = section.querySelectorAll('.card:not([style*="none"])');
+      const sectionMatch = activeGlandula === 'all' || g === activeGlandula;
+      section.style.display = (sectionMatch && visibleCards.length > 0) ? '' : 'none';
+    });
+
+    // Separadores
+    document.querySelectorAll('.section-divider').forEach(d => {
+      d.style.display = activeGlandula === 'all' ? '' : 'none';
+    });
+
+    // Contador
+    const total = document.querySelectorAll('.card:not([style*="display: none"])').length;
+    const counter = document.getElementById('resultCount');
+    counter.textContent = searchTerm || activeQuimica ? `${total} hormônio${total !== 1 ? 's' : ''} encontrado${total !== 1 ? 's' : ''}` : '';
+  }
+
+  // Filtro glândula
+  document.getElementById('filterGlandula').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('#filterGlandula .filter-btn').forEach(b => {
+      b.className = 'filter-btn';
+    });
+    activeGlandula = btn.dataset.filter;
+    btn.classList.add(`active-${activeGlandula}`);
+
+    // Cor do anel de busca
+    const colorMap = {
+      all: 'var(--tireoide)', hipotalamo: 'var(--hipotalamo)', hipofise: 'var(--hipofise)',
+      tireoide: 'var(--tireoide)', paratireoide: 'var(--paratireoide)', adrenal: 'var(--adrenal)',
+      pancreas: 'var(--pancreas)', gonadas: 'var(--gonadas)', pineal: 'var(--pineal)'
+    };
+    document.querySelector('.search-wrap input').style.setProperty('--focus-color', colorMap[activeGlandula] || 'var(--tireoide)');
+
+    applyFilters();
+  });
+
+  // Filtro química
+  document.getElementById('filterQuimica').addEventListener('click', e => {
+    const btn = e.target.closest('.q-btn');
+    if (!btn) return;
+    const q = btn.dataset.quimica;
+    if (activeQuimica === q) {
+      activeQuimica = null;
+      document.querySelectorAll('.q-btn').forEach(b => b.classList.remove('active'));
+    } else {
+      activeQuimica = q;
+      document.querySelectorAll('.q-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    applyFilters();
+  });
+
+  // Busca
+  document.getElementById('searchInput').addEventListener('input', e => {
+    searchTerm = e.target.value.toLowerCase().trim();
+    applyFilters();
+  });
+
+  // Init
+  document.querySelectorAll('.q-btn').forEach(b => b.classList.remove('active'));
+
+  // Filtro doenças
+  document.getElementById('doencaFilter').addEventListener('click', e => {
+    const btn = e.target.closest('.df-btn');
+    if (!btn) return;
+    document.querySelectorAll('.df-btn').forEach(b => {
+      b.style.background = 'transparent';
+      b.style.fontWeight = '500';
+    });
+    btn.style.background = '#3a3f52';
+    btn.style.fontWeight = '600';
+    const dg = btn.dataset.dg;
+    document.querySelectorAll('.doenca-card').forEach(card => {
+      card.style.display = (dg === 'all' || card.dataset.dg === dg) ? '' : 'none';
+    });
+  });
+</script>
+</body>
+</html>
