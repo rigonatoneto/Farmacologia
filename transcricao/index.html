@@ -224,6 +224,53 @@
   .diag-log .warn{ color: #E0637A; }
   .diag-log .info{ color: var(--cyan); }
 
+  .btn.ata{ border-color: var(--lime); color: var(--lime); }
+
+  .ata-wrap{
+    display:none;
+    margin-top: 20px;
+    background: var(--paper);
+    color: #1B2A4A;
+    border-radius: 14px;
+    padding: 26px 28px;
+    font-family: var(--sans);
+  }
+  .ata-wrap.visible{ display:block; }
+  .ata-header{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #1B2A4A;
+  }
+  .ata-header h2{
+    font-size: 17px;
+    color: #1B2A4A;
+    letter-spacing: -0.3px;
+  }
+  .ata-header .btn-mini{
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 7px;
+    border: 1px solid #1B2A4A;
+    background: transparent;
+    color: #1B2A4A;
+    cursor: pointer;
+  }
+  .ata-body{
+    font-size: 14px;
+    line-height: 1.75;
+    white-space: pre-wrap;
+  }
+  .ata-loading{
+    color: var(--ink-dim);
+    font-style: italic;
+    text-align: center;
+    padding: 20px 0;
+  }
+
   .unsupported{
     max-width: 760px;
     background: rgba(224,99,122,0.1);
@@ -265,6 +312,7 @@
     <button class="btn primary" id="pauseBtn" disabled>Pausar</button>
     <button class="btn" id="clearBtn">Limpar</button>
     <button class="btn" id="downloadBtn" disabled>Baixar .txt</button>
+    <button class="btn ata" id="ataBtn" disabled>Gerar Ata (IA)</button>
     <button class="btn danger" id="resetBtn">Encerrar reunião</button>
   </div>
 
@@ -275,6 +323,14 @@
   <div class="diag-wrap">
     <div class="diag-label">Diagnóstico técnico</div>
     <div class="diag-log" id="diagLog"></div>
+  </div>
+
+  <div class="ata-wrap" id="ataWrap">
+    <div class="ata-header">
+      <h2>Ata da Reunião</h2>
+      <button class="btn-mini" id="downloadAtaBtn">Baixar Ata (.txt)</button>
+    </div>
+    <div class="ata-body" id="ataBody"></div>
   </div>
 </div>
 
@@ -295,6 +351,11 @@
   const downloadBtn = document.getElementById('downloadBtn');
   const resetBtn = document.getElementById('resetBtn');
   const unsupportedBanner = document.getElementById('unsupported');
+  const ataBtn = document.getElementById('ataBtn');
+  const ataWrap = document.getElementById('ataWrap');
+  const ataBody = document.getElementById('ataBody');
+  const downloadAtaBtn = document.getElementById('downloadAtaBtn');
+  let lastAtaText = '';
 
   let recognition = null;
   let isRecording = false;
@@ -414,6 +475,7 @@
     if (currentInterimNode) { currentInterimNode.remove(); currentInterimNode = null; }
     transcriptWrap.scrollTop = transcriptWrap.scrollHeight;
     downloadBtn.disabled = false;
+    ataBtn.disabled = false;
   }
 
   function renderInterim(text) {
@@ -511,6 +573,10 @@
     fullLog = [];
     transcriptWrap.innerHTML = '<div class="empty-state" id="emptyState">Aguardando início da fala…</div>';
     downloadBtn.disabled = true;
+    ataBtn.disabled = true;
+    ataWrap.classList.remove('visible');
+    ataBody.innerHTML = '';
+    lastAtaText = '';
   });
 
   resetBtn.addEventListener('click', () => {
@@ -531,6 +597,82 @@
     const a = document.createElement('a');
     a.href = url;
     a.download = `transcricao-reuniao-${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+  ataBtn.addEventListener('click', async () => {
+    if (fullLog.length === 0) return;
+    ataWrap.classList.add('visible');
+    ataBody.innerHTML = '<div class="ata-loading">Gerando ata a partir da transcrição…</div>';
+    ataWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    const transcriptText = fullLog.map(e => `[${e.time}] ${e.text}`).join('\n');
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 1500,
+          messages: [
+            {
+              role: 'user',
+              content: `Você é um assistente que gera atas de reunião profissionais em português do Brasil, a partir de uma transcrição bruta e informal (com falhas de reconhecimento de voz, repetições e trechos soltos).
+
+Gere uma ATA estruturada com as seções abaixo, usando SOMENTE o que está na transcrição (não invente nomes, decisões ou números que não apareçam no texto). Se uma seção não tiver conteúdo identificável, escreva "Não identificado na transcrição".
+
+Formato (texto simples, sem markdown, use MAIÚSCULAS para os títulos de seção):
+
+RESUMO GERAL
+(2-3 frases resumindo do que se tratou a reunião)
+
+PONTOS DISCUTIDOS
+(lista dos principais assuntos abordados)
+
+DECISÕES TOMADAS
+(lista de decisões explícitas mencionadas)
+
+AÇÕES E RESPONSÁVEIS
+(lista de ações combinadas, com responsável se mencionado)
+
+PENDÊNCIAS / PRÓXIMOS PASSOS
+(o que ficou em aberto)
+
+Transcrição bruta:
+"""
+${transcriptText}
+"""`
+            }
+          ]
+        })
+      });
+
+      const data = await response.json();
+      const textBlocks = (data.content || []).filter(b => b.type === 'text').map(b => b.text);
+      const ataText = textBlocks.join('\n').trim();
+
+      if (!ataText) {
+        ataBody.innerHTML = '<div class="ata-loading">Não foi possível gerar a ata. Tente novamente.</div>';
+        return;
+      }
+
+      lastAtaText = ataText;
+      ataBody.textContent = ataText;
+    } catch (err) {
+      ataBody.innerHTML = '<div class="ata-loading">Erro ao gerar a ata. Verifique a conexão e tente novamente.</div>';
+    }
+  });
+
+  downloadAtaBtn.addEventListener('click', () => {
+    if (!lastAtaText) return;
+    const dateStr = new Date().toLocaleDateString('pt-BR');
+    const content = `ATA DE REUNIÃO — ${dateStr}\n${'='.repeat(40)}\n\n${lastAtaText}`;
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ata-reuniao-${Date.now()}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   });
