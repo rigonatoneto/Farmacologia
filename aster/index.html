@@ -57,12 +57,14 @@
 
 <header>
   <h1>Linha Aster — Treinamento de Produtos</h1>
-  <p>Tanduo® · Sil HP® · Spasmex® — Apsen Farmacêutica · Distrito 1203</p>
+  <p>Tanduo® · Sil HP® · Spasmex® · Micpure® · Traturil® — Apsen Farmacêutica · Distrito 1203</p>
 </header>
 
 <nav id="mainNav">
   <button data-tab="visao" class="active">Visão Geral</button>
   <button data-tab="produtos">Produtos</button>
+  <button data-tab="mercado">Mercado</button>
+  <button data-tab="territorio">Território</button>
   <button data-tab="argumentacao">Argumentação</button>
   <button data-tab="casos">Casos Clínicos</button>
   <button data-tab="quiz">Quiz</button>
@@ -81,12 +83,15 @@
       <tr><td><b>Tanduo®</b></td><td>Dutasterida + Cloridrato de Tansulosina</td><td>Inibidor 5-alfa-redutase + alfa-bloqueador</td><td>Urologia</td></tr>
       <tr><td><b>Sil HP®</b></td><td>Silodosina</td><td>Bloqueador alfa-1A seletivo</td><td>Urologia</td></tr>
       <tr><td><b>Spasmex®</b></td><td>Cloreto de tróspio</td><td>Antimuscarínico (amina quaternária)</td><td>Urologia / Ginecologia</td></tr>
+      <tr><td><b>Micpure®</b></td><td>Mirabegrona</td><td>Agonista beta-3 adrenérgico</td><td>Urologia / Ginecologia</td></tr>
+      <tr><td><b>Traturil®</b></td><td>Fosfomicina trometamol</td><td>Antibiótico de amplo espectro</td><td>Urologia / Ginecologia</td></tr>
     </table>
     <h3>Como eles se complementam</h3>
     <ul>
       <li><b>Tanduo®</b> ataca a causa estrutural (reduz volume prostático) e alivia a obstrução — foco em prevenir cirurgia.</li>
-      <li><b>Sil HP®</b> é monoterapia de ação rápida — alívio sintomático imediato, quando reduzir volume não é prioridade.</li>
-      <li><b>Spasmex®</b> atua na bexiga (armazenamento), não na próstata — resposta para urgência residual, inclusive em mulheres.</li>
+      <li><b>Sil HP®</b> é monoterapia de ação rápida — alívio sintomático imediato, ou expulsão de cálculo renal.</li>
+      <li><b>Spasmex® e Micpure®</b> atuam na bexiga (armazenamento), não na próstata — dois mecanismos diferentes (antimuscarínico x beta-3) para o mesmo problema, permitindo trocar de classe sem sair do portfólio.</li>
+      <li><b>Traturil®</b> trata a infecção urinária aguda — produto de dose única, relevante em qualquer consulta com queixa de cistite.</li>
     </ul>
     <p style="font-size:14px;color:#5a6472;">Na prática: um mesmo urologista pode ser prescritor-alvo dos três produtos, em momentos diferentes da jornada do paciente.</p>
   </div>
@@ -101,6 +106,8 @@
       <button data-prod="tanduo" class="active">Tanduo®</button>
       <button data-prod="silhp">Sil HP®</button>
       <button data-prod="spasmex">Spasmex®</button>
+      <button data-prod="micpure">Micpure®</button>
+      <button data-prod="traturil">Traturil®</button>
     </div>
 
     <div class="prod-panel active" id="tanduo">
@@ -153,6 +160,98 @@
       </ul>
       <div class="obj"><b>Concorrência:</b> solifenacina (Vesicare), tolterodina, oxibutinina. <b>Argumento-chave:</b> em idosos, polimedicados ou com preocupação cognitiva, Spasmex® tem racional de segurança central objetivo — o argumento mais consultivo da linha.</div>
     </div>
+
+    <div class="prod-panel" id="micpure">
+      <h3>Composição</h3>
+      <p>Comprimido de liberação prolongada, 50 mg. 1x/dia, pela manhã. Início da ação em 3-4h.</p>
+      <h3>Mecanismo</h3>
+      <p>Agonista beta-3 adrenérgico — mecanismo diferente do Spasmex®. Ativa receptores beta-3 do detrusor, relaxando a bexiga na fase de armazenamento, sem efeito antimuscarínico.</p>
+      <h3>Indicação</h3>
+      <p>Urgência, aumento de frequência e incontinência de urgência em bexiga hiperativa.</p>
+      <h3>Segurança</h3>
+      <ul>
+        <li>Menor incidência de boca seca e constipação (não é antimuscarínico)</li>
+        <li>Pode elevar pressão arterial — monitorar em hipertensos</li>
+        <li>Não recomendado em doença renal terminal/insuficiência hepática grave</li>
+      </ul>
+      <div class="obj"><b>Concorrência:</b> Betmiga® (Astellas) e similares de mirabegrona. <b>Argumento-chave:</b> alternativa de mecanismo para quem não tolera antimuscarínico — não compete com Spasmex®, é a segunda porta de entrada no mesmo portfólio.</div>
+    </div>
+
+    <div class="prod-panel" id="traturil">
+      <h3>Composição</h3>
+      <p>Granulado 5,631g (3g de fosfomicina)/envelope. Dose única, dissolvido em água. Venda com retenção de receita.</p>
+      <h3>Mecanismo</h3>
+      <p>Antibiótico bactericida de amplo espectro — Gram-positivas e Gram-negativas (E. coli, Proteus, Klebsiella, Enterobacter, Pseudomonas), inclusive cepas resistentes.</p>
+      <h3>Indicação</h3>
+      <p>Infecções não complicadas do trato urinário baixo (cistite, uretrite, bacteriúria) e profilaxia pós-cirúrgica/instrumental.</p>
+      <h3>Segurança</h3>
+      <ul>
+        <li>Dose única — forte argumento de adesão</li>
+        <li>Tomar em jejum ou 2-3h após refeição</li>
+        <li>Contraindicado em insuficiência renal grave/hemodiálise</li>
+      </ul>
+      <div class="obj"><b>Concorrência:</b> Macrodantina® (nitrofurantoína), Monuril® (fosfomicina referência). <b>Argumento-chave:</b> retenção obrigatória de receita torna o dado de auditoria muito confiável — os gaps aqui são oportunidade real, não distorção.</div>
+    </div>
+  </div>
+</section>
+
+<!-- MERCADO -->
+<section id="mercado">
+  <div class="card">
+    <span class="badge">Módulo 3</span>
+    <h2>Mercado e Concorrência (Visão Geral)</h2>
+    <p>Evolução em cascata: Brasil → Regional SPI → Distrito 1203 → território de Maria Laura, último trimestre fechado.</p>
+    <table>
+      <tr><th>Produto</th><th>MS Brasil</th><th>MS Distrito</th><th>MS Maria Laura</th><th>Índice (ML)</th><th>Leitura</th></tr>
+      <tr><td><b>Tanduo®</b></td><td>17,5→20,7%</td><td>15,4→16,9%</td><td>17,5→18,4%</td><td>104,9</td><td>Crescendo, abaixo do distrito</td></tr>
+      <tr><td><b>Sil HP®</b></td><td>2,9→5,3%</td><td>3,3→6,8%</td><td>4,9→9,1%</td><td><b>185,5</b></td><td>Forte crescimento, acima do Brasil</td></tr>
+      <tr><td><b>Spasmex®</b></td><td>58,0→56,9%</td><td>56,3→56,6%</td><td>59,0→59,0%</td><td>100,1</td><td>Estável, líder consolidado</td></tr>
+      <tr><td><b>Micpure®</b></td><td>29,4→29,6%</td><td>28,2→26,0%</td><td>28,3→28,3%</td><td>100,0</td><td>Estável no território dela</td></tr>
+      <tr><td><b>Traturil®</b></td><td>11,9→12,2%</td><td>12,2→10,5%</td><td>16,6→13,4%</td><td><b>81,2</b></td><td>Em queda — pior no território dela</td></tr>
+    </table>
+    <h3>Principais concorrentes nacionais</h3>
+    <ul>
+      <li><b>Tanduo®:</b> Dutam (34,3%, genérico), Combodart (21,0%, GSK/referência), Duomo HP (12,1%)</li>
+      <li><b>Sil HP®:</b> tansulosina genérica domina (EMS 39,3%, GM2 14,2%, GOB 13,1%)</li>
+      <li><b>Spasmex®:</b> solifenacina genérica (9,3%), Impere (8,3%), Fenazic (6,6%) — mercado fragmentado</li>
+      <li><b>Micpure®:</b> mirabegrona genérica (45,7%), Myrbetric/Astellas (15,2%)</li>
+      <li><b>Traturil®:</b> Macrodantina (35,2%), Monuril (24,6%) — juntos quase 60% do mercado</li>
+    </ul>
+    <div class="obj"><b>Ponto de atenção:</b> Sil HP® é o carro-chefe de crescimento da linha (Índice 185,5). Traturil® é o único produto em queda consistente, mais acentuada no território dela — vale uma análise de causa raiz dedicada.</div>
+  </div>
+</section>
+
+<!-- TERRITORIO -->
+<section id="territorio">
+  <div class="card">
+    <span class="badge">Módulo 4</span>
+    <h2>Território de Maria Laura (Araçatuba)</h2>
+    <p>Cidades: Araçatuba, Birigui, Andradina, Três Lagoas, Dracena, Penápolis, Adamantina, Osvaldo Cruz.</p>
+    <h3>Maior oportunidade absoluta — Traturil®</h3>
+    <p>Araçatuba (gap de 2.457 un., share 22,9%) e Birigui (gap de 2.155 un., share 14,1%) concentram a maior oportunidade da linha.</p>
+    <table>
+      <tr><th>Médico</th><th>Especialidade</th><th>Cidade</th><th>Gap</th><th>Share</th></tr>
+      <tr><td><b>Jurandir Yoshito Hayashi</b></td><td>URO</td><td>Birigui</td><td>231</td><td>18%</td></tr>
+      <tr><td><b>Antonio Zanovelo Filho</b></td><td>URO</td><td>Birigui</td><td>226</td><td>0,4%</td></tr>
+      <tr><td><b>Eduardo Herreros</b></td><td>URO</td><td>Andradina</td><td>140</td><td>3,4%</td></tr>
+      <tr><td><b>Alexandre Scamardi M. Pereira</b></td><td>URO</td><td>Dracena</td><td>113</td><td>23%</td></tr>
+    </table>
+    <h3>Whitespace total — Tanduo® e Sil HP®</h3>
+    <table>
+      <tr><th>Cidade</th><th>Tanduo® gap</th><th>Sil HP® gap</th><th>Status</th></tr>
+      <tr><td><b>Dracena</b></td><td>11 (0%)</td><td>4 (parcial)</td><td>Whitespace Tanduo</td></tr>
+      <tr><td><b>Penápolis</b></td><td>7 (0%)</td><td>9 (0%)</td><td>Whitespace total</td></tr>
+      <tr><td><b>Adamantina</b></td><td>6 (0%)</td><td>9 (0%)</td><td>Whitespace total</td></tr>
+      <tr><td><b>Osvaldo Cruz</b></td><td>4 (0%)</td><td>—</td><td>Whitespace Tanduo</td></tr>
+    </table>
+    <h3>Resumo de share por produto</h3>
+    <ul>
+      <li><b>Spasmex®:</b> 67,3% — líder confortável</li>
+      <li><b>Micpure®:</b> 37,9% — espaço nas cidades menores</li>
+      <li><b>Traturil®:</b> 18,8% — maior gap absoluto, prioridade do ciclo</li>
+      <li><b>Tanduo®:</b> 17,1% — crescendo, ainda distante do potencial</li>
+      <li><b>Sil HP®:</b> 10,3% — menor share, maior índice de evolução</li>
+    </ul>
   </div>
 </section>
 
@@ -167,11 +266,15 @@
       <tr><td><b>Tanduo®</b></td><td>Próstata efetivamente aumentada, quer evitar cirurgia</td><td>"Minha próstata está grande e não quero operar"</td></tr>
       <tr><td><b>Sil HP®</b></td><td>Precisa de alívio rápido; idoso/risco de hipotensão; ou paciente com cálculo ureteral em terapia expulsiva</td><td>"Preciso urinar toda hora e não posso mexer na pressão" / "Está com cálculo no ureter"</td></tr>
       <tr><td><b>Spasmex®</b></td><td>Urgência/frequência residual, idoso ou preocupação cognitiva</td><td>"Continuo com urgência mesmo tratando a próstata"</td></tr>
+      <tr><td><b>Micpure®</b></td><td>Não tolera antimuscarínico (boca seca, constipação)</td><td>"Já tentei e a boca seca foi insuportável"</td></tr>
+      <tr><td><b>Traturil®</b></td><td>Cistite aguda ou profilaxia pré-procedimento</td><td>"Estou com ardência para urinar"</td></tr>
     </table>
     <h3>Objeções comuns</h3>
     <div class="obj"><b>Tanduo®:</b> "Já uso tansulosina isolada" → a combinação reduz progressão e cirurgia a longo prazo — o ganho aparece no seguimento.</div>
     <div class="obj"><b>Sil HP®:</b> "Meu paciente já usa doxazosina" → alta seletividade uroespecífica, baixo impacto pressórico, pode ser somado com segurança.</div>
     <div class="obj"><b>Spasmex®:</b> "Já prescrevo Vesicare, funciona bem" → perguntar sobre idade/queixa cognitiva; trospio tem a mesma eficácia com mais segurança central.</div>
+    <div class="obj"><b>Micpure®:</b> "Já uso um antimuscarínico e funciona" → perguntar sobre efeitos colaterais; se presentes, mecanismo beta-3 evita boca seca/constipação.</div>
+    <div class="obj"><b>Traturil®:</b> "Prefiro antibiótico de vários dias que já conheço" → dose única melhora adesão, sem perder eficácia bactericida.</div>
     <h3>Registro no Salesforce</h3>
     <p>Seguir a metodologia Paciente Centrismo: estruturar o comentário em torno de <b>perfil do paciente</b>, <b>patologia/sintomas</b> e <b>conduta/produto recomendado</b>, sempre com OPV claro.</p>
   </div>
