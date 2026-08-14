@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linha Aster — Treinamento de Produtos | Apsen D1203</title>
+<style>
+  :root{
+    --navy:#1B2A4A; --cyan:#13A9DB; --lime:#A6CE39;
+    --grey:#f4f6f8; --dark:#2b2b2b; --border:#e1e6ec;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--grey);color:var(--dark);}
+  header{background:linear-gradient(135deg,var(--navy),#243a63);color:#fff;padding:28px 20px;text-align:center;}
+  header h1{margin:0 0 4px;font-size:26px;}
+  header p{margin:0;color:#c9d6ea;font-size:14px;letter-spacing:.5px;text-transform:uppercase;}
+  nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;background:#fff;padding:12px;border-bottom:3px solid var(--cyan);position:sticky;top:0;z-index:10;}
+  nav button{background:var(--grey);border:1px solid var(--border);color:var(--navy);padding:9px 16px;border-radius:20px;cursor:pointer;font-size:14px;font-weight:600;transition:.15s;}
+  nav button:hover{background:#e8f7fc;}
+  nav button.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+  main{max-width:920px;margin:0 auto;padding:24px 16px 60px;}
+  section{display:none;animation:fade .25s ease;}
+  section.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  .card{background:#fff;border-radius:12px;padding:22px 24px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-top:4px solid var(--cyan);}
+  .card h2{color:var(--navy);margin-top:0;font-size:21px;}
+  .card h3{color:var(--cyan);font-size:16px;margin-bottom:6px;}
+  .card p{line-height:1.6;font-size:15px;}
+  .badge{display:inline-block;background:var(--lime);color:#1a2e05;font-weight:700;font-size:12px;padding:3px 10px;border-radius:12px;margin-bottom:8px;}
+  ul{line-height:1.6;font-size:15px;padding-left:20px;}
+  .prod-tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+  .prod-tabs button{flex:1;min-width:140px;padding:12px;border-radius:10px;border:2px solid var(--border);background:#fff;font-weight:700;color:var(--navy);cursor:pointer;}
+  .prod-tabs button.active{border-color:var(--cyan);background:#e8f7fc;}
+  .prod-panel{display:none;}
+  .prod-panel.active{display:block;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px;}
+  th{background:var(--navy);color:#fff;padding:8px 10px;text-align:left;}
+  td{padding:8px 10px;border-bottom:1px solid var(--border);}
+  tr:nth-child(even) td{background:#fafbfc;}
+  .obj{background:#fff8ec;border-left:4px solid var(--lime);padding:12px 16px;border-radius:6px;margin:10px 0;font-size:14.5px;}
+  .obj b{color:var(--navy);}
+  .case{border-left:4px solid var(--cyan);padding:14px 18px;background:#f8fdff;border-radius:8px;margin-bottom:14px;}
+  .case button{margin-top:8px;background:var(--navy);color:#fff;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:13px;}
+  .gabarito{display:none;margin-top:10px;padding:10px 14px;background:#eefbe9;border-left:4px solid var(--lime);border-radius:6px;font-size:14px;}
+  .gabarito.show{display:block;}
+  #quizArea .q{background:#fff;border-radius:10px;padding:16px;margin-bottom:12px;border:1px solid var(--border);}
+  #quizArea .q p{font-weight:600;margin:0 0 10px;font-size:14.5px;}
+  #quizArea label{display:block;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;cursor:pointer;font-size:14px;}
+  #quizArea label:hover{background:#f4f9fd;}
+  #quizArea input{margin-right:8px;}
+  #quizResult{font-weight:700;color:var(--navy);margin-top:10px;font-size:16px;}
+  .checkBtn{background:var(--cyan);color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:700;font-size:14px;margin-top:6px;}
+  .footer-note{text-align:center;color:#93a0b3;font-size:12px;margin-top:30px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Linha Aster — Treinamento de Produtos</h1>
+  <p>Tanduo® · Sil HP® · Spasmex® — Apsen Farmacêutica · Distrito 1203</p>
+</header>
+
+<nav id="mainNav">
+  <button data-tab="visao" class="active">Visão Geral</button>
+  <button data-tab="produtos">Produtos</button>
+  <button data-tab="argumentacao">Argumentação</button>
+  <button data-tab="casos">Casos Clínicos</button>
+  <button data-tab="quiz">Quiz</button>
+</nav>
+
+<main>
+
+<!-- VISÃO GERAL -->
+<section id="visao" class="active">
+  <div class="card">
+    <span class="badge">Módulo 1</span>
+    <h2>Visão Geral da Linha Aster</h2>
+    <p>A linha Aster reúne três produtos com foco em <b>Urologia e Ginecologia</b>, voltados a condições do trato geniturinário. Os três produtos <b>não competem entre si</b> — se complementam ao longo da jornada do mesmo paciente.</p>
+    <table>
+      <tr><th>Produto</th><th>Molécula</th><th>Classe</th><th>Especialidade</th></tr>
+      <tr><td><b>Tanduo®</b></td><td>Dutasterida + Cloridrato de Tansulosina</td><td>Inibidor 5-alfa-redutase + alfa-bloqueador</td><td>Urologia</td></tr>
+      <tr><td><b>Sil HP®</b></td><td>Silodosina</td><td>Bloqueador alfa-1A seletivo</td><td>Urologia</td></tr>
+      <tr><td><b>Spasmex®</b></td><td>Cloreto de tróspio</td><td>Antimuscarínico (amina quaternária)</td><td>Urologia / Ginecologia</td></tr>
+    </table>
+    <h3>Como eles se complementam</h3>
+    <ul>
+      <li><b>Tanduo®</b> ataca a causa estrutural (reduz volume prostático) e alivia a obstrução — foco em prevenir cirurgia.</li>
+      <li><b>Sil HP®</b> é monoterapia de ação rápida — alívio sintomático imediato, quando reduzir volume não é prioridade.</li>
+      <li><b>Spasmex®</b> atua na bexiga (armazenamento), não na próstata — resposta para urgência residual, inclusive em mulheres.</li>
+    </ul>
+    <p style="font-size:14px;color:#5a6472;">Na prática: um mesmo urologista pode ser prescritor-alvo dos três produtos, em momentos diferentes da jornada do paciente.</p>
+  </div>
+</section>
+
+<!-- PRODUTOS -->
+<section id="produtos">
+  <div class="card">
+    <span class="badge">Módulo 2</span>
+    <h2>Produtos em Detalhe</h2>
+    <div class="prod-tabs">
+      <button data-prod="tanduo" class="active">Tanduo®</button>
+      <button data-prod="silhp">Sil HP®</button>
+      <button data-prod="spasmex">Spasmex®</button>
+    </div>
+
+    <div class="prod-panel active" id="tanduo">
+      <h3>Composição</h3>
+      <p>Cápsula de liberação prolongada — dutasterida 0,5 mg + cloridrato de tansulosina 0,4 mg. 1 cápsula/dia.</p>
+      <h3>Mecanismo</h3>
+      <p>Dutasterida inibe a 5-alfa-redutase (tipos 1 e 2), reduzindo DHT e o volume prostático. Tansulosina bloqueia receptores alfa-1 da musculatura prostática/colo vesical, melhorando o fluxo urinário de forma imediata.</p>
+      <h3>Indicação</h3>
+      <p>HPB em homens com próstata aumentada — previne progressão e reduz risco de retenção urinária/cirurgia.</p>
+      <h3>Segurança</h3>
+      <ul>
+        <li>Tontura postural; avisar oftalmologista antes de cirurgia de catarata (Íris Flácida Intraoperatória)</li>
+        <li>Não associar a outros alfa-bloqueadores</li>
+        <li>Contraindicado manuseio por mulheres/crianças (absorção cutânea)</li>
+      </ul>
+      <div class="obj"><b>Concorrência:</b> Combodart® (GSK) — mesmos princípios ativos. <b>Argumento-chave:</b> combinação supera monoterapia com tansulosina isolada a partir de ~8-9 meses na prevenção de progressão/cirurgia.</div>
+    </div>
+
+    <div class="prod-panel" id="silhp">
+      <h3>Composição</h3>
+      <p>Cápsulas de 4 mg e 8 mg. 1x/dia, com alimento.</p>
+      <h3>Mecanismo</h3>
+      <p>Bloqueador alfa-1A com a maior uroseletividade da classe — relaxa a musculatura do trato urinário inferior com menor ação sobre receptores vasculares (pressão arterial).</p>
+      <h3>Indicação</h3>
+      <p>Alívio dos sintomas da HPB.</p>
+      <h3>Uso adicional — expulsão de cálculos renais (MET)</h3>
+      <p>Amplamente usado na Terapia de Expulsão Medicamentosa de cálculos ureterais — relaxa a musculatura ureteral, reduzindo tempo de expulsão e dor. Evidência de meta-análises mostra taxa de expulsão superior à tansulosina, especialmente em cálculos de 5-10 mm. Discurso de alto valor com urologistas, ampliando o uso além do paciente HPB.</p>
+      <h3>Segurança</h3>
+      <ul>
+        <li>Início de ação mais rápido da classe</li>
+        <li>Maior incidência de disfunção ejaculatória vs. tansulosina</li>
+        <li>Baixo impacto pressórico</li>
+      </ul>
+      <div class="obj"><b>Concorrência:</b> tansulosina, alfuzosina, doxazosina. <b>Argumento-chave:</b> em idosos/polimedicados/hipotensão prévia, a alta uroseletividade reduz risco de interação pressórica frente a bloqueadores não seletivos. Reforçar sempre as duas frentes: HPB crônica + cólica renal aguda.</div>
+    </div>
+
+    <div class="prod-panel" id="spasmex">
+      <h3>Composição</h3>
+      <p>Comprimidos de 15 mg e 30 mg. Dose diária recomendada 45 mg (redutível a 30 mg).</p>
+      <h3>Mecanismo</h3>
+      <p>Antimuscarínico que relaxa o músculo detrusor da bexiga, reduzindo contrações involuntárias. Efeito terapêutico inicia em ~1 semana.</p>
+      <h3>Indicação</h3>
+      <p>Bexiga hiperativa em adultos: urgência, frequência e incontinência de urgência.</p>
+      <h3>Diferencial central</h3>
+      <p>Amina quaternária — <b>praticamente não atravessa a barreira hematoencefálica</b>, ao contrário de oxibutinina, tolterodina e solifenacina. Menor risco de efeito cognitivo central.</p>
+      <h3>Segurança</h3>
+      <ul>
+        <li>Contraindicado em obstrução urinária/GI, insuficiência renal grave em diálise</li>
+        <li>Contraindicado para menores de 18 anos</li>
+      </ul>
+      <div class="obj"><b>Concorrência:</b> solifenacina (Vesicare), tolterodina, oxibutinina. <b>Argumento-chave:</b> em idosos, polimedicados ou com preocupação cognitiva, Spasmex® tem racional de segurança central objetivo — o argumento mais consultivo da linha.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ARGUMENTACAO -->
+<section id="argumentacao">
+  <div class="card">
+    <span class="badge">Módulo 5</span>
+    <h2>Argumentação de Campo</h2>
+    <h3>Roteiro por produto</h3>
+    <table>
+      <tr><th>Produto</th><th>Perfil ideal</th><th>Gatilho</th></tr>
+      <tr><td><b>Tanduo®</b></td><td>Próstata efetivamente aumentada, quer evitar cirurgia</td><td>"Minha próstata está grande e não quero operar"</td></tr>
+      <tr><td><b>Sil HP®</b></td><td>Precisa de alívio rápido; idoso/risco de hipotensão; ou paciente com cálculo ureteral em terapia expulsiva</td><td>"Preciso urinar toda hora e não posso mexer na pressão" / "Está com cálculo no ureter"</td></tr>
+      <tr><td><b>Spasmex®</b></td><td>Urgência/frequência residual, idoso ou preocupação cognitiva</td><td>"Continuo com urgência mesmo tratando a próstata"</td></tr>
+    </table>
+    <h3>Objeções comuns</h3>
+    <div class="obj"><b>Tanduo®:</b> "Já uso tansulosina isolada" → a combinação reduz progressão e cirurgia a longo prazo — o ganho aparece no seguimento.</div>
+    <div class="obj"><b>Sil HP®:</b> "Meu paciente já usa doxazosina" → alta seletividade uroespecífica, baixo impacto pressórico, pode ser somado com segurança.</div>
+    <div class="obj"><b>Spasmex®:</b> "Já prescrevo Vesicare, funciona bem" → perguntar sobre idade/queixa cognitiva; trospio tem a mesma eficácia com mais segurança central.</div>
+    <h3>Registro no Salesforce</h3>
+    <p>Seguir a metodologia Paciente Centrismo: estruturar o comentário em torno de <b>perfil do paciente</b>, <b>patologia/sintomas</b> e <b>conduta/produto recomendado</b>, sempre com OPV claro.</p>
+  </div>
+</section>
+
+<!-- CASOS -->
+<section id="casos">
+  <div class="card">
+    <span class="badge">Módulo 6</span>
+    <h2>Casos Clínicos Simulados</h2>
+
+    <div class="case">
+      <p><b>Caso 1 — Tanduo®:</b> Homem, 68 anos, HPB com próstata aumentada, em uso de tansulosina isolada há 1 ano, sintomas parcialmente controlados. Qual a proposta e o argumento central?</p>
+      <button onclick="this.nextElementSibling.classList.toggle('show')">Ver gabarito</button>
+      <div class="gabarito">Propor a combinação (Tanduo®) — o objetivo passa a ser reduzir o volume prostático, não só aliviar o sintoma, reduzindo risco de progressão e cirurgia a longo prazo.</div>
+    </div>
+
+    <div class="case">
+      <p><b>Caso 2 — Sil HP®:</b> Homem, 74 anos, hipertenso/cardiopata, 3 anti-hipertensivos, histórico de hipotensão postural com outro alfa-bloqueador. Qual produto e por quê?</p>
+      <button onclick="this.nextElementSibling.classList.toggle('show')">Ver gabarito</button>
+      <div class="gabarito">Sil HP® — maior uroseletividade alfa-1A, menor interferência sobre a pressão arterial vs. alfa-bloqueadores não seletivos.</div>
+    </div>
+
+    <div class="case">
+      <p><b>Caso 3 — Sil HP® (cólica renal):</b> Homem, 45 anos, cólica renal por cálculo ureteral de 7 mm. Urologista optou por terapia expulsiva medicamentosa. Por que Sil HP® é respaldado por evidência aqui?</p>
+      <button onclick="this.nextElementSibling.classList.toggle('show')">Ver gabarito</button>
+      <div class="gabarito">Meta-análises mostram taxa de expulsão maior que a tansulosina para cálculos de 5-10 mm, com menor tempo de expulsão — argumento objetivo para esse perfil.</div>
+    </div>
+
+    <div class="case">
+      <p><b>Caso 4 — Spasmex®:</b> Mulher, 79 anos, urgência e perda urinária, esquecimentos leves relatados pela família. Médico reticente a iniciar antimuscarínico por medo de piorar a cognição. Como conduzir?</p>
+      <button onclick="this.nextElementSibling.classList.toggle('show')">Ver gabarito</button>
+      <div class="gabarito">Apresentar Spasmex® como amina quaternária que não atravessa a barreira hematoencefálica — mesma eficácia da classe, menor risco cognitivo, exatamente o ponto de preocupação do médico.</div>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="card">
+    <span class="badge">Fixação</span>
+    <h2>Quiz — Linha Aster</h2>
+    <div id="quizArea"></div>
+    <button class="checkBtn" onclick="checkQuiz()">Corrigir</button>
+    <div id="quizResult"></div>
+  </div>
+</section>
+
+</main>
+<p class="footer-note">Material de treinamento interno — Distrito 1203 · Apsen Farmacêutica</p>
+
+<script>
+// TAB NAV
+document.querySelectorAll('#mainNav button').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('#mainNav button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+});
+// PRODUCT SUB-TABS
+document.querySelectorAll('.prod-tabs button').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('.prod-tabs button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.prod-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.prod).classList.add('active');
+  };
+});
+
+// QUIZ
+const questions = [
+ {q:"Qual componente do Tanduo® reduz o volume da próstata?", opts:["Tansulosina","Dutasterida","Silodosina","Tróspio"], a:1},
+ {q:"Por que a tansulosina exige atenção antes de cirurgia de catarata?", opts:["Risco de glaucoma","Síndrome da Íris Flácida Intraoperatória","Reduz acuidade visual","Não há relação"], a:1},
+ {q:"A silodosina (Sil HP®) tem maior seletividade por qual subtipo de receptor?", opts:["Alfa-1B","Alfa-1D","Alfa-1A","Beta-2"], a:2},
+ {q:"Qual efeito adverso é mais comum com Sil HP® do que com tansulosina?", opts:["Hipotensão grave","Disfunção ejaculatória","Cefaleia intensa","Insônia"], a:1},
+ {q:"Por que Sil HP® é mais seguro em hipertensos polimedicados?", opts:["Não tem efeito algum","Baixo impacto sobre a pressão arterial","Reduz a pressão arterial","Interage com anti-hipertensivos"], a:1},
+ {q:"Além da HPB, para qual uso Sil HP® tem evidência favorável, e em qual faixa de cálculo?", opts:["Infecção urinária, qualquer tamanho","Expulsão de cálculo ureteral, 5-10 mm","Prevenção de câncer, acima de 10 mm","Não há outro uso"], a:1},
+ {q:"Qual o princípio ativo do Spasmex®?", opts:["Solifenacina","Oxibutinina","Cloreto de tróspio","Tolterodina"], a:2},
+ {q:"Por que o cloreto de tróspio tem menor risco cognitivo?", opts:["É metabolizado no fígado","Não atravessa a barreira hematoencefálica","Tem meia-vida curta","Não é antimuscarínico"], a:1},
+ {q:"Qual é uma contraindicação de Spasmex®?", opts:["Hipertensão leve","Obstrução do trato urinário com risco de retenção","Diabetes controlada","Rinite alérgica"], a:1},
+ {q:"Em que cenário os 3 produtos Aster podem ser usados sequencialmente no mesmo paciente?", opts:["Nunca ocorre","HPB que evolui com bexiga hiperativa residual","Somente em mulheres","Somente em jovens"], a:1},
+ {q:"O que diferencia Tanduo® de um concorrente com os mesmos princípios ativos?", opts:["Eficácia clínica superior comprovada","Relacionamento e posicionamento comercial, eficácia é equivalente","Dose menor","Menos efeitos colaterais"], a:1},
+];
+const quizArea = document.getElementById('quizArea');
+questions.forEach((item,i)=>{
+  const div = document.createElement('div');
+  div.className='q';
+  div.innerHTML = `<p>${i+1}. ${item.q}</p>` + item.opts.map((o,j)=>
+    `<label><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  quizArea.appendChild(div);
+});
+function checkQuiz(){
+  let score=0;
+  questions.forEach((item,i)=>{
+    const sel = document.querySelector(`input[name="q${i}"]:checked`);
+    if(sel && parseInt(sel.value)===item.a) score++;
+  });
+  document.getElementById('quizResult').textContent = `Resultado: ${score} / ${questions.length} corretas.`;
+}
+</script>
+
+</body>
+</html>
