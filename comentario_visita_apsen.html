@@ -1,1 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Comentário de Visita — Apsen D1203</title>
+<style>
+  :root{
+    --navy:#1B2A4A;
+    --cyan:#13A9DB;
+    --lime:#A6CE39;
+    --bg:#F2F4F7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:#1c2536;
+    -webkit-tap-highlight-color:transparent;
+  }
+  header{background:var(--navy);color:#fff;padding:22px 20px 20px;text-align:center;}
+  header h1{margin:0 0 4px;font-size:1.2rem;font-weight:700;}
+  header p{margin:0;font-size:.82rem;color:#c7d3ea;}
+  .bar{height:4px;background:linear-gradient(90deg,var(--cyan),var(--lime));}
 
+  main{max-width:640px;margin:0 auto;padding:18px 16px 60px;}
+  .card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:16px;box-shadow:0 1px 3px rgba(27,42,74,.08);}
+  .card h2{font-size:1rem;margin:0 0 10px;color:var(--navy);display:flex;align-items:center;gap:8px;}
+  .card h2 .n{background:var(--cyan);color:#fff;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;flex:none;}
+
+  label{display:block;font-size:.8rem;color:#4a5670;margin:10px 0 4px;font-weight:600;}
+  label.opt::after{content:" (opcional)";font-weight:400;color:#8a93a8;}
+  input[type=text], textarea{width:100%;border:1px solid #d8dee8;border-radius:10px;padding:10px 12px;font-size:.95rem;font-family:inherit;resize:vertical;background:#fbfcfe;}
+  textarea{min-height:80px;line-height:1.4;}
+  #relatoAtual{min-height:130px;}
+  input[type=text]:focus, textarea:focus{outline:none;border-color:var(--cyan);background:#fff;}
+  .hint{font-size:.75rem;color:#8a93a8;margin-top:4px;}
+
+  .btn{width:100%;border:none;border-radius:12px;padding:14px;font-size:1rem;font-weight:700;color:#fff;background:var(--navy);margin-top:6px;cursor:pointer;}
+  .btn.copy{background:var(--cyan);}
+  .btn.copy.copied{background:var(--lime);color:var(--navy);}
+
+  #output-wrap{display:none;}
+  #promptOut{width:100%;min-height:360px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem;line-height:1.45;background:#fbfcfe;color:#2b3550;}
+
+  .steps{font-size:.85rem;color:#4a5670;line-height:1.5;padding-left:18px;margin:0;}
+  .steps li{margin-bottom:4px;}
+
+  footer{text-align:center;font-size:.72rem;color:#9aa3b8;padding:20px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Comentário de Visita — Assistente de Campo</h1>
+  <p>Metodologia Apsen — Paciente Centrismo · Distrito 1203</p>
+</header>
+<div class="bar"></div>
+
+<main>
+  <div class="card">
+    <h2><span class="n">1</span> Dados da visita</h2>
+    <label class="opt">Médico</label>
+    <input type="text" id="medico" placeholder="Ex: Dr. Fulano de Tal">
+    <label class="opt">Produto(s) discutido(s)</label>
+    <input type="text" id="produto" placeholder="Ex: Flancox, Atentah...">
+  </div>
+
+  <div class="card">
+    <h2><span class="n">2</span> Relato da visita de hoje</h2>
+    <label>Escreva como quiser, sem se preocupar com formatação</label>
+    <textarea id="relatoAtual" placeholder="Conte o que aconteceu na consulta: paciente, problema, o que o médico decidiu..."></textarea>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">3</span> Comentário da visita anterior a este médico</h2>
+    <label class="opt">Cole aqui se este NÃO for o primeiro contato com este médico</label>
+    <textarea id="comentarioAnterior" placeholder="Cole o comentário já registrado na visita passada para checar continuidade..."></textarea>
+    <p class="hint">Deixe em branco se for a primeira visita — o critério de continuidade é redistribuído automaticamente entre os demais.</p>
+  </div>
+
+  <button class="btn" id="gerarBtn">Gerar prompt para o Claude</button>
+
+  <div class="card" id="output-wrap">
+    <h2><span class="n">4</span> Copie e cole no Claude</h2>
+    <p class="hint" style="margin-bottom:8px;">Toque em "Copiar", abra o app Claude e cole no chat.</p>
+    <textarea id="promptOut" readonly></textarea>
+    <button class="btn copy" id="copyBtn">Copiar prompt</button>
+
+    <ol class="steps" style="margin-top:14px;">
+      <li>Abra o app <strong>Claude</strong> no iPad</li>
+      <li>Cole o texto copiado em uma nova conversa</li>
+      <li>Envie — o Claude devolve o comentário estruturado, a OPV e a avaliação nos 7 critérios</li>
+    </ol>
+  </div>
+
+</main>
+
+<footer>Uso interno — Distrito 1203 · Regional SPI · Apsen Farmacêutica</footer>
+
+<script>
+const gerarBtn = document.getElementById('gerarBtn');
+const outputWrap = document.getElementById('output-wrap');
+const promptOut = document.getElementById('promptOut');
+const copyBtn = document.getElementById('copyBtn');
+
+function buildPrompt(){
+  const medico = document.getElementById('medico').value.trim();
+  const produto = document.getElementById('produto').value.trim();
+  const relatoAtual = document.getElementById('relatoAtual').value.trim();
+  const comentarioAnterior = document.getElementById('comentarioAnterior').value.trim();
+
+  if(!relatoAtual){
+    alert('Escreva o relato da visita de hoje antes de gerar o prompt.');
+    return null;
+  }
+
+  const temAnterior = comentarioAnterior.length > 0;
+
+  let contexto = '';
+  if(medico) contexto += `Médico: ${medico}\n`;
+  if(produto) contexto += `Produto(s) discutido(s): ${produto}\n`;
+
+  const crit7 = temAnterior
+    ? `7. Continuidade com a visita anterior (peso 20% = 2,0 pts)
+   - 2,0: continuidade clara — o comentário atual responde diretamente ao que foi combinado na visita anterior
+   - 1,0: continuidade parcial — retoma o tema de forma incompleta
+   - 0: ruptura semântica — ignora completamente o tema anterior
+   Compare com o COMENTÁRIO DA VISITA ANTERIOR fornecido abaixo. IMPORTANTE — se o comentário estruturado que você vai gerar acabar sendo cópia idêntica (ou quase idêntica) do comentário anterior, isso é o pior cenário possível: zere o Critério 7, e o SCORE TOTAL da visita também deve ser 0 e a classificação "Cópia idêntica identificada" — mais grave que qualquer visita Expositiva, mesmo que os outros critérios pontuassem bem isoladamente. Avise isso claramente na resposta.`
+    : `7. Continuidade com a visita anterior — N/A, pois não há comentário de visita anterior (primeira visita a este médico). Redistribua o peso 20% (2,0 pts) proporcionalmente entre os critérios 1-6, usando esta tabela: Critério 1 = 2,5 | Critério 2 = 2,5 | Critério 3 = 1,25 | Critério 4 = 1,25 | Critério 5 = 1,25 | Critério 6 = 1,25 (soma 10,0).`;
+
+  const prompt = `Você é um assistente da Apsen Farmacêutica que faz duas tarefas em sequência a partir do relato bruto de um representante sobre uma visita médica:
+
+TAREFA A — ESTRUTURAR O COMENTÁRIO
+A partir do relato livre abaixo, redija o comentário de visita em 3ª pessoa (referindo o médico como "o Dr./a Dra."), seguindo a lógica: paciente → problema clínico → decisão do médico → raciocínio → papel do produto → compromisso/próximo passo. Nunca invente nenhum dado, nome, número ou detalhe que não esteja no relato original — se um elemento não estiver presente, simplesmente não o inclua. Produza um único comentário de até 2000 caracteres (use só o espaço que o relato sustenta, sem redundância) e um Objetivo da Próxima Visita (OPV) coerente.
+
+TAREFA B — AVALIAR O COMENTÁRIO
+Avalie o comentário estruturado que você acabou de produzir, segundo a Metodologia Apsen — Paciente Centrismo, nos 7 critérios oficiais. Pressuposto central: quando o paciente e o problema clínico estão presentes no comentário, estão presentes na conversa.
+
+${contexto}
+RELATO BRUTO DO REPRESENTANTE SOBRE A VISITA DE HOJE:
+"""
+${relatoAtual}
+"""
+
+${temAnterior ? `COMENTÁRIO DA VISITA ANTERIOR a este médico (para checar continuidade):
+"""
+${comentarioAnterior}
+"""` : 'Não há comentário de visita anterior — esta é a primeira visita a este médico na amostra.'}
+
+CRITÉRIOS OFICIAIS (0 a 10 no total):
+
+1. Paciente identificado (peso 20% = 2,0 pts)
+   - 2,0: paciente individualizado (idade, condição específica, histórico ou situação de tratamento claros)
+   - 1,0: perfil clínico reconhecível mas não individualizado (ex: "polimedicados")
+   - 0: paciente ausente ou citado apenas como usuário do produto
+
+2. Problema clínico do paciente (peso 20% = 2,0 pts)
+   - 2,0: problema específico e contextualizado (gravidade, evolução, falha de tratamento anterior, comorbidade)
+   - 1,0: problema mencionado mas genérico (ex: "ansiedade", "insônia" sem profundidade)
+   - 0: sem problema clínico — a conversa parte do produto, não da necessidade do paciente
+
+3. Decisão do médico (peso 10% = 1,0 pt)
+   - 1,0: decisão clara e concreta (prescrição, mudança de conduta, intenção explícita)
+   - 0,5: sinalização parcial (abertura, interesse, sem compromisso formal)
+   - 0: nenhuma decisão ou reação registrada
+
+4. Raciocínio clínico (peso 10% = 1,0 pt)
+   - 1,0: explícito — o comentário explica POR QUE o médico decidiu assim
+   - 0,5: inferido — lógica sugerida mas não declarada
+   - 0: nenhum racional identificável
+
+5. Papel do produto na solução (peso 10% = 1,0 pt)
+   - 1,0: produto como solução natural, conectado ao paciente e problema identificados
+   - 0,5: alguma justificativa clínica mas sem conexão clara
+   - 0: produto como protagonista isolado, sem ancoragem clínica
+
+6. Compromisso ou próximo passo (peso 10% = 1,0 pt)
+   - 1,0: concreto (prescrição, teste iniciado, retorno agendado)
+   - 0,5: abertura sinalizada, sem compromisso formal
+   - 0: nenhum desdobramento registrado
+
+${crit7}
+
+CLASSIFICAÇÃO FINAL (score total 0-10):
+- Consultiva: 7,5 a 10,0
+- Intermediária: 4,0 a 7,4
+- Expositiva: 0,1 a 3,9
+- Sem Registro: comentário vazio ou sem nenhum conteúdo de visita
+- Cópia idêntica identificada: aplica-se em vez das anteriores se o comentário atual for cópia da visita anterior (ver Critério 7 acima) — score total 0, independentemente dos demais critérios
+
+FORMATO DA RESPOSTA:
+1. Comentário estruturado (até 2000 caracteres)
+2. Objetivo da Próxima Visita (OPV)
+3. Pontuação critério a critério (nota + 1 frase justificando cada uma)
+4. Score total (0 a 10) e classificação final
+5. Se a classificação NÃO for Consultiva: 2-3 sugestões objetivas e específicas do que poderia ter sido perguntado/registrado de diferente nesta mesma visita
+6. Nunca usar os termos "fraude" ou "má fé" — usar "comentário sem elementos individualizantes" ou "padrão de cópia identificado" quando aplicável
+7. Tom construtivo e de desenvolvimento, nunca punitivo`;
+
+  return prompt;
+}
+
+gerarBtn.addEventListener('click', () => {
+  const p = buildPrompt();
+  if(!p) return;
+  promptOut.value = p;
+  outputWrap.style.display = 'block';
+  copyBtn.classList.remove('copied');
+  copyBtn.textContent = 'Copiar prompt';
+  outputWrap.scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+copyBtn.addEventListener('click', async () => {
+  try{
+    promptOut.select();
+    promptOut.setSelectionRange(0, 99999);
+    await navigator.clipboard.writeText(promptOut.value);
+    copyBtn.textContent = '✓ Copiado!';
+    copyBtn.classList.add('copied');
+    setTimeout(()=>{
+      copyBtn.textContent = 'Copiar prompt';
+      copyBtn.classList.remove('copied');
+    }, 2200);
+  }catch(e){
+    document.execCommand('copy');
+    copyBtn.textContent = '✓ Copiado!';
+    copyBtn.classList.add('copied');
+  }
+});
+</script>
+
+</body>
+</html>
